@@ -5,7 +5,6 @@ const invitation = document.getElementById('invitation');
 function openInvitation() {
   if (envelope.classList.contains('unseal')) return;
   envelope.classList.add('unseal');
-  if (typeof toggleMusic === 'function' && !musicPlaying) { try { toggleMusic(); } catch (error) { /* autoplay may be blocked until a gesture */ } }
   setTimeout(() => { screen.classList.add('opened'); invitation.classList.remove('is-hidden'); invitation.setAttribute('aria-hidden', 'false'); }, 1150);
 }
 envelope.addEventListener('click', openInvitation);
@@ -47,10 +46,14 @@ function toggleMusic() {
   if (!musicContext) musicContext = new (window.AudioContext || window.webkitAudioContext)();
   if (musicContext.state === 'suspended') musicContext.resume();
   musicPlaying = !musicPlaying;
-  musicToggle.classList.toggle('is-playing', musicPlaying);
-  musicToggle.setAttribute('aria-pressed', String(musicPlaying));
-  musicToggle.setAttribute('aria-label', musicPlaying ? '暫停背景音樂' : '播放背景音樂');
+  if (musicToggle) {
+    musicToggle.classList.toggle('is-playing', musicPlaying);
+    musicToggle.setAttribute('aria-pressed', String(musicPlaying));
+    musicToggle.setAttribute('aria-label', musicPlaying ? '暫停背景音樂' : '播放背景音樂');
+  }
   if (musicPlaying) { playMusicNote(); musicTimer = setInterval(playMusicNote, 620); }
   else { clearInterval(musicTimer); musicTimer = null; }
 }
-musicToggle.addEventListener('click', toggleMusic);
+document.addEventListener('pointerdown', (event) => {
+  if (!musicPlaying) { try { toggleMusic(); } catch (error) {} }
+}, { once: true, passive: true });
