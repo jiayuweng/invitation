@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f2e9" />
+    <title>劉育名 & 翁佳瑜｜婚禮邀請</title>
+    <meta name="description" content="劉育名與翁佳瑜的婚禮邀請函。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Serif+TC:wght@400;500;600;700&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .map-hotspot{top:76.5%;height:7.1%;border-radius:999px;align-items:center;justify-content:center;padding:0 8px}
+      .map-hotspot span{opacity:1;display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:clamp(72px,68%,128px);height:100%;white-space:nowrap;padding:0 clamp(5px,1.8vw,12px);border:1px solid #cbb9a5;border-radius:999px;background:rgba(255,252,245,.92);color:#887461;text-align:center;line-height:1;font:500 clamp(8px,2.8vw,13px) 'Noto Serif TC',serif;letter-spacing:.08em;box-shadow:0 2px 7px #8e735b1c;transition:background .2s,transform .2s}
+      .map-hotspot:focus span,.map-hotspot:hover span{opacity:1;background:#fffaf1;transform:translateY(-2px);box-shadow:0 4px 12px #8e735b35}
+      .map-hotspot{width:26%}
+      .map-hotspot span{width:100%;height:100%;padding:0}
+      .venue-hotspot{left:12%}
+      .parking-hotspot{right:12%}
+      .map-hotspot{top:77%;height:16% !important;width:34% !important;padding:0;background:transparent;align-items:flex-start}
+      .venue-hotspot{left:15%}
+      .parking-hotspot{right:15%}
+      .map-hotspot span{display:flex !important;width:50% !important;min-width:0 !important;height:25%;overflow:hidden;white-space:nowrap;padding:0 !important;font-size:clamp(7px,2vw,12px) !important;letter-spacing:0 !important}
+      .calendar-pages{width:100%;max-width:380px;margin:0 auto;gap:clamp(4px,2vw,8px)}
+      .calendar-unit{min-width:0;flex:1;padding:clamp(6px,2vw,10px) 4px 8px}
+      .calendar-unit b{font-size:clamp(22px,8vw,31px)}
+      .calendar-unit span{font-size:clamp(9px,2.8vw,11px)}
+    </style>
+  </head>
+  <body>
+    <main id="experience">
+      <section class="envelope-screen" id="envelopeScreen" aria-label="婚禮邀請函開場">
+        <div class="petal-field" aria-hidden="true"></div>
+        <div class="envelope-wrap">
+          <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="點擊打開婚禮邀請函">
+            <div class="env-back"></div><div class="letter"><span>WEDDING<br><em>INVITATION</em></span></div><div class="env-flap"></div>
+            <div class="env-front"></div><button class="wax" aria-hidden="true">開啟<br>招待狀</button>
+          </div>
+          <p class="tap-hint">TAP TO OPEN</p>
+        </div>
+      </section>
+
+      <section class="invitation is-hidden" id="invitation" aria-hidden="true">
+        <div class="floating-petals" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="card-image-wrap">
+          <img class="invitation-image" src="assets/wedding-invitation.png" alt="劉育名與翁佳瑜婚禮喜帖；可點選下方會場或停車資訊導航" />
+          <a class="map-hotspot venue-hotspot" href="https://www.google.com/maps/dir/?api=1&destination=%E5%BD%AD%E5%9C%92%E6%96%B0%E6%9D%BF%E9%A4%A8" target="_blank" rel="noopener" aria-label="導航至彭園新板館"><span>導航</span></a>
+          <a class="map-hotspot parking-hotspot" href="https://www.google.com/maps/dir/?api=1&destination=%E6%96%B0%E5%8C%97%E5%B8%82%E5%B8%82%E6%B0%91%E5%BB%A3%E5%A0%B4%E5%9C%B0%E4%B8%8B%E5%81%9C%E8%BB%8A%E5%A0%B4" target="_blank" rel="noopener" aria-label="導航至市民廣場地下停車場"><span>導航</span></a>
+        </div>
+        <section class="calendar-countdown" aria-label="距離婚禮倒數" aria-live="polite">
+          <p>距離我們的婚禮</p>
+          <div class="calendar-pages"><div class="calendar-unit"><b id="days">000</b><span>天</span></div><div class="calendar-unit"><b id="hours">00</b><span>時</span></div><div class="calendar-unit"><b id="minutes">00</b><span>分</span></div><div class="calendar-unit"><b id="seconds">00</b><span>秒</span></div></div>
+        </section>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
