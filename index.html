@@ -26,6 +26,14 @@
       @media (hover:none){.map-hotspot span{opacity:1}}
       .map-hotspot span{left:44%;bottom:-8%;opacity:1 !important;transform:translateX(-50%) !important}
       .map-hotspot:hover span,.map-hotspot:focus span{opacity:1 !important;transform:translateX(-50%) !important}
+      .calendar-countdown{margin-top:-14px;position:relative;z-index:4;border-radius:24px 24px 0 0;padding:24px 12px 30px;background:linear-gradient(180deg,#f4ebdf 0%,#f7efe5 100%);box-shadow:0 -8px 20px rgba(122,91,66,.08)}
+      .calendar-countdown p{margin-bottom:14px;font-size:13px}
+      .calendar-pages{max-width:330px;gap:4px}
+      .calendar-unit{padding:6px 3px 6px;border-radius:3px}
+      .calendar-unit b{font-size:clamp(20px,6.8vw,28px)}
+      .calendar-unit span{margin-top:5px;font-size:10px}
+      .how-to{background:#faf6ee;padding:18px 0 0;line-height:0}
+      .how-to img{display:block;width:100%;height:auto}
       .calendar-pages{width:100%;max-width:380px;margin:0 auto;gap:clamp(4px,2vw,8px)}
       .calendar-unit{min-width:0;flex:1;padding:clamp(6px,2vw,10px) 4px 8px}
       .calendar-unit b{font-size:clamp(22px,8vw,31px)}
@@ -55,6 +63,9 @@
         <section class="calendar-countdown" aria-label="距離婚禮倒數" aria-live="polite">
           <p>距離我們的婚禮</p>
           <div class="calendar-pages"><div class="calendar-unit"><b id="days">000</b><span>天</span></div><div class="calendar-unit"><b id="hours">00</b><span>時</span></div><div class="calendar-unit"><b id="minutes">00</b><span>分</span></div><div class="calendar-unit"><b id="seconds">00</b><span>秒</span></div></div>
+        </section>
+        <section class="how-to" aria-label="如何前往會場">
+          <img src="assets/how-to-get-there.png" alt="如何前往會場：停車場與新北市政府入口步行指引" />
         </section>
       </section>
     </main>
