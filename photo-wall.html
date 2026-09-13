@@ -1,1 +1,109 @@
-
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f1e8">
+<title>Wedding Photo Wall｜育名 & 佳瑜</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#f7f1e8;--paper:#fffaf3;--pink:#d9aaa8;--pink-light:#ead0cc;--brown:#806c60;--dark:#514840}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--cream)}
+body{font-family:"Noto Serif TC",serif;color:var(--dark);-webkit-font-smoothing:antialiased}
+.photo-wall{position:fixed;inset:0;width:100vw;height:100dvh;overflow:hidden;background:var(--cream)}
+.photo-stage{position:absolute;inset:0;overflow:hidden}
+.photo{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;object-position:center;opacity:0;transform:scale(1.04);transition:opacity 1.8s ease-in-out,transform 8s cubic-bezier(.2,.7,.2,1);will-change:opacity,transform}
+.photo.active{opacity:1;transform:scale(1.10)}
+.photo-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(247,241,232,.28),transparent 32%,transparent 70%,rgba(247,241,232,.08));pointer-events:none}
+.bottom-fade{position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(to top,rgba(42,34,29,.42),rgba(42,34,29,.08) 55%,transparent);pointer-events:none}
+.brand{position:absolute;top:clamp(22px,4vh,58px);left:clamp(24px,4vw,70px);z-index:10;color:rgba(255,250,243,.94);text-shadow:0 1px 12px rgba(40,30,25,.25);pointer-events:none}
+.brand-main{font-family:"DM Serif Display",serif;font-size:clamp(26px,3vw,48px);letter-spacing:.04em;line-height:1}
+.brand-sub{margin-top:9px;font-size:clamp(10px,.9vw,15px);letter-spacing:.28em;opacity:.85}
+.message-area{position:absolute;z-index:20;left:clamp(24px,5vw,90px);bottom:clamp(28px,5vh,72px);width:min(42vw,620px);pointer-events:none}
+.message-card{position:relative;padding:clamp(18px,2vw,30px) clamp(20px,2.5vw,38px);border-radius:18px;background:linear-gradient(135deg,rgba(255,250,243,.91),rgba(255,246,239,.80));border:1px solid rgba(255,255,255,.68);box-shadow:0 12px 40px rgba(52,39,31,.13),inset 0 1px 0 rgba(255,255,255,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.message-card.show{opacity:1;transform:translateY(0)}
+.message-card.hide{opacity:0;transform:translateY(10px)}
+.message-card:before{content:"❀";position:absolute;top:-13px;left:24px;width:27px;height:27px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--pink-light);color:white;font-size:13px;box-shadow:0 3px 10px rgba(100,70,60,.12)}
+.message-name{margin-bottom:7px;color:#a57d76;font-size:clamp(10px,.85vw,14px);letter-spacing:.14em}
+.message-text{font-size:clamp(15px,1.35vw,24px);line-height:1.75;letter-spacing:.06em;color:var(--dark);word-break:break-word}
+.counter{position:absolute;right:clamp(20px,4vw,70px);bottom:clamp(22px,4vh,55px);z-index:20;color:rgba(255,250,243,.86);font-family:"DM Serif Display",serif;font-size:clamp(13px,1.1vw,18px);letter-spacing:.12em;text-shadow:0 2px 10px rgba(30,20,15,.35);pointer-events:none}
+.petals{position:absolute;inset:0;z-index:15;pointer-events:none;overflow:hidden}
+.petal{position:absolute;width:10px;height:15px;border-radius:70% 30% 70% 30%;background:rgba(255,220,220,.72);filter:blur(.2px);animation:fall linear infinite;opacity:.65}
+.petal:nth-child(1){left:8%;animation-duration:11s;animation-delay:-4s}
+.petal:nth-child(2){left:21%;animation-duration:15s;animation-delay:-8s;transform:scale(.7)}
+.petal:nth-child(3){left:36%;animation-duration:12s;animation-delay:-2s;transform:scale(.55)}
+.petal:nth-child(4){left:55%;animation-duration:17s;animation-delay:-10s;transform:scale(.8)}
+.petal:nth-child(5){left:72%;animation-duration:13s;animation-delay:-6s;transform:scale(.6)}
+.petal:nth-child(6){left:89%;animation-duration:16s;animation-delay:-12s;transform:scale(.75)}
+@keyframes fall{0%{top:-10%;transform:translateX(0) rotate(0deg)}50%{transform:translateX(70px) rotate(180deg)}100%{top:110%;transform:translateX(-60px) rotate(360deg)}}
+.loading{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--cream);transition:opacity 1s ease}
+.loading.hidden{opacity:0;pointer-events:none}
+.loading-inner{text-align:center;color:var(--brown)}
+.loading-heart{font-size:27px;animation:heartbeat 1.5s ease-in-out infinite}
+.loading-text{margin-top:12px;font-size:12px;letter-spacing:.25em}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@media(max-width:700px){
+.brand{top:20px;left:20px}.brand-main{font-size:26px}.brand-sub{font-size:9px;margin-top:6px}
+.photo-overlay{background:linear-gradient(180deg,rgba(247,241,232,.1),transparent 35%,rgba(42,34,29,.05))}
+.bottom-fade{height:46%}
+.message-area{left:18px;right:18px;bottom:24px;width:auto}
+.message-card{padding:17px 20px 18px;border-radius:16px}
+.message-text{font-size:15px;line-height:1.65}.message-name{font-size:10px}.counter{display:none}
+}
+@media(min-width:2000px){.message-card{border-radius:26px}.message-text{font-size:30px}.message-name{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.photo{transition:opacity 1s ease;transform:none!important}.petal{animation:none}.message-card{transition:opacity .5s ease;transform:none}}
+</style>
+</head>
+<body>
+<div class="photo-wall">
+<div class="loading" id="loading"><div class="loading-inner"><div class="loading-heart">♡</div><div class="loading-text">WEDDING PHOTO WALL</div></div></div>
+<div class="photo-stage" id="photoStage"></div>
+<div class="photo-overlay"></div>
+<div class="bottom-fade"></div>
+<div class="brand"><div class="brand-main">Yu-Ming &amp; Jia-Yu</div><div class="brand-sub">OUR WEDDING DAY</div></div>
+<div class="petals" aria-hidden="true"><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span></div>
+<div class="message-area"><div class="message-card" id="messageCard"><div class="message-name" id="messageName">親愛的新人</div><div class="message-text" id="messageText">願你們一直幸福下去 ♡</div></div></div>
+<div class="counter" id="counter">01 / 06</div>
+</div>
+<script>
+/* Provider architecture: replace Demo providers later with Google Drive / Google Sheet providers. */
+class DemoPhotoProvider{
+async getPhotos(){return[
+{id:"photo-01",url:"https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2400&q=90",alt:"Wedding"},
+{id:"photo-02",url:"https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=2400&q=90",alt:"Wedding couple"},
+{id:"photo-03",url:"https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=2400&q=90",alt:"Wedding decoration"},
+{id:"photo-04",url:"https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=2400&q=90",alt:"Wedding flowers"},
+{id:"photo-05",url:"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=2400&q=90",alt:"Wedding table"},
+{id:"photo-06",url:"https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=2400&q=90",alt:"Wedding bouquet"}
+]}}
+class DemoMessageProvider{
+async getMessages(){return[
+{id:"message-01",name:"小明",text:"祝你們永遠幸福快樂，白頭偕老 ♡"},
+{id:"message-02",name:"婷婷",text:"今天真的好美！祝新人每天都像今天一樣幸福。"},
+{id:"message-03",name:"阿哲",text:"恭喜恭喜！一起走過每一個春夏秋冬。"},
+{id:"message-04",name:"佩佩",text:"願你們的生活充滿溫柔，也充滿彼此的笑聲。"},
+{id:"message-05",name:"大學同學",text:"從認識你們到今天，真的很替你們開心！"},
+{id:"message-06",name:"親友",text:"新婚快樂！幸福久久，甜甜蜜蜜！"}
+]}}
+class PhotoWall{
+constructor(photoProvider,messageProvider){
+this.photoProvider=photoProvider;this.messageProvider=messageProvider;this.photos=[];this.messages=[];this.photoIndex=0;this.messageIndex=0;this.photoTimer=null;this.messageTimer=null;this.photoDuration=8000;this.messageDuration=6500;this.stage=document.getElementById("photoStage");this.messageCard=document.getElementById("messageCard");this.messageName=document.getElementById("messageName");this.messageText=document.getElementById("messageText");this.counter=document.getElementById("counter");this.loading=document.getElementById("loading")}
+async init(){
+try{[this.photos,this.messages]=await Promise.all([this.photoProvider.getPhotos(),this.messageProvider.getMessages()]);if(!this.photos.length)throw new Error("No photos available.");this.preloadImages();this.createPhotoElements();this.showPhoto(0);this.showMessage(0);this.startPhotoLoop();this.startMessageLoop();setTimeout(()=>this.loading.classList.add("hidden"),700)}catch(e){console.error("Photo Wall initialization failed:",e);this.loading.classList.add("hidden")}}
+preloadImages(){this.photos.forEach(p=>{const img=new Image();img.src=p.url})}
+createPhotoElements(){this.photos.forEach((p,i)=>{const img=document.createElement("img");img.className="photo";img.src=p.url;img.alt=p.alt||"Wedding photo";img.loading=i===0?"eager":"lazy";this.stage.appendChild(img);p.element=img})}
+showPhoto(index){if(!this.photos.length)return;this.photos.forEach(p=>p.element.classList.remove("active"));const p=this.photos[index];p.element.classList.add("active");this.photoIndex=index;this.updateCounter()}
+nextPhoto(){this.showPhoto((this.photoIndex+1)%this.photos.length)}
+startPhotoLoop(){clearInterval(this.photoTimer);this.photoTimer=setInterval(()=>this.nextPhoto(),this.photoDuration)}
+showMessage(index){if(!this.messages.length)return;const m=this.messages[index];this.messageCard.classList.remove("show");this.messageCard.classList.add("hide");setTimeout(()=>{this.messageName.textContent=m.name;this.messageText.textContent=m.text;this.messageCard.classList.remove("hide");requestAnimationFrame(()=>this.messageCard.classList.add("show"))},500);this.messageIndex=index}
+nextMessage(){this.showMessage((this.messageIndex+1)%this.messages.length)}
+startMessageLoop(){clearInterval(this.messageTimer);this.messageTimer=setInterval(()=>this.nextMessage(),this.messageDuration)}
+updateCounter(){this.counter.textContent=`${String(this.photoIndex+1).padStart(2,"0")} / ${String(this.photos.length).padStart(2,"0")}`}
+}
+document.addEventListener("DOMContentLoaded",async()=>{const photoProvider=new DemoPhotoProvider();const messageProvider=new DemoMessageProvider();const photoWall=new PhotoWall(photoProvider,messageProvider);await photoWall.init()});
+</script>
+</body>
+</html>
