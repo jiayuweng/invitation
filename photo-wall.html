@@ -28,3 +28,6 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
 
 
 
+
+<script>setInterval(async()=>{try{const r=await fetch('https://script.google.com/macros/s/AKfycbyY_W_qWkIVH-hj3Yde2ki3PJEi9qqLVGlnTsO2thnJA6yAE7bnCat_QnQ_3fx7CY7M_w/exec',{cache:'no-store'});if(r.ok){const p=await r.json();const a=Array.isArray(p)?p:(p.items||p.photos||p.data||[].concat(p.preset||[],p.live||[],p.uploads||[]));if(Array.isArray(a)&&a.length)appendIncoming(a)}}catch(e){}},5000);</script>
+<script>setInterval(async()=>{try{const r=await fetch('https://script.google.com/macros/s/AKfycbyY_W_qWkIVH-hj3Yde2ki3PJEi9qqLVGlnTsO2thnJA6yAE7bnCat_QnQ_3fx7CY7M_w/exec',{cache:'no-store'});if(r.ok){const p=await r.json();const a=Array.isArray(p)?p:(p.items||p.photos||p.data||[].concat(p.preset||[],p.live||[],p.uploads||[]));if(Array.isArray(a)&&a.length)appendIncoming(a)}}catch(e){}},5000);</script>
