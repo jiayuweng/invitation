@@ -71,3 +71,18 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
 
 
 
+<style>
+.brand{display:none!important}
+.live{right:16px!important;top:16px!important;padding:0!important;width:18px!important;height:18px!important;border:0!important;background:transparent!important;font-size:0!important}
+.live i{width:12px!important;height:12px!important;display:block!important}
+.qr-card{left:16px!important;right:auto!important;top:58px!important;bottom:auto!important;width:86px!important;padding:6px!important;animation:qrPeek 16s ease-in-out infinite;pointer-events:none}
+.qr-card img{width:72px!important;height:72px!important;margin:0 auto!important}.qr-card span{display:none!important}
+html,body{background:transparent!important}body{padding:0!important}.wall{width:100vw!important;max-width:none!important;border-radius:0!important;box-shadow:none!important}.stage-grid{display:block!important;inset:0!important;padding:0!important;overflow:hidden!important}.stage-grid .tile{position:absolute!important;width:36%!important;height:70%!important;border:1px solid #fff9!important;border-radius:16px!important;background:#161311!important;box-shadow:0 22px 55px #0009!important;opacity:0;animation:liveCard 11s cubic-bezier(.22,.72,.2,1) infinite!important}.stage-grid .tile img{object-fit:contain!important;background:#171412!important;border-radius:16px!important}.stage-grid .tile:nth-child(1){left:3%!important;top:22%!important}.stage-grid .tile:nth-child(2){left:23%!important;top:7%!important;animation-delay:2.2s!important}.stage-grid .tile:nth-child(3){left:46%!important;top:19%!important;animation-delay:4.4s!important}.stage-grid .tile:nth-child(4){left:66%!important;top:6%!important;animation-delay:6.6s!important}.stage-grid .tile:nth-child(5){left:32%!important;top:27%!important;width:37%!important;height:67%!important;animation-delay:8.8s!important}@keyframes liveCard{0%,7%{opacity:0;transform:translate3d(0,34px,0) scale(.84) rotate(-5deg)}16%,70%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(0)}82%,100%{opacity:0;transform:translate3d(0,-26px,0) scale(.9) rotate(4deg)}}@keyframes qrPeek{0%,70%{opacity:0;transform:translateY(-8px)}76%,90%{opacity:.94;transform:translateY(0)}96%,100%{opacity:0}}
+@media(max-width:700px){.stage-grid .tile{width:44%!important;height:58%!important;border-radius:11px!important}.stage-grid .tile:nth-child(1){left:2%!important;top:24%!important}.stage-grid .tile:nth-child(2){left:29%!important;top:11%!important}.stage-grid .tile:nth-child(3){left:56%!important;top:23%!important}.stage-grid .tile:nth-child(4){left:13%!important;top:38%!important}.stage-grid .tile:nth-child(5){left:43%!important;top:35%!important;width:44%!important;height:58%!important}}
+</style>
+<script>
+let lastGridKey='';
+const animatedGridRender=renderGrid;
+renderGrid=function(){const key=playlist.length+':'+index;if(key===lastGridKey)return;lastGridKey=key;animatedGridRender()};
+renderGrid();
+</script>
