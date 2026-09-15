@@ -275,8 +275,15 @@ async function pollIncoming(){
 
       /* 保留原本中央主視覺，不因既有資料而消失 */
       const img=heroPhoto.querySelector("img");
-      if(img){
+      const existingPhotos=playlist.filter(item=>hasPhoto(item));
+
+      if(img && existingPhotos.length){
+        photoIndex=0;
+        currentPhotoKey=existingPhotos[0].sourceId;
+        img.src=existingPhotos[0].url;
         img.style.opacity="1";
+        heroPhoto.style.opacity="1";
+      }else if(img){
         heroPhoto.style.opacity="1";
       }
 
