@@ -91,13 +91,14 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
   .stage-grid.feed-mode .tile.fly-in{animation:feedFlyIn 1.15s cubic-bezier(.18,.8,.24,1) both!important}
   .stage-grid.feed-mode .tile.leaving{animation:feedFlyOut .65s ease both!important;pointer-events:none}
   .stage-grid.feed-mode .tile:hover{filter:brightness(1.08) saturate(1.08)}
+  .stage-grid.feed-mode .text-tile{height:100%;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center;color:#5d493c;background:#fffaf0e8;font:600 clamp(16px,2.1vw,30px)/1.45 "Ma Shan Zheng","Noto Serif TC",serif}
   @keyframes feedFlyIn{0%{opacity:0;transform:translate3d(var(--feed-from-x),var(--feed-from-y),0) scale(.35) rotate(var(--feed-from-r));filter:blur(5px)}65%{opacity:1;transform:translate3d(0,0,0) scale(1.04) rotate(var(--feed-r));filter:blur(0)}100%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(var(--feed-r))}}
   @keyframes feedFlyOut{0%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(var(--feed-r))}100%{opacity:0;transform:translate3d(var(--feed-to-x),var(--feed-to-y),0) scale(.35) rotate(var(--feed-to-r))}}
 </style>
 <script>
 // Live-feed mode: keep existing cards in place and animate only newly arrived cards.
 (function enableLiveFeed(){
-  const MAX_CARDS=5, grid=document.getElementById('stageGrid');
+  const MAX_CARDS=8, grid=document.getElementById('stageGrid');
   const slots=[
     ['3%','22%','36%','70%','-4deg'],['23%','7%','36%','70%','2deg'],
     ['46%','19%','36%','70%','-2deg'],['66%','6%','36%','70%','4deg'],
@@ -112,7 +113,7 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
     tile.style.setProperty('--feed-from-x',(Math.random()>.5?'':'-')+(18+Math.round(Math.random()*24))+'vw');
     tile.style.setProperty('--feed-from-y',(18+Math.round(Math.random()*24))+'vh'); tile.style.setProperty('--feed-from-r',(Math.random()>.5?'':'-')+(10+Math.round(Math.random()*12))+'deg');
     tile.style.setProperty('--feed-to-x',(Math.random()>.5?'':'-')+(16+Math.round(Math.random()*20))+'vw'); tile.style.setProperty('--feed-to-y','-24vh'); tile.style.setProperty('--feed-to-r',(Math.random()>.5?'':'-')+'12deg');
-    tile.innerHTML=item.url?'<img src="'+item.url+'" alt="'+(item.name||'婚禮照片')+'">':'<div class="text-tile">'+(item.text||'')+'</div>';
+    tile.innerHTML=item.url&&item.kind!=='blessing'?'<img src="'+item.url+'" alt="'+(item.name||'婚禮照片')+'">':'<div class="text-tile">'+(item.text||'')+'</div>';
     tile.addEventListener('animationend',()=>tile.classList.remove('fly-in'),{once:true});
     return tile;
   };
@@ -128,5 +129,3 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
   setInterval(renderGrid,1500);
 })();
 </script>
-
-
