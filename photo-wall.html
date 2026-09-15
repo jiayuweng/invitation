@@ -229,19 +229,9 @@ function appendIncoming(rawItems){
 }
 
 let syncing=false;
-let initialSnapshotReady=false;
 
-/*
- * 第一次讀取：
- * - 只建立「已存在資料」的基準
- * - 不把舊祝福當成新祝福播放
- * - 不把舊資料一次塞滿畫面
- *
- * 第二次開始：
- * - 只處理真正新增的資料
- */
 async function pollIncoming(){
-  if(!DATA_ENDPOINT || syncing)return;
+  if(!DATA_ENDPOINT||syncing)return;
 
   syncing=true;
 
@@ -258,43 +248,9 @@ async function pollIncoming(){
 
     const payload=await response.json();
     const rawItems=extractItems(payload);
+    const newItems=appendIncoming(rawItems);
 
-    if(!initialSnapshotReady){
-      /* 第一次：建立基準，不顯示舊訊息 */
-      rawItems.forEach((rawItem,index)=>{
-        if(!rawItem)return;
-
-        const item=normalizeItem(rawItem,index);
-        if(!item.sourceId || knownIds.has(item.sourceId))return;
-
-        knownIds.add(item.sourceId);
-        playlist.push(item);
-      });
-
-      initialSnapshotReady=true;
-
-      /* 保留原本中央主視覺，不因既有資料而消失 */
-      const img=heroPhoto.querySelector("img");
-      const existingPhotos=playlist.filter(item=>hasPhoto(item));
-
-      if(img && existingPhotos.length){
-        photoIndex=0;
-        currentPhotoKey=existingPhotos[0].sourceId;
-        img.src=existingPhotos[0].url;
-        img.style.opacity="1";
-        heroPhoto.style.opacity="1";
-      }else if(img){
-        heroPhoto.style.opacity="1";
-      }
-
-    }else{
-      /* 後續只抓真正新增的資料 */
-      const newItems=appendIncoming(rawItems);
-
-      if(newItems.length){
-        handleNewItems(newItems);
-      }
-    }
+    if(newItems.length)handleNewItems(newItems);
 
     connectionStatus.textContent="即時同步中";
     connectionStatus.classList.remove("error");
@@ -316,12 +272,195 @@ function handleNewItems(items){
 
   preloadNewPhotos(items);
 
-  /*
-   * 重要：
-   * 這裡絕對不能再設定 heroPhoto.opacity = 0。
-   * heroPhoto 就是原本的中央主視覺/背景照片。
-   */
+  if(items.length)heroPhoto.style.opacity="0";
 }
+
+function createFeedElement(item,positionIndex){
+  const el=document.createElement("article");
+  const photo=hasPhoto(item);
+  const text=hasText(item);
+
+  el.className="feed-item"+(photo&&!text?" photo-only":"");
+
+  const pos=positions[positionIndex%positions.length];
+  el.style.left=pos[0];
+  el.style.top=pos[1];
+
+  const fromX=Math.random()>.5?"":"-";
+  const toX=Math.random()>.5?"":"-";
+  const fromR=(Math.random()*20-10).toFixed(1);
+  const r=(Math.random()*6-3).toFixed(1);
+  const toR=(Math.random()*18-9).toFixed(1);
+
+  el.style.setProperty("--from-x",fromX+(18+Math.round(Math.random()*24))+"vw");
+  el.style.setProperty("--from-y",(15+Math.round(Math.random()*25))+"vh");
+  el.style.setProperty("--from-r",fromR+"deg");
+  el.style.setProperty("--r",r+"deg");
+  el.style.setProperty("--to-x",toX+(16+Math.round(Math.random()*20))+"vw");
+  el.style.setProperty("--to-y","-24vh");
+  el.style.setProperty("--to-r",toR+"deg");
+  el.dataset.feedKey=item.sourceId;
+
+  let html="";
+
+  if(text){
+    const avatar=(getName(item).slice(0,1)||"♡");
+    html+='<div class="feed-row"><div class="avatar">'+escapeHtml(avatar)+'</div><div class="feed-content"><div class="feed-name">'+escapeHtml(getName(item))+'</div><div class="feed-text">'+escapeHtml(getText(item))+'</div></div></div>';
+  }
+
+  if(photo){
+    html+='<img class="feed-photo" src="'+escapeAttribute(item.url)+'" alt="婚禮照片">';
+  }
+
+  el.innerHTML=html;
+  return el;
+}
+
+function escapeHtml(value){
+  return String(value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function escapeAttribute(value){return escapeHtml(value)}
+
+function addFeedItem(item){
+  if(activeFeed.has(item.sourceId))return;
+
+  if(activeFeed.size>=8){
+    const first=activeFeed.keys().next().value;
+    const old=activeFeed.get(first);
+    if(old)removeFeedElement(first,old);
+  }
+
+  const el=createFeedElement(item,activeFeed.size);
+  feedLayer.appendChild(el);
+  activeFeed.set(item.sourceId,el);
+}
+
+function removeFeedElement(key,el){
+  if(!el){
+    activeFeed.delete(key);
+    return;
+  }
+
+  if(el.classList.contains("leaving"))return;
+
+  el.classList.add("leaving");
+
+  el.addEventListener("animationend",()=>{
+    el.remove();
+    activeFeed.delete(key);
+  },{once:true});
+}
+
+let latestTimer=null;
+
+function showBlessing(item,delay=0){
+  const key=item.sourceId;
+  if(shownBlessings.has(key))return;
+
+  shownBlessings.add(key);
+
+  setTimeout(()=>displayLatestMessage(item),delay);
+}
+
+function displayLatestMessage(item){
+  latestMessage.classList.remove("out");
+  latestMessage.style.display="block";
+
+  const avatar=(getName(item).slice(0,1)||"♡");
+
+  latestMessage.innerHTML=
+    '<div class="latest-row">'+
+      '<div class="latest-avatar">'+escapeHtml(avatar)+'</div>'+
+      '<div>'+
+        '<div class="latest-name">'+escapeHtml(getName(item))+'</div>'+
+        '<div class="latest-text">'+escapeHtml(getText(item))+'</div>'+
+      '</div>'+
+    '</div>';
+
+  void latestMessage.offsetWidth;
+  latestMessage.classList.remove("out");
+
+  if(latestTimer)clearTimeout(latestTimer);
+
+  latestTimer=setTimeout(()=>{
+    latestMessage.classList.add("out");
+
+    setTimeout(()=>{
+      if(latestMessage.classList.contains("out")){
+        latestMessage.style.display="none";
+      }
+    },850);
+  },5500);
+}
+
+let photoIndex=0;
+let currentPhotoKey="";
+
+function getPhotos(){
+  return playlist.filter(item=>hasPhoto(item));
+}
+
+function showNextPhoto(){
+  const photos=getPhotos();
+  if(!photos.length)return;
+
+  if(!currentPhotoKey){
+    photoIndex=0;
+  }else{
+    photoIndex=(photoIndex+1)%photos.length;
+  }
+
+  const item=photos[photoIndex];
+  currentPhotoKey=item.sourceId;
+
+  const img=heroPhoto.querySelector("img");
+  if(!img)return;
+
+  heroPhoto.style.opacity="0";
+
+  setTimeout(()=>{
+    img.src=item.url;
+    heroPhoto.style.opacity="1";
+  },350);
+}
+
+function preloadNewPhotos(items){
+  items.filter(item=>hasPhoto(item)).forEach(item=>{
+    const image=new Image();
+    image.src=item.url;
+  });
+}
+
+async function startup(){
+  await pollIncoming();
+
+  const photos=getPhotos();
+
+  if(photos.length){
+    photoIndex=0;
+    const first=photos[0];
+    currentPhotoKey=first.sourceId;
+
+    const img=heroPhoto.querySelector("img");
+    if(img)img.src=first.url;
+
+    heroPhoto.style.opacity="1";
+  }
+
+  const blessings=playlist.filter(item=>hasText(item)).slice(-3);
+
+  blessings.forEach(item=>shownBlessings.add(item.sourceId));
+
+  if(blessings.length){
+    displayLatestMessage(blessings[blessings.length-1]);
+  }
+}
+
+/* 唯一的 Google Sheet polling：每 2 秒 */
+setInterval(()=>{
+  pollIncoming();
+},2000);
 
 /* 照片輪播 */
 setInterval(()=>{
