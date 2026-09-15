@@ -9,465 +9,311 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root{--cream:#fbf6ee;--ink:#5d493c;--muted:#a58973}
+:root{--cream:#fbf6ee;--ink:#5d493c}
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:#241c1c;color:var(--cream);font-family:"Noto Serif TC","PingFang TC",serif}
-body{display:grid;place-items:center;min-height:100svh;padding:0;overflow:hidden}
-.wall{position:relative;width:100vw;height:100svh;overflow:hidden;background:#241c1c}
-.stage{position:absolute;inset:0;z-index:0;display:grid;place-items:center;background:#241c1c url("assets/hero-forest-illustration.png") center/cover no-repeat}
-.veil{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,#160d0dcc 0%,transparent 35%,transparent 65%,#160d0d99 100%),linear-gradient(0deg,#160d0dcc 0%,transparent 42%)}
-.stage::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle at 50% 48%,transparent 40%,#08070655 100%),linear-gradient(180deg,#0002,transparent 22%,transparent 78%,#0005)}
-.brand{position:absolute;z-index:20;left:50%;top:5.5%;transform:translateX(-50%);text-align:center;white-space:nowrap;text-shadow:0 3px 18px #0009;pointer-events:none}
-.brand b{display:block;font-family:"Ma Shan Zheng",cursive;font-size:clamp(30px,4.2vw,70px);line-height:1;font-weight:400;letter-spacing:.03em}
-.brand span{display:block;margin-top:9px;font-family:"Noto Serif TC",serif;font-size:clamp(9px,1.1vw,18px);font-weight:500;letter-spacing:.34em;opacity:.9}
-.live{position:absolute;z-index:20;right:3%;top:4%;display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #fff6;border-radius:999px;background:#211d1bcc;font-family:"Ma Shan Zheng","Noto Serif TC",serif;font-size:clamp(10px,1vw,14px);letter-spacing:.12em;backdrop-filter:blur(7px)}
-.live i{display:block;width:8px;height:8px;border-radius:50%;background:#e38e7a;box-shadow:0 0 0 5px #e38e7a2e;animation:pulse 2s infinite}
+html,body{margin:0;width:100%;height:100%;background:#241c1c;color:#fff;font-family:"Noto Serif TC","PingFang TC",serif}
+body{overflow:hidden}
+.wall{position:relative;width:100vw;height:100svh;overflow:hidden;background:#191715}
+.stage{position:absolute;inset:0;background:#eee5d8 url("assets/hero-forest.jpg") center/cover no-repeat}
+.stage:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#160d0dcc 0%,transparent 35%,transparent 68%,#160d0d88 100%),linear-gradient(0deg,#160d0dcc 0%,transparent 45%);pointer-events:none}
+.brand{position:absolute;z-index:20;left:50%;top:5.5%;transform:translateX(-50%);text-align:center;white-space:nowrap;text-shadow:0 3px 18px #0009}
+.brand b{display:block;font-family:"Ma Shan Zheng",cursive;font-size:clamp(30px,4.2vw,70px);line-height:1;font-weight:400}
+.brand span{display:block;margin-top:9px;font-size:clamp(9px,1.1vw,18px);letter-spacing:.34em}
+.live{position:absolute;z-index:20;right:3%;top:4%;display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #fff6;border-radius:999px;background:#211d1bcc;font-family:"Ma Shan Zheng",serif;font-size:clamp(10px,1vw,14px);letter-spacing:.12em;backdrop-filter:blur(7px)}
+.live i{width:8px;height:8px;border-radius:50%;background:#e38e7a;box-shadow:0 0 0 5px #e38e7a2e;animation:pulse 2s infinite}
 @keyframes pulse{50%{opacity:.45;transform:scale(.75)}}
 
-.qr-card{position:absolute;z-index:30;left:16px;top:16px;width:76px;padding:6px;border-radius:14px;background:#fffaf0ee;box-shadow:0 8px 24px #0006;backdrop-filter:blur(8px);pointer-events:auto;text-decoration:none;transition:transform .2s ease,opacity .2s ease}
-.qr-card img{display:block;width:64px;height:64px;margin:0 auto;background:#fff}
-.qr-card:hover{transform:translateY(-2px) scale(1.03)}
+.qr-card{position:absolute;z-index:30;left:16px;top:16px;width:76px;padding:6px;border-radius:14px;background:#fffaf0ee;box-shadow:0 8px 24px #0006}
+.qr-card img{display:block;width:64px;height:64px}
 
-.hero-photo{position:absolute;left:50%;top:50%;z-index:5;width:min(42vw,560px);height:min(65vh,600px);transform:translate(-50%,-48%);display:grid;place-items:center;pointer-events:none;transition:opacity .8s ease,transform .8s ease}
-.hero-photo img{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;border-radius:15px;filter:drop-shadow(0 18px 40px #000b)}
-
-.feed-layer{position:absolute;inset:0;z-index:10;overflow:hidden;pointer-events:none}
-.feed-item{position:absolute;width:clamp(115px,12vw,205px);padding:7px 9px;border:1px solid #fff8;border-radius:13px;background:#21191de8;color:#fff;box-shadow:0 12px 30px #0008;backdrop-filter:blur(8px);opacity:0;animation:feedIn .9s cubic-bezier(.18,.8,.25,1) both;will-change:transform,opacity}
+.feed-layer{position:absolute;inset:0;z-index:10;pointer-events:none;overflow:hidden}
+.feed-item{position:absolute;width:clamp(115px,12vw,205px);padding:7px 9px;border:1px solid #fff8;border-radius:13px;background:#21191de8;color:#fff;box-shadow:0 12px 30px #0008;backdrop-filter:blur(8px);opacity:0;animation:feedIn .9s cubic-bezier(.18,.8,.25,1) both}
 .feed-item.photo-only{padding:5px;background:#fff3}
 .feed-item img{display:block;width:100%;height:auto;max-height:135px;object-fit:contain;border-radius:9px;background:#130f0f}
 .feed-row{display:flex;align-items:flex-start;gap:7px}
 .avatar{width:27px;height:27px;flex:none;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#f0b49b,#9d6679);border:1px solid #fff;font-size:12px;font-weight:700}
 .feed-content{min-width:0}
-.feed-name{font-size:11px;opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.feed-text{margin-top:3px;font-family:"Ma Shan Zheng","Noto Serif TC",serif;font-size:clamp(12px,1.05vw,17px);line-height:1.4;font-weight:400;word-break:break-word}
-.feed-photo{margin-top:5px}
-.feed-item.leaving{animation:feedOut .8s ease both}
+.feed-name{font-size:11px;opacity:.82}
+.feed-text{margin-top:3px;font-family:"Ma Shan Zheng","Noto Serif TC",serif;font-size:clamp(12px,1.05vw,17px);line-height:1.4;word-break:break-word}
 @keyframes feedIn{0%{opacity:0;transform:translate3d(var(--from-x),var(--from-y),0) scale(.45) rotate(var(--from-r));filter:blur(5px)}55%{opacity:1}100%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(var(--r));filter:blur(0)}}
-@keyframes feedOut{0%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(var(--r))}100%{opacity:0;transform:translate3d(var(--to-x),var(--to-y),0) scale(.7) rotate(var(--to-r))}}
+@keyframes feedOut{to{opacity:0;transform:translate3d(var(--to-x),var(--to-y),0) scale(.7) rotate(var(--to-r));filter:blur(2px)}}
+.feed-item.leaving{animation:feedOut .8s ease both}
 
-.latest-message{position:absolute;left:50%;bottom:6.5%;z-index:25;width:min(420px,42vw);padding:12px 16px;transform:translateX(-50%);border:1px solid #fff9;border-radius:16px;background:#3c2930e8;color:#fff;box-shadow:0 14px 35px #0009;backdrop-filter:blur(9px);animation:latestIn .7s cubic-bezier(.2,.8,.25,1) both;pointer-events:none}
-.latest-message.out{animation:latestOut .8s ease both}
+.latest-message{position:absolute;left:50%;bottom:6.5%;z-index:25;width:min(420px,42vw);padding:12px 16px;transform:translateX(-50%);border:1px solid #fff9;border-radius:16px;background:#3c2930e8;color:#fff;box-shadow:0 14px 35px #0009;backdrop-filter:blur(9px);animation:latestIn .7s ease both;pointer-events:none}
 .latest-row{display:flex;align-items:flex-start;gap:9px}
 .latest-avatar{width:31px;height:31px;flex:none;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#f0b49b,#9d6679);border:1px solid #fff;font-weight:700}
 .latest-name{font-size:11px;opacity:.8}
-.latest-text{margin-top:2px;font-family:"Ma Shan Zheng","Noto Serif TC",serif;font-size:clamp(14px,1.4vw,21px);line-height:1.45;font-weight:400}
+.latest-text{margin-top:2px;font-family:"Ma Shan Zheng","Noto Serif TC",serif;font-size:clamp(14px,1.4vw,21px);line-height:1.45}
 @keyframes latestIn{from{opacity:0;transform:translate(-50%,18px) scale(.94)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
-@keyframes latestOut{to{opacity:0;transform:translate(-50%,-18px) scale(.96)}}
 
-.connection-status{position:absolute;right:3%;bottom:3%;z-index:30;font-family:"Ma Shan Zheng","Noto Serif TC",serif;font-size:11px;opacity:.55;pointer-events:none;transition:opacity .3s ease}
-.connection-status.error{opacity:.9}
+.connection-status{position:absolute;right:3%;bottom:3%;z-index:30;font-family:"Ma Shan Zheng",serif;font-size:11px;opacity:.5}
 
 @media(max-width:700px){
-  .brand{top:5%}
-  .brand b{font-size:28px}
-  .brand span{font-size:9px;letter-spacing:.25em}
-  .live{right:3%;top:3%;padding:6px 9px;font-size:9px}
-  .live i{width:6px;height:6px}
-  .qr-card{left:8px;top:8px;width:58px;padding:4px}
-  .qr-card img{width:50px;height:50px}
-  .hero-photo{width:78vw;height:54vh;top:49%}
-  .feed-item{width:42vw;padding:7px 8px;border-radius:11px}
-  .feed-item img{max-height:105px}
-  .avatar{width:25px;height:25px;font-size:11px}
-  .feed-name{font-size:9px}
-  .feed-text{font-size:12px}
-  .latest-message{width:78vw;bottom:5.5%;padding:9px 11px}
-  .latest-avatar{width:28px;height:28px}
-  .latest-text{font-size:14px}
-  .connection-status{right:3%;bottom:1.5%;font-size:9px}
+ .brand{top:5%}.brand b{font-size:28px}.brand span{font-size:9px}
+ .live{right:3%;top:3%;padding:6px 9px;font-size:9px}
+ .qr-card{left:8px;top:8px;width:58px;padding:4px}.qr-card img{width:50px;height:50px}
+ .feed-item{width:42vw;padding:7px 8px}.feed-item img{max-height:105px}
+ .latest-message{width:78vw;bottom:5.5%;padding:9px 11px}.latest-text{font-size:14px}
 }
 </style>
 </head>
 
 <body>
-<main class="wall" aria-label="婚禮現場照片牆">
-
-  <div class="stage">
-    <div class="hero-photo" id="heroPhoto">
-      <img src="assets/hero-forest.jpg" alt="婚禮照片牆">
-    </div>
-  </div>
-
-  <div class="veil"></div>
+<main class="wall">
+  <div class="stage"></div>
 
   <div class="brand">
     <b>Yu-Ming &amp; Jia-Yu</b>
     <span>OUR WEDDING DAY</span>
   </div>
 
-  <div class="live">
-    <i></i>
-    <span>現場照片牆</span>
-  </div>
+  <div class="live"><i></i><span>現場照片牆</span></div>
 
-  <a class="qr-card" id="qrCard" href="https://jiayuweng.github.io/invitation/upload.html" target="_blank" rel="noopener" aria-label="掃碼上傳照片與祝福">
-    <img id="qrImage" src="" alt="掃碼上傳照片">
+  <a class="qr-card" href="https://jiayuweng.github.io/invitation/upload.html" target="_blank" rel="noopener">
+    <img id="qr" alt="掃碼上傳照片">
   </a>
 
-  <div class="feed-layer" id="feedLayer"></div>
-
+  <div id="feedLayer" class="feed-layer"></div>
   <div id="latestMessage" class="latest-message" style="display:none"></div>
-
-  <div id="connectionStatus" class="connection-status">即時同步中</div>
+  <div id="status" class="connection-status">即時同步中</div>
 </main>
 
 <script>
 const DATA_ENDPOINT="https://script.google.com/macros/s/AKfycbwiBfLfxWrImX3Z8Mi1qqxxHaReprYiiu8j7VMnaFKFQyRGmIJaQ5h2iifUXpReVQlB/exec";
 const UPLOAD_URL="https://jiayuweng.github.io/invitation/upload.html";
 
-const wall=document.querySelector(".wall");
+document.getElementById("qr").src=
+  "https://quickchart.io/qr?size=180&text="+encodeURIComponent(UPLOAD_URL);
+
 const feedLayer=document.getElementById("feedLayer");
-const latestMessage=document.getElementById("latestMessage");
-const connectionStatus=document.getElementById("connectionStatus");
-const heroPhoto=document.getElementById("heroPhoto");
-const qrImage=document.getElementById("qrImage");
+const latest=document.getElementById("latestMessage");
+const statusEl=document.getElementById("status");
 
-qrImage.src="https://quickchart.io/qr?size=180&text="+encodeURIComponent(UPLOAD_URL);
-
-let playlist=[];
-const knownIds=new Set();
+const playlist=[];
+const known=new Set();
 const shownBlessings=new Set();
-const activeFeed=new Map();
+const active=new Map();
 
-const positions=[
-  ["3%","20%"],["20%","31%"],["42%","18%"],["68%","20%"],
-  ["82%","38%"],["8%","64%"],["29%","72%"],["67%","70%"]
+const slots=[
+ ["3%","21%"],["22%","30%"],["43%","18%"],["68%","21%"],
+ ["82%","39%"],["7%","64%"],["30%","72%"],["67%","69%"]
 ];
 
-function cleanText(value){return String(value==null?"":value).trim()}
-function getName(item){return cleanText(item.name||item.Name||item.姓名||item.nickname||"親友")}
-function getText(item){return cleanText(item.text||item.message||item.blessing||item.留言||item.祝福)}
-function getUrl(item){return cleanText(item.url||item.photoUrl||item.image||item.imageUrl||item.photo||item.照片)}
-function getKind(item){return cleanText(item.kind||item.type||item.類型||"upload").toLowerCase()}
-function hasPhoto(item){return Boolean(getUrl(item))}
-function hasText(item){return Boolean(getText(item))}
+function s(v){return String(v==null?"":v).trim()}
+function esc(v){return s(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 
-function normalizeImageUrl(url){
-  url=cleanText(url);
+function getName(x){return s(x.name||x.Name||x.姓名||x.nickname||"親友")}
+function getText(x){return s(x.text||x.message||x.blessing||x.留言||x.祝福)}
+function getUrl(x){return s(x.url||x.photoUrl||x.imageUrl||x.image||x.photo||x.照片)}
+function getKind(x){return s(x.kind||x.type||x.類型||"upload").toLowerCase()}
+
+/* Google Drive 各種網址都轉成可嵌入圖片 */
+function driveUrl(url){
+  url=s(url);
   if(!url)return "";
 
+  let m;
+
+  m=url.match(/[?&]id=([^&]+)/);
+  if(m && url.includes("drive.google.com")){
+    return "https://drive.google.com/thumbnail?id="+encodeURIComponent(m[1])+"&sz=w1600";
+  }
+
+  m=url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if(m){
+    return "https://drive.google.com/thumbnail?id="+encodeURIComponent(m[1])+"&sz=w1600";
+  }
+
+  m=url.match(/drive\.usercontent\.google\.com\/download\?id=([^&]+)/);
+  if(m){
+    return "https://drive.google.com/thumbnail?id="+encodeURIComponent(m[1])+"&sz=w1600";
+  }
+
   if(url.includes("drive.google.com/thumbnail")){
-    if(!url.includes("sz=")&&!url.includes("sz=w")){
-      return url+(url.includes("?")?"&":"?")+"sz=w1600";
-    }
+    if(!url.includes("sz="))url+=(url.includes("?")?"&":"?")+"sz=w1600";
     return url;
-  }
-
-  if(url.includes("drive.google.com/uc?export=view&id=")){
-    const id=url.split("id=")[1]?.split("&")[0];
-    if(id)return "https://drive.google.com/thumbnail?id="+encodeURIComponent(id)+"&sz=w1600";
-  }
-
-  const fileMatch=url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-  if(fileMatch){
-    return "https://drive.google.com/thumbnail?id="+encodeURIComponent(fileMatch[1])+"&sz=w1600";
-  }
-
-  const openMatch=url.match(/drive\.google\.com\/open\?id=([^&]+)/);
-  if(openMatch){
-    return "https://drive.google.com/thumbnail?id="+encodeURIComponent(openMatch[1])+"&sz=w1600";
   }
 
   return url;
 }
 
-function getSourceId(item,index){
-  const raw=item.sourceId||item.id||item.ID||item.timestamp||item.time||item.createdAt||item.created||item.row||item.rowNumber;
-  if(raw!=null&&cleanText(raw))return cleanText(raw);
-  return [getName(item),getText(item),getUrl(item),index].join("|");
+function sourceId(x,i){
+  const v=x.sourceId||x.id||x.ID||x.timestamp||x.time||x.createdAt||x.created||x.rowNumber||x.row;
+  return s(v)||[getName(x),getText(x),getUrl(x),i].join("|");
 }
 
-function normalizeItem(item,index){
-  const sourceId=getSourceId(item,index);
-  return {
-    ...item,
-    sourceId,
-    id:sourceId,
-    kind:getKind(item),
-    name:getName(item),
-    text:getText(item),
-    url:normalizeImageUrl(getUrl(item))
+function normalize(x,i){
+  const id=sourceId(x,i);
+  return {...x,
+    sourceId:id,
+    id:id,
+    name:getName(x),
+    text:getText(x),
+    kind:getKind(x),
+    url:driveUrl(getUrl(x))
   };
 }
 
-function extractItems(payload){
+function extract(payload){
   if(Array.isArray(payload))return payload;
   if(!payload||typeof payload!=="object")return [];
   if(Array.isArray(payload.items))return payload.items;
   if(Array.isArray(payload.photos))return payload.photos;
   if(Array.isArray(payload.data))return payload.data;
 
+  const a=[];
+  if(Array.isArray(payload.preset))a.push(...payload.preset);
+  if(Array.isArray(payload.live))a.push(...payload.live);
+  if(Array.isArray(payload.uploads))a.push(...payload.uploads);
+  if(Array.isArray(payload.blessings))a.push(...payload.blessings);
+  return a;
+}
+
+function addNew(raw){
   const result=[];
-  if(Array.isArray(payload.preset))result.push(...payload.preset);
-  if(Array.isArray(payload.live))result.push(...payload.live);
-  if(Array.isArray(payload.uploads))result.push(...payload.uploads);
-  if(Array.isArray(payload.blessings))result.push(...payload.blessings);
+
+  raw.forEach((x,i)=>{
+    if(!x)return;
+    const item=normalize(x,i);
+    if(!item.sourceId||known.has(item.sourceId))return;
+
+    known.add(item.sourceId);
+    playlist.push(item);
+    result.push(item);
+  });
+
   return result;
 }
 
-function appendIncoming(rawItems){
-  if(!Array.isArray(rawItems))return [];
+let busy=false;
 
-  const newItems=[];
-
-  rawItems.forEach((rawItem,index)=>{
-    if(!rawItem)return;
-
-    const item=normalizeItem(rawItem,index);
-    const id=item.sourceId;
-
-    if(!id||knownIds.has(id))return;
-
-    knownIds.add(id);
-    playlist.push(item);
-    newItems.push(item);
-  });
-
-  if(playlist.length>1000)playlist=playlist.slice(-1000);
-
-  return newItems;
-}
-
-let syncing=false;
-
-async function pollIncoming(){
-  if(!DATA_ENDPOINT||syncing)return;
-
-  syncing=true;
+async function poll(){
+  if(busy)return;
+  busy=true;
 
   try{
-    const url=DATA_ENDPOINT+"?t="+Date.now();
-
-    const response=await fetch(url,{
-      method:"GET",
+    /* 每次使用不同 URL，避免 Google Apps Script / CDN 快取 */
+    const response=await fetch(DATA_ENDPOINT+"?t="+Date.now(),{
       cache:"no-store",
-      credentials:"omit"
+      method:"GET"
     });
 
     if(!response.ok)throw new Error("HTTP "+response.status);
 
     const payload=await response.json();
-    const rawItems=extractItems(payload);
-    const newItems=appendIncoming(rawItems);
+    const incoming=addNew(extract(payload));
 
-    if(newItems.length)handleNewItems(newItems);
+    incoming.forEach((item,i)=>{
+      addCard(item);
+      if(getText(item))showBlessing(item,i*250);
+    });
 
-    connectionStatus.textContent="即時同步中";
-    connectionStatus.classList.remove("error");
+    statusEl.textContent="即時同步中";
 
-  }catch(error){
-    console.warn("照片牆同步暫時無法連線",error);
-    connectionStatus.textContent="同步連線中…";
-    connectionStatus.classList.add("error");
+  }catch(e){
+    console.warn("照片同步失敗",e);
+    statusEl.textContent="同步連線中…";
   }finally{
-    syncing=false;
+    busy=false;
   }
 }
 
-function handleNewItems(items){
-  items.forEach((item,index)=>{
-    if(hasText(item))showBlessing(item,index*350);
-    addFeedItem(item);
-  });
+function addCard(item){
+  if(active.has(item.sourceId))return;
 
-  preloadNewPhotos(items);
+  if(active.size>=8){
+    const oldKey=active.keys().next().value;
+    removeCard(oldKey);
+  }
 
-  if(items.length)heroPhoto.style.opacity="0";
-}
-
-function createFeedElement(item,positionIndex){
   const el=document.createElement("article");
-  const photo=hasPhoto(item);
-  const text=hasText(item);
+  const photo=!!item.url;
+  const text=!!getText(item);
 
   el.className="feed-item"+(photo&&!text?" photo-only":"");
 
-  const pos=positions[positionIndex%positions.length];
-  el.style.left=pos[0];
-  el.style.top=pos[1];
+  const p=slots[active.size%slots.length];
+  el.style.left=p[0];
+  el.style.top=p[1];
 
-  const fromX=Math.random()>.5?"":"-";
-  const toX=Math.random()>.5?"":"-";
-  const fromR=(Math.random()*20-10).toFixed(1);
-  const r=(Math.random()*6-3).toFixed(1);
-  const toR=(Math.random()*18-9).toFixed(1);
-
-  el.style.setProperty("--from-x",fromX+(18+Math.round(Math.random()*24))+"vw");
-  el.style.setProperty("--from-y",(15+Math.round(Math.random()*25))+"vh");
-  el.style.setProperty("--from-r",fromR+"deg");
-  el.style.setProperty("--r",r+"deg");
-  el.style.setProperty("--to-x",toX+(16+Math.round(Math.random()*20))+"vw");
+  el.style.setProperty("--from-x",(Math.random()>.5?"":"-")+(18+Math.round(Math.random()*20))+"vw");
+  el.style.setProperty("--from-y",(15+Math.round(Math.random()*20))+"vh");
+  el.style.setProperty("--from-r",(Math.random()*18-9)+"deg");
+  el.style.setProperty("--r",(Math.random()*6-3)+"deg");
+  el.style.setProperty("--to-x",(Math.random()>.5?"":"-")+(16+Math.round(Math.random()*20))+"vw");
   el.style.setProperty("--to-y","-24vh");
-  el.style.setProperty("--to-r",toR+"deg");
-  el.dataset.feedKey=item.sourceId;
+  el.style.setProperty("--to-r",(Math.random()*18-9)+"deg");
+  el.dataset.key=item.sourceId;
 
   let html="";
 
   if(text){
-    const avatar=(getName(item).slice(0,1)||"♡");
-    html+='<div class="feed-row"><div class="avatar">'+escapeHtml(avatar)+'</div><div class="feed-content"><div class="feed-name">'+escapeHtml(getName(item))+'</div><div class="feed-text">'+escapeHtml(getText(item))+'</div></div></div>';
+    html+='<div class="feed-row"><div class="avatar">'+esc(getName(item).slice(0,1)||"♡")+'</div><div class="feed-content"><div class="feed-name">'+esc(getName(item))+'</div><div class="feed-text">'+esc(getText(item))+'</div></div></div>';
   }
 
   if(photo){
-    html+='<img class="feed-photo" src="'+escapeAttribute(item.url)+'" alt="婚禮照片">';
+    html+='<img src="'+esc(item.url)+'" alt="婚禮照片">';
   }
 
   el.innerHTML=html;
-  return el;
-}
-
-function escapeHtml(value){
-  return String(value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
-
-function escapeAttribute(value){return escapeHtml(value)}
-
-function addFeedItem(item){
-  if(activeFeed.has(item.sourceId))return;
-
-  if(activeFeed.size>=8){
-    const first=activeFeed.keys().next().value;
-    const old=activeFeed.get(first);
-    if(old)removeFeedElement(first,old);
-  }
-
-  const el=createFeedElement(item,activeFeed.size);
   feedLayer.appendChild(el);
-  activeFeed.set(item.sourceId,el);
+  active.set(item.sourceId,el);
+
+  /* 如果 Google Drive 圖片真的載不到，不讓破圖圖示一直留著 */
+  const img=el.querySelector("img");
+  if(img){
+    img.addEventListener("error",()=>{
+      console.warn("照片無法載入:",item.url);
+      if(!getText(item))removeCard(item.sourceId);
+    },{once:true});
+  }
 }
 
-function removeFeedElement(key,el){
+function removeCard(key){
+  const el=active.get(key);
   if(!el){
-    activeFeed.delete(key);
+    active.delete(key);
     return;
   }
 
-  if(el.classList.contains("leaving"))return;
-
   el.classList.add("leaving");
-
   el.addEventListener("animationend",()=>{
     el.remove();
-    activeFeed.delete(key);
+    active.delete(key);
   },{once:true});
 }
 
-let latestTimer=null;
+let latestTimer;
 
-function showBlessing(item,delay=0){
-  const key=item.sourceId;
-  if(shownBlessings.has(key))return;
-
-  shownBlessings.add(key);
-
-  setTimeout(()=>displayLatestMessage(item),delay);
-}
-
-function displayLatestMessage(item){
-  latestMessage.classList.remove("out");
-  latestMessage.style.display="block";
-
-  const avatar=(getName(item).slice(0,1)||"♡");
-
-  latestMessage.innerHTML=
-    '<div class="latest-row">'+
-      '<div class="latest-avatar">'+escapeHtml(avatar)+'</div>'+
-      '<div>'+
-        '<div class="latest-name">'+escapeHtml(getName(item))+'</div>'+
-        '<div class="latest-text">'+escapeHtml(getText(item))+'</div>'+
-      '</div>'+
-    '</div>';
-
-  void latestMessage.offsetWidth;
-  latestMessage.classList.remove("out");
-
-  if(latestTimer)clearTimeout(latestTimer);
-
-  latestTimer=setTimeout(()=>{
-    latestMessage.classList.add("out");
-
-    setTimeout(()=>{
-      if(latestMessage.classList.contains("out")){
-        latestMessage.style.display="none";
-      }
-    },850);
-  },5500);
-}
-
-let photoIndex=0;
-let currentPhotoKey="";
-
-function getPhotos(){
-  return playlist.filter(item=>hasPhoto(item));
-}
-
-function showNextPhoto(){
-  const photos=getPhotos();
-  if(!photos.length)return;
-
-  if(!currentPhotoKey){
-    photoIndex=0;
-  }else{
-    photoIndex=(photoIndex+1)%photos.length;
-  }
-
-  const item=photos[photoIndex];
-  currentPhotoKey=item.sourceId;
-
-  const img=heroPhoto.querySelector("img");
-  if(!img)return;
-
-  heroPhoto.style.opacity="0";
+function showBlessing(item,delay){
+  if(shownBlessings.has(item.sourceId))return;
+  shownBlessings.add(item.sourceId);
 
   setTimeout(()=>{
-    img.src=item.url;
-    heroPhoto.style.opacity="1";
-  },350);
+    latest.style.display="block";
+    latest.innerHTML=
+      '<div class="latest-row">'+
+        '<div class="latest-avatar">'+esc(getName(item).slice(0,1)||"♡")+'</div>'+
+        '<div><div class="latest-name">'+esc(getName(item))+'</div>'+
+        '<div class="latest-text">'+esc(getText(item))+'</div></div>'+
+      '</div>';
+
+    latest.classList.remove("out");
+    void latest.offsetWidth;
+
+    clearTimeout(latestTimer);
+    latestTimer=setTimeout(()=>{
+      latest.classList.add("out");
+      setTimeout(()=>latest.style.display="none",850);
+    },5200);
+  },delay||0);
 }
 
-function preloadNewPhotos(items){
-  items.filter(item=>hasPhoto(item)).forEach(item=>{
-    const image=new Image();
-    image.src=item.url;
-  });
-}
+/* 啟動：第一次立即抓 */
+poll();
 
-async function startup(){
-  await pollIncoming();
-
-  const photos=getPhotos();
-
-  if(photos.length){
-    photoIndex=0;
-    const first=photos[0];
-    currentPhotoKey=first.sourceId;
-
-    const img=heroPhoto.querySelector("img");
-    if(img)img.src=first.url;
-
-    heroPhoto.style.opacity="1";
-  }
-
-  const blessings=playlist.filter(item=>hasText(item)).slice(-3);
-
-  blessings.forEach(item=>shownBlessings.add(item.sourceId));
-
-  if(blessings.length){
-    displayLatestMessage(blessings[blessings.length-1]);
-  }
-}
-
-/* 唯一的 Google Sheet polling：每 2 秒 */
-setInterval(()=>{
-  pollIncoming();
-},2000);
-
-/* 照片輪播 */
-setInterval(()=>{
-  showNextPhoto();
-},8000);
-
-startup();
+/* 唯一輪詢：每 2 秒 */
+setInterval(poll,2000);
 </script>
 </body>
 </html>
