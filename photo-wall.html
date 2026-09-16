@@ -25,7 +25,13 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
   window.__syncManagerActive=true;
   const known=new Set(playlist.map(x=>String(x.sourceId||x.id||'')));
   let busy=false, timer=0;
-  const unwrap=data=>Array.isArray(data)?data:(data&&Array.isArray(data.items)?data.items:(data&&Array.isArray(data.data)?data.data:[]));
+  const unwrap=data=>{
+    if(Array.isArray(data)) return data;
+    if(!data) return [];
+    if(Array.isArray(data.items)) return data.items;
+    if(Array.isArray(data.data)) return data.data;
+    return [].concat(data.photos||[],data.uploads||[],data.live||[],data.preset||[]);
+  };
   const normalize=(raw,i)=>{
     const sourceId=String(raw.id||raw.timestamp||raw.name||('event-'+i));
     const kind=raw.kind||raw.type||(raw.photo||raw.imageUrl||raw.url?'upload':'blessing');
