@@ -447,46 +447,25 @@ function addPolaroid(item){
   el.className="polaroid guest-photo";
 
   /*
-   * 每次隨機選擇左右區域，再在區域內隨機位置。
-   * 中央主視覺保留給新人與祝福，不讓賓客照片蓋住中心。
+   * 上傳照片也使用避讓演算法，避免跟婚紗照疊在一起。
+   * 暫時先加入 DOM，計算位置後再顯示。
    */
-  const side=Math.random()<0.5 ? "left" : "right";
+  polaroidLayer.appendChild(el);
 
-  let left, top;
+  const pos=randomPresetPosition();
 
-  if(side==="left"){
-    left=(3+Math.random()*22);
-    top=(10+Math.random()*68);
-  }else{
-    left=(75+Math.random()*21);
-    top=(10+Math.random()*68);
-  }
-
-  const rot=(-10+Math.random()*20);
-  const scale=(0.88+Math.random()*0.22);
-
-  el.style.left=left+"%";
-  el.style.top=top+"%";
-  el.style.setProperty("--rot",rot+"deg");
+  el.style.left=pos.left;
+  el.style.top=pos.top;
+  el.style.setProperty("--rot",pos.rot);
   el.style.setProperty("--float-x",((-35+Math.random()*70))+"px");
-  el.style.setProperty("--scale",scale);
-
-  /*
-   * 避免太靠近 QR Code。
-   */
-  if(top<20 && side==="right"){
-    el.style.top=(22+Math.random()*52)+"%";
-  }
+  el.style.setProperty("--scale",pos.scale);
 
   el.innerHTML=
     '<img src="'+esc(item.url)+'" alt="">'+
     '<span class="heart">♡</span>';
 
-  polaroidLayer.appendChild(el);
-
   /*
    * 上傳照片最多保留 6 張。
-   * 新照片會取代最舊的一張。
    */
   const guests=polaroidLayer.querySelectorAll(".guest-photo");
 
@@ -602,7 +581,9 @@ const presetShowcase={
   items:[],
   active:[],
   timer:null,
-  nextIndex:0
+  nextIndex:0,
+  shownHistory:[],
+  historyLimit:0
 };
 
 /*
@@ -611,27 +592,180 @@ const presetShowcase={
  * 中央保留給新人主視覺，照片主要分布在四周。
  */
 function randomPresetPosition(){
+  /*
+   * 不再只靠「隨機」：
+   * 每次會產生多個候選位置，檢查是否與畫面上其他照片太接近。
+   * 找到不重疊的位置才使用。
+   *
+   * 座標使用百分比，所以手機 / 平板 / 大螢幕都會跟著縮放。
+   */
   const zones=[
-    {left:3,  top:8,  width:22, height:24},
-    {left:18, top:5,  width:18, height:25},
-    {left:3,  top:34, width:21, height:27},
-    {left:72, top:7,  width:20, height:25},
-    {left:78, top:31, width:18, height:27},
-    {left:70, top:61, width:22, height:25},
-    {left:4,  top:67, width:21, height:24},
-    {left:20, top:67, width:18, height:25}
+    {left:3,  top:8,  width:19, height:22},
+    {left:22, top:5,  width:17, height:23},
+    {left:3,  top:34, width:19, height:24},
+    {left:22, top:67, width:17, height:22},
+
+    {left:77, top:7,  width:19, height:22},
+    {left:72, top:33, width:19, height:24},
+    {left:79, top:62, width:18, height:23},
+    {left:60, top:68, width:17, height:21}
   ];
 
-  const zone=zones[Math.floor(Math.random()*zones.length)];
+  /*
+   * Polaroid 大約佔畫面 14~18% 寬、20~25% 高。
+   * margin 讓照片之間不要貼太近。
+   */
+  const photoW=15;
+  const photoH=22;
+  const gap=2.5;
+
+  const occupied=[];
+
+  presetShowcase.active.forEach(entry=>{
+    if(!entry.el || !entry.el.isConnected)return;
+
+    const left=parseFloat(entry.el.style.left);
+    const top=parseFloat(entry.el.style.top);
+
+    if(!isNaN(left) && !isNaN(top)){
+      occupied.push({
+        left,
+        top,
+        right:left+photoW,
+        bottom:top+photoH
+      });
+    }
+  });
+
+  /*
+   * 賓客剛上傳的照片也算進避讓範圍，
+   * 避免婚紗照跟賓客照片完全疊在一起。
+   */
+  polaroidLayer.querySelectorAll(".guest-photo").forEach(el=>{
+    const left=parseFloat(el.style.left);
+    const top=parseFloat(el.style.top);
+
+    if(!isNaN(left) && !isNaN(top)){
+      occupied.push({
+        left,
+        top,
+        right:left+photoW,
+        bottom:top+photoH
+      });
+    }
+  });
+
+  function overlaps(a,b){
+    return !(
+      a.right+gap < b.left ||
+      a.left-gap > b.right ||
+      a.bottom+gap < b.top ||
+      a.top-gap > b.bottom
+    );
+  }
+
+  /*
+   * 最多嘗試 80 次。
+   * 找不到完全不重疊的位置，就選「重疊面積最小」的候選。
+   */
+  let best=null;
+  let bestScore=Infinity;
+
+  for(let i=0;i<80;i++){
+    const zone=
+      zones[Math.floor(Math.random()*zones.length)];
+
+    const left=
+      zone.left+
+      Math.random()*Math.max(0,zone.width-photoW);
+
+    const top=
+      zone.top+
+      Math.random()*Math.max(0,zone.height-photoH);
+
+    const candidate={
+      left,
+      top,
+      right:left+photoW,
+      bottom:top+photoH
+    };
+
+    let score=0;
+    let collision=false;
+
+    occupied.forEach(other=>{
+      const xOverlap=
+        Math.max(
+          0,
+          Math.min(candidate.right,other.right)-
+          Math.max(candidate.left,other.left)
+        );
+
+      const yOverlap=
+        Math.max(
+          0,
+          Math.min(candidate.bottom,other.bottom)-
+          Math.max(candidate.top,other.top)
+        );
+
+      const area=xOverlap*yOverlap;
+
+      if(area>0){
+        collision=true;
+        score+=area;
+      }
+
+      /*
+       * 即使沒有真正重疊，也把太近的位置視為扣分。
+       */
+      const cx=(candidate.left+candidate.right)/2;
+      const cy=(candidate.top+candidate.bottom)/2;
+      const ox=(other.left+other.right)/2;
+      const oy=(other.top+other.bottom)/2;
+
+      const dx=Math.abs(cx-ox);
+      const dy=Math.abs(cy-oy);
+
+      if(dx<photoW+gap && dy<photoH+gap){
+        score+=(photoW+gap-dx)*0.35;
+        score+=(photoH+gap-dy)*0.35;
+      }
+    });
+
+    if(!collision && score<bestScore){
+      bestScore=score;
+      best=candidate;
+    }
+
+    if(!collision && score<1){
+      best=candidate;
+      break;
+    }
+  }
+
+  /*
+   * 萬一畫面已經很多照片，仍然保證有位置可用。
+   */
+  if(!best){
+    const zone=zones[
+      Math.floor(Math.random()*zones.length)
+    ];
+
+    best={
+      left:zone.left+
+        Math.random()*Math.max(0,zone.width-photoW),
+      top:zone.top+
+        Math.random()*Math.max(0,zone.height-photoH)
+    };
+  }
 
   return {
-    left:(zone.left + Math.random()*Math.max(2,zone.width-12))+"%",
-    top:(zone.top + Math.random()*Math.max(2,zone.height-14))+"%",
+    left:best.left+"%",
+    top:best.top+"%",
     rot:(-10+Math.random()*20)+"deg",
-    scale:(.86+Math.random()*.24).toFixed(2)
+    scale:(0.86+Math.random()*0.24).toFixed(2)
   };
 }
-
 function createPresetPhoto(item,animate=true){
   if(!item || !item.url)return null;
 
@@ -700,11 +834,16 @@ function setupPresetSlideshow(presets){
   const initialCount=
     min + Math.floor(Math.random()*(max-min+1));
 
-  const shuffled=[...presetShowcase.items]
-    .sort(()=>Math.random()-.5);
+  presetShowcase.shownHistory=[];
+  presetShowcase.historyLimit=Math.max(
+    presetShowcase.items.length,
+    CONFIG.maxPolaroids*2
+  );
 
   for(let i=0;i<initialCount;i++){
-    const item=shuffled[i%shuffled.length];
+    const item=getNextPresetItem();
+    if(!item)break;
+
     const el=createPresetPhoto(item,false);
 
     if(el){
@@ -774,13 +913,11 @@ function refreshPresetPhotos(){
    * 只要有下一張婚紗照，就直接補一張。
    */
   if(activeCount<CONFIG.maxPolaroids){
-    const item=items[
-      presetShowcase.nextIndex%items.length
-    ];
+    const item=getNextPresetItem();
 
-    presetShowcase.nextIndex++;
-
-    addPresetPhoto(item);
+    if(item){
+      addPresetPhoto(item);
+    }
     return;
   }
 
@@ -817,12 +954,11 @@ function refreshPresetPhotos(){
     const currentCount=presetShowcase.active.length;
 
     if(currentCount<CONFIG.maxPolaroids){
-      const item=items[
-        presetShowcase.nextIndex%items.length
-      ];
+      const item=getNextPresetItem();
 
-      presetShowcase.nextIndex++;
-      addPresetPhoto(item);
+      if(item){
+        addPresetPhoto(item);
+      }
     }
   },CONFIG.presetFadeDuration+80);
 }
