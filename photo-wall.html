@@ -128,6 +128,16 @@ html,body{
   display:block;width:100%;aspect-ratio:1/1.08;object-fit:cover;
   background:#ddd;
 }
+/* 橫式照片自動使用橫向相框 */
+.polaroid.landscape{
+  width:210px;
+}
+.polaroid.landscape img{
+  aspect-ratio:3/2;
+}
+.polaroid.square{
+  width:165px;
+}
 .polaroid .heart{
   position:absolute;right:7px;bottom:5px;
   color:#f39aa0;font-size:22px;text-shadow:0 2px 4px rgba(0,0,0,.15)
@@ -235,6 +245,8 @@ html,body{
   .live-text{font-size:14px}
   .live-time{display:none}
   .polaroid{width:100px;padding:7px 7px 20px}
+  .polaroid.landscape{width:135px}
+  .polaroid.square{width:112px}
   .float-msg{max-width:145px;padding:8px 11px}
   .float-msg .words{font-size:12px}
   .bottom-copy,  .qr{width:77px;right:9px;top:9px;padding:5px}
@@ -441,6 +453,27 @@ function addCard(item){
   },CONFIG.messageDisplayTime);
 }
 
+function applyPhotoOrientation(el,img){
+  if(!el || !img)return;
+
+  const apply=()=>{
+    const w=img.naturalWidth || 0;
+    const h=img.naturalHeight || 0;
+    if(!w || !h)return;
+
+    el.classList.remove("landscape","square");
+
+    if(w / h > 1.15){
+      el.classList.add("landscape");
+    }else if(Math.abs(w / h - 1) < 0.15){
+      el.classList.add("square");
+    }
+  };
+
+  if(img.complete) apply();
+  else img.addEventListener("load",apply,{once:true});
+}
+
 function addPolaroid(item){
   if(!item.url)return;
 
@@ -464,6 +497,8 @@ function addPolaroid(item){
   el.innerHTML=
     '<img src="'+esc(item.url)+'" alt="">'+
     '<span class="heart">♡</span>';
+
+  applyPhotoOrientation(el,el.querySelector("img"));
 
   /*
    * 上傳照片最多保留 6 張。
@@ -787,6 +822,8 @@ function createPresetPhoto(item,animate=true){
   el.innerHTML=
     '<img src="'+esc(item.url)+'" alt="">'+
     '<span class="heart">♡</span>';
+
+  applyPhotoOrientation(el,el.querySelector("img"));
 
   polaroidLayer.appendChild(el);
 
