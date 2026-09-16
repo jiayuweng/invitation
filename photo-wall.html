@@ -341,6 +341,10 @@ const state={
   // 避免長時間運作時 Set 無限增長
   knownOrder:[],
 
+  // 初次同步完成後的資料時間水位。
+  // 後續只接受比這個時間更新的資料，避免舊訊息重播。
+  watermarkTime:0,
+
   // 網路 / polling 狀態
   online:navigator.onLine!==false,
   pollTimer:null,
@@ -1098,31 +1102,71 @@ function showNextQueued(){
 function process(items){
   if(!Array.isArray(items))return;
 
+  const normalized=items.map(normalize);
   const fresh=[];
 
-  items.map(normalize).forEach(item=>{
-    const id=keyOf(item);
+  /*
+   * 非常重要：
+   * initial 回傳的是「歷史資料快照」，只拿來建立初始畫面。
+   * 記住當下資料中最新的時間，之後 polling 只接受
+   * time 嚴格大於這個時間的資料。
+   *
+   * 這樣即使：
+   * - known Set 因長時間播放而淘汰舊 ID
+   * - 網路斷線後重新抓回最近 30 筆
+   * - 分頁切回前景又重新 poll
+   *
+   * 舊祝福都不會再次進入播放佇列。
+   */
+  if(state.initial){
+    let maxInitialTime=0;
 
-    if(!rememberKey(id))return;
+    normalized.forEach(item=>{
+      const t=Number(item.time)||0;
+      if(t>maxInitialTime)maxInitialTime=t;
 
-    state.items.push(item);
-    fresh.push(item);
-  });
+      const id=keyOf(item);
+      if(!rememberKey(id))return;
+
+      state.items.push(item);
+      fresh.push(item);
+    });
+
+    state.watermarkTime=maxInitialTime;
+  }else{
+    normalized.forEach(item=>{
+      const id=keyOf(item);
+      const t=Number(item.time)||0;
+
+      /*
+       * 只接受 initial 快照之後真正新增的資料。
+       * preset 是靜態婚紗照，不應該在 polling 時重新播放。
+       */
+      if(item.kind==="preset")return;
+      if(t<=state.watermarkTime)return;
+      if(!rememberKey(id))return;
+
+      state.items.push(item);
+      fresh.push(item);
+
+      if(t>state.watermarkTime){
+        state.watermarkTime=t;
+      }
+    });
+
+    // 後續真正的新資料才進播放佇列
+    fresh.forEach(queueNewItem);
+  }
 
   /*
    * 初次載入：
    * - 婚紗照交給「輪播器」
-   * - 歷史祝福不當成新訊息播放
+   * - 歷史祝福只建立資料，不進播放佇列
    */
   if(state.initial){
     setupPresetSlideshow(
       fresh.filter(x=>x.kind==="preset")
     );
-  }else{
-    // 後續新資料進佇列，一筆一筆播
-    fresh
-      .filter(x=>x.kind!=="preset")
-      .forEach(queueNewItem);
   }
 
   // 限制前端資料量，避免婚禮長時間播放後記憶體持續增加
