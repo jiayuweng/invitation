@@ -114,6 +114,10 @@ html,body{
 .live-card.fade{
   opacity:.4;
 }
+.live-card.leaving{
+  animation:cardOutUp .95s ease forwards;
+  pointer-events:none;
+}
 .avatar{
   width:48px;height:48px;border-radius:50%;flex:none;
   display:grid;place-items:center;
@@ -151,6 +155,20 @@ html,body{
   transform:rotate(var(--rot));
   animation:polaroidIn .8s ease both;
 }
+.polaroid.preset-slide{
+  animation:polaroidIn .8s ease both;
+}
+.polaroid.preset-slide.leaving{
+  animation:polaroidOutUp .9s ease forwards;
+  pointer-events:none;
+}
+.polaroid.guest-photo{
+  animation:guestPhotoIn .7s cubic-bezier(.2,.75,.25,1) both;
+}
+.polaroid.guest-photo.leaving{
+  animation:polaroidOutUp .9s ease forwards;
+  pointer-events:none;
+}
 .polaroid img{
   display:block;width:100%;aspect-ratio:1/1.08;object-fit:cover;
   background:#ddd;
@@ -176,6 +194,10 @@ html,body{
 .float-msg .words{
   font-size:clamp(14px,1.05vw,18px);
   line-height:1.4;font-weight:600;word-break:break-word;
+}
+.float-msg.leaving{
+  animation:bubbleOutUp .95s ease forwards;
+  pointer-events:none;
 }
 
 /* ---------- decorative emojis / petals ---------- */
@@ -232,13 +254,29 @@ html,body{
   from{opacity:0;transform:translateY(28px) scale(.97)}
   to{opacity:1;transform:none}
 }
+@keyframes cardOutUp{
+  from{opacity:1;transform:translateY(0) scale(1)}
+  to{opacity:0;transform:translateY(-55px) scale(.98)}
+}
 @keyframes polaroidIn{
   from{opacity:0;transform:translateY(25px) scale(.9) rotate(var(--rot))}
+  to{opacity:1;transform:rotate(var(--rot))}
+}
+@keyframes polaroidOutUp{
+  from{opacity:1;transform:translateY(0) scale(1) rotate(var(--rot))}
+  to{opacity:0;transform:translateY(-65px) scale(.96) rotate(var(--rot))}
+}
+@keyframes guestPhotoIn{
+  from{opacity:0;transform:translateY(30px) scale(.88) rotate(var(--rot))}
   to{opacity:1;transform:rotate(var(--rot))}
 }
 @keyframes bubbleIn{
   from{opacity:0;transform:translateY(18px) scale(.9)}
   to{opacity:1;transform:none}
+}
+@keyframes bubbleOutUp{
+  from{opacity:1;transform:translateY(0) scale(1)}
+  to{opacity:0;transform:translateY(-55px) scale(.96)}
 }
 @keyframes emojiFloat{
   from{opacity:0;transform:translateY(12px) scale(.75)}
@@ -357,7 +395,15 @@ const CONFIG={
 
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
   minPollInterval:1000,
-  maxPollInterval:15000
+  maxPollInterval:15000,
+
+  // 婚紗照輪播
+  presetSlideInterval:5000,
+  presetFadeDuration:900,
+
+  // 新訊息 / 新照片顯示時間
+  messageDisplayTime:6000,
+  guestPhotoDisplayTime:8000
 };
 
 const wall=document.querySelector(".wall");
@@ -463,7 +509,7 @@ function addCard(item){
         thumb.src=
           "https://drive.google.com/uc?export=view&id="+
           encodeURIComponent(item.photoId);
-      },{once:false});
+      });
     }
   }
 
@@ -477,16 +523,23 @@ function addCard(item){
     feed.firstElementChild.remove();
   }
 
+  // 6 秒後「往上淡出」，動畫結束後真正移除 DOM
   setTimeout(()=>{
-    if(el.isConnected)el.classList.add("fade");
-  },7000);
+    if(!el.isConnected)return;
+
+    el.classList.add("leaving");
+
+    setTimeout(()=>{
+      if(el.isConnected)el.remove();
+    },950);
+  },CONFIG.messageDisplayTime);
 }
 
 function addPolaroid(item){
   if(!item.url)return;
 
   const el=document.createElement("div");
-  el.className="polaroid";
+  el.className="polaroid guest-photo";
 
   const positions=[
     {left:"3%",top:"31%",rot:"-8deg"},
@@ -509,9 +562,22 @@ function addPolaroid(item){
 
   polaroidLayer.appendChild(el);
 
-  while(polaroidLayer.children.length>CONFIG.maxPolaroids){
-    polaroidLayer.firstElementChild.remove();
+  while(polaroidLayer.querySelectorAll(".guest-photo").length>CONFIG.maxPolaroids){
+    const old=polaroidLayer.querySelector(".guest-photo");
+    if(old)old.remove();
+    else break;
   }
+
+  // 賓客照片顯示一段時間後往上淡出
+  setTimeout(()=>{
+    if(!el.isConnected)return;
+
+    el.classList.add("leaving");
+
+    setTimeout(()=>{
+      if(el.isConnected)el.remove();
+    },950);
+  },CONFIG.guestPhotoDisplayTime);
 }
 
 function addBubble(item){
@@ -556,13 +622,146 @@ function addBubble(item){
 
   setTimeout(()=>{
     if(el.isConnected){
-      el.style.transition="opacity .7s,transform .7s";
-      el.style.opacity="0";
-      el.style.transform="translateY(-10px)";
-      setTimeout(()=>el.remove(),750);
+      el.classList.add("leaving");
+      setTimeout(()=>el.remove(),950);
     }
-  },8500);
+  },6500);
 }
+
+/* =========================================================
+   婚紗照輪播
+   - 多張婚紗照固定在四周
+   - 每 5 秒淡出
+   - 往上飄出
+   - 換下一張後淡入
+========================================================= */
+
+const presetPositions=[
+  {left:"3%",top:"31%",rot:"-8deg"},
+  {left:"19%",top:"6%",rot:"8deg"},
+  {right:"19%",top:"18%",rot:"-7deg"},
+  {right:"3%",top:"38%",rot:"8deg"},
+  {right:"16%",bottom:"8%",rot:"-6deg"},
+  {left:"8%",bottom:"7%",rot:"6deg"}
+];
+
+const presetShowcase={
+  items:[],
+  slots:[],
+  timer:null
+};
+
+function setupPresetSlideshow(presets){
+  presetShowcase.items=Array.isArray(presets)
+    ? presets.filter(x=>x.url)
+    : [];
+
+  if(!presetShowcase.items.length)return;
+
+  presetShowcase.slots=[];
+
+  const count=Math.min(
+    CONFIG.maxPolaroids,
+    presetShowcase.items.length
+  );
+
+  for(let i=0;i<count;i++){
+    const slot={
+      index:i,
+      itemIndex:i%presetShowcase.items.length,
+      el:null
+    };
+
+    const el=document.createElement("div");
+    el.className="polaroid preset-slide";
+
+    const pos=presetPositions[
+      i%presetPositions.length
+    ];
+
+    Object.entries(pos).forEach(([k,v])=>{
+      el.style.setProperty(k,v);
+    });
+    el.style.setProperty("--rot",pos.rot);
+
+    polaroidLayer.appendChild(el);
+
+    slot.el=el;
+    presetShowcase.slots.push(slot);
+
+    renderPresetSlot(slot,false);
+  }
+
+  if(presetShowcase.timer){
+    clearInterval(presetShowcase.timer);
+  }
+
+  presetShowcase.timer=setInterval(
+    rotateOnePreset,
+    CONFIG.presetSlideInterval
+  );
+}
+
+function renderPresetSlot(slot,animate){
+  const item=
+    presetShowcase.items[
+      slot.itemIndex%presetShowcase.items.length
+    ];
+
+  const el=slot.el;
+  if(!el||!item)return;
+
+  const pos=presetPositions[
+    slot.index%presetPositions.length
+  ];
+
+  el.style.setProperty("--rot",pos.rot);
+
+  el.innerHTML=
+    '<img src="'+esc(item.url)+'" alt="">'+
+    '<span class="heart">♡</span>';
+
+  el.dataset.itemId=keyOf(item);
+  el.classList.remove("leaving");
+
+  if(!animate)return;
+
+  el.style.animation="none";
+  void el.offsetWidth;
+  el.style.animation="polaroidIn .8s ease both";
+}
+
+function rotateOnePreset(){
+  if(!presetShowcase.items.length)return;
+
+  // 每次只換一張，畫面會一直有照片，不會全部同時消失
+  const slot=
+    presetShowcase.slots[
+      rotateOnePreset.counter%
+      presetShowcase.slots.length
+    ];
+
+  rotateOnePreset.counter++;
+
+  if(!slot||!slot.el)return;
+
+  const el=slot.el;
+
+  el.classList.remove("leaving");
+  el.style.animation="none";
+  void el.offsetWidth;
+  el.classList.add("leaving");
+
+  setTimeout(()=>{
+    slot.itemIndex=
+      (slot.itemIndex+1)%
+      presetShowcase.items.length;
+
+    renderPresetSlot(slot,true);
+  },CONFIG.presetFadeDuration);
+}
+
+rotateOnePreset.counter=0;
 
 function rememberKey(id){
   if(state.known.has(id))return false;
@@ -615,15 +814,13 @@ function process(items){
 
   /*
    * 初次載入：
-   * - 建立已知資料
-   * - 婚紗照才直接放到 Polaroid
-   * - 不把歷史祝福當成「剛收到」
+   * - 婚紗照交給「輪播器」
+   * - 歷史祝福不當成新訊息播放
    */
   if(state.initial){
-    fresh
-      .filter(x=>x.kind==="preset")
-      .slice(0,CONFIG.maxPolaroids)
-      .forEach(addPolaroid);
+    setupPresetSlideshow(
+      fresh.filter(x=>x.kind==="preset")
+    );
   }else{
     // 後續新資料進佇列，一筆一筆播
     fresh
