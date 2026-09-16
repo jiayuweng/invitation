@@ -133,12 +133,30 @@ function renderHero(){
 
   if(hero.dataset.id!==id){
     hero.dataset.id=id;
+    hero.dataset.fallback="0";
     hero.style.animation="none";
     void hero.offsetWidth;
     hero.style.animation="heroFade .9s ease both";
     hero.src=p.url;
   }
 }
+
+hero.addEventListener("error",()=>{
+  /*
+   * Drive thumbnail 若暫時失敗，
+   * 第二次嘗試 uc?export=view。
+   */
+  const id=hero.dataset.id;
+  if(!id||hero.dataset.fallback==="1")return;
+
+  const item=state.items.find(x=>getKey(x)===id);
+  if(!item||!item.photoId)return;
+
+  hero.dataset.fallback="1";
+  hero.src=
+    "https://drive.google.com/uc?export=view&id="+
+    encodeURIComponent(item.photoId);
+});
 
 function addNotice(item){
   const message=getText(item);
@@ -299,31 +317,37 @@ async function initialSync(){
 }
 
 async function poll(){
-  if(state.syncing||!state.lastServerTime)return;
+  if(state.syncing)return;
 
   state.syncing=true;
 
-  const callback="weddingPoll_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  const callback=
+    "weddingPoll_"+Date.now()+"_"+Math.floor(Math.random()*10000);
 
   try{
+    /*
+     * 每次直接取得最新 30 筆。
+     * 不使用 since 時間比對，避免 Sheet 時間格式造成漏資料。
+     */
     const url=
       CONFIG.endpoint+
       "?mode=poll"+
-      "&since="+encodeURIComponent(state.lastServerTime)+
       "&callback="+encodeURIComponent(callback)+
       "&t="+Date.now();
 
     const data=await jsonpRequest(url,callback);
 
-    if(data&&data.ok&&Array.isArray(data.items)&&data.items.length){
+    if(
+      data &&
+      data.ok &&
+      Array.isArray(data.items)
+    ){
       process(data.items);
     }
 
     if(data&&data.serverTime){
-      state.lastServerTime=Math.max(
-        state.lastServerTime,
-        Number(data.serverTime)
-      );
+      state.lastServerTime=
+        Number(data.serverTime);
     }
   }catch(error){
     console.warn("同步暫時失敗",error);
