@@ -300,6 +300,8 @@ const CONFIG={
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
   minPollInterval:1000,
   maxPollInterval:15000,
+  // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
+  jsonpTimeout:60000,
 
   // 婚紗照輪播
   presetSlideInterval:5000,
@@ -1053,7 +1055,7 @@ function jsonpRequest(url,callbackName){
 
     const timeout=setTimeout(()=>{
       finish(new Error("JSONP timeout"));
-    },CONFIG.maxPollInterval);
+    },CONFIG.jsonpTimeout);
 
     function cleanup(){
       clearTimeout(timeout);
