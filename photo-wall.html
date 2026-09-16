@@ -263,25 +263,25 @@ html,body{
   to{opacity:1;transform:rotate(var(--rot))}
 }
 @keyframes polaroidOutUp{
-  from{opacity:1;transform:translateY(0) scale(1) rotate(var(--rot))}
-  to{opacity:0;transform:translateY(-65px) scale(.96) rotate(var(--rot))}
+  0%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(var(--rot))}
+  100%{opacity:0;transform:translate3d(var(--float-x,0px),-28vh,0) scale(.92) rotate(var(--rot))}
 }
 @keyframes guestPhotoIn{
-  from{opacity:0;transform:translateY(30px) scale(.88) rotate(var(--rot))}
-  to{opacity:1;transform:rotate(var(--rot))}
+  from{opacity:0;transform:translate3d(0,35px,0) scale(.82) rotate(var(--rot))}
+  to{opacity:1;transform:translate3d(0,0,0) scale(var(--scale,1)) rotate(var(--rot))}
 }
 @keyframes bubbleIn{
-  from{opacity:0;transform:translateY(18px) scale(.9)}
-  to{opacity:1;transform:none}
+  from{opacity:0;transform:translateY(35px) scale(.88)}
+  to{opacity:1;transform:translateY(0) scale(1)}
 }
 @keyframes bubbleOutUp{
-  from{opacity:1;transform:translateY(0) scale(1)}
-  to{opacity:0;transform:translateY(-55px) scale(.96)}
+  0%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+  100%{opacity:0;transform:translate3d(var(--float-x,0px),-30vh,0) scale(.94)}
 }
 @keyframes emojiFloat{
-  from{opacity:0;transform:translateY(12px) scale(.75)}
+  0%{opacity:0;transform:translate3d(0,18px,0) scale(.75)}
   15%{opacity:1}
-  to{opacity:0;transform:translateY(-22vh) scale(1.08)}
+  100%{opacity:0;transform:translate3d(var(--float-x,0px),-30vh,0) scale(1.08)}
 }
 @keyframes petalFall{
   0%{transform:translate3d(0,-8vh,0) rotate(var(--rot));opacity:0}
@@ -403,7 +403,7 @@ const CONFIG={
 
   // 新訊息 / 新照片顯示時間
   messageDisplayTime:6000,
-  guestPhotoDisplayTime:8000
+  guestPhotoDisplayTime:12000
 };
 
 const wall=document.querySelector(".wall");
@@ -541,20 +541,37 @@ function addPolaroid(item){
   const el=document.createElement("div");
   el.className="polaroid guest-photo";
 
-  const positions=[
-    {left:"3%",top:"31%",rot:"-8deg"},
-    {left:"19%",top:"6%",rot:"8deg"},
-    {right:"19%",top:"18%",rot:"-7deg"},
-    {right:"3%",top:"38%",rot:"8deg"},
-    {right:"16%",bottom:"8%",rot:"-6deg"},
-    {left:"8%",bottom:"7%",rot:"6deg"}
-  ];
-  const pos=positions[
-    Math.floor(Math.random()*positions.length)
-  ];
+  /*
+   * 每次隨機選擇左右區域，再在區域內隨機位置。
+   * 中央主視覺保留給新人與祝福，不讓賓客照片蓋住中心。
+   */
+  const side=Math.random()<0.5 ? "left" : "right";
 
-  Object.entries(pos).forEach(([k,v])=>el.style.setProperty(k,v));
-  el.style.setProperty("--rot",pos.rot);
+  let left, top;
+
+  if(side==="left"){
+    left=(3+Math.random()*22);
+    top=(10+Math.random()*68);
+  }else{
+    left=(75+Math.random()*21);
+    top=(10+Math.random()*68);
+  }
+
+  const rot=(-10+Math.random()*20);
+  const scale=(0.88+Math.random()*0.22);
+
+  el.style.left=left+"%";
+  el.style.top=top+"%";
+  el.style.setProperty("--rot",rot+"deg");
+  el.style.setProperty("--float-x",((-35+Math.random()*70))+"px");
+  el.style.setProperty("--scale",scale);
+
+  /*
+   * 避免太靠近 QR Code。
+   */
+  if(top<20 && side==="right"){
+    el.style.top=(22+Math.random()*52)+"%";
+  }
 
   el.innerHTML=
     '<img src="'+esc(item.url)+'" alt="">'+
@@ -562,13 +579,20 @@ function addPolaroid(item){
 
   polaroidLayer.appendChild(el);
 
-  while(polaroidLayer.querySelectorAll(".guest-photo").length>CONFIG.maxPolaroids){
-    const old=polaroidLayer.querySelector(".guest-photo");
+  /*
+   * 上傳照片最多保留 6 張。
+   * 新照片會取代最舊的一張。
+   */
+  const guests=polaroidLayer.querySelectorAll(".guest-photo");
+
+  if(guests.length>CONFIG.maxPolaroids){
+    const old=guests[0];
     if(old)old.remove();
-    else break;
   }
 
-  // 賓客照片顯示一段時間後往上淡出
+  /*
+   * 12 秒後：往上飄 + 淡出。
+   */
   setTimeout(()=>{
     if(!el.isConnected)return;
 
@@ -579,36 +603,62 @@ function addPolaroid(item){
     },950);
   },CONFIG.guestPhotoDisplayTime);
 }
-
 function addBubble(item){
   const message=textOf(item);
   if(!message||message.length<2)return;
 
+  /*
+   * 純 Emoji 維持原本像氣泡一樣從下往上飄。
+   */
   if(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u.test(message)){
     const e=document.createElement("div");
     e.className="emoji";
-    e.textContent=message;
-    e.style.left=(16+Math.random()*68)+"%";
-    e.style.bottom=(18+Math.random()*25)+"%";
+
+    e.style.left=(10+Math.random()*78)+"%";
+    e.style.bottom=(-5+Math.random()*18)+"%";
+
+    e.style.setProperty(
+      "--float-x",
+      (-60+Math.random()*120)+"px"
+    );
+
     wall.appendChild(e);
-    e.addEventListener("animationend",()=>e.remove(),{once:true});
+    e.textContent=message;
+
+    e.addEventListener(
+      "animationend",
+      ()=>e.remove(),
+      {once:true}
+    );
+
     return;
   }
 
   const el=document.createElement("article");
   el.className="float-msg";
 
-  const positions=[
-    {left:"6%",top:"13%"},
-    {left:"19%",top:"55%"},
-    {right:"9%",top:"13%"},
-    {right:"10%",top:"45%"},
-    {left:"4%",top:"66%"},
-    {right:"19%",top:"65%"},
-    {left:"26%",top:"17%"}
-  ];
-  const pos=positions[Math.floor(Math.random()*positions.length)];
-  Object.entries(pos).forEach(([k,v])=>el.style[k]=v);
+  /*
+   * 文字從畫面下方不同位置出現。
+   * 刻意避開最中央標題區，讓視覺比較舒服。
+   */
+  const side=Math.random();
+
+  let left;
+  if(side<0.5){
+    left=5+Math.random()*27;
+  }else{
+    left=68+Math.random()*25;
+  }
+
+  const bottom=3+Math.random()*25;
+
+  el.style.left=left+"%";
+  el.style.bottom=bottom+"%";
+
+  el.style.setProperty(
+    "--float-x",
+    (-50+Math.random()*100)+"px"
+  );
 
   el.innerHTML=
     '<div class="who">'+esc(item.name)+'</div>'+
@@ -616,18 +666,25 @@ function addBubble(item){
 
   floatLayer.appendChild(el);
 
-  while(floatLayer.children.length>CONFIG.maxBubbles){
-    floatLayer.firstElementChild.remove();
+  while(floatLayer.querySelectorAll(".float-msg").length>CONFIG.maxBubbles){
+    const old=floatLayer.querySelector(".float-msg");
+    if(old)old.remove();
+    else break;
   }
 
+  /*
+   * 6 秒後從目前位置一路往上飄並淡出。
+   */
   setTimeout(()=>{
-    if(el.isConnected){
-      el.classList.add("leaving");
-      setTimeout(()=>el.remove(),950);
-    }
-  },6500);
-}
+    if(!el.isConnected)return;
 
+    el.classList.add("leaving");
+
+    setTimeout(()=>{
+      if(el.isConnected)el.remove();
+    },950);
+  },CONFIG.messageDisplayTime);
+}
 /* =========================================================
    婚紗照輪播
    - 多張婚紗照固定在四周
