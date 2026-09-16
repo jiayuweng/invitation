@@ -809,6 +809,54 @@ function createPresetPhoto(item,animate=true){
   return el;
 }
 
+function getNextPresetItem(){
+  const items=presetShowcase.items.filter(x=>x && x.url);
+  if(!items.length)return null;
+
+  // 先排除目前正在畫面上的照片，避免同一張同時出現
+  const activeItems=new Set(
+    presetShowcase.active
+      .filter(entry=>entry && entry.el && entry.el.isConnected)
+      .map(entry=>entry.item)
+  );
+
+  let candidates=items.filter(item=>!activeItems.has(item));
+
+  // 再排除最近已經顯示過的照片，盡量避免短時間重複
+  const history=presetShowcase.shownHistory || [];
+  const fresh=candidates.filter(item=>!history.includes(item));
+
+  if(fresh.length){
+    candidates=fresh;
+  }else if(!candidates.length){
+    // 所有照片都在畫面上時，允許從全部照片重新挑選
+    candidates=items.filter(item=>!history.includes(item));
+
+    if(!candidates.length){
+      // 整輪都播完了，重新開始一輪，但仍避開目前畫面上的照片
+      presetShowcase.shownHistory=[];
+      candidates=items.filter(item=>!activeItems.has(item));
+    }
+  }
+
+  if(!candidates.length)return null;
+
+  const item=candidates[Math.floor(Math.random()*candidates.length)];
+
+  presetShowcase.shownHistory.push(item);
+
+  // 保留最近一段播放紀錄，避免照片很快再次出現
+  const limit=Math.max(1,presetShowcase.historyLimit || items.length);
+  if(presetShowcase.shownHistory.length>limit){
+    presetShowcase.shownHistory.splice(
+      0,
+      presetShowcase.shownHistory.length-limit
+    );
+  }
+
+  return item;
+}
+
 function setupPresetSlideshow(presets){
   presetShowcase.items=Array.isArray(presets)
     ? presets.filter(x=>x.url)
