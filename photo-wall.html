@@ -906,61 +906,72 @@ function refreshPresetPhotos(){
 
   if(!items.length)return;
 
-  const activeCount=presetShowcase.active.length;
+  // 只計算目前真正還在畫面上的婚紗照
+  const candidates=
+    presetShowcase.active.filter(x=>x.el && x.el.isConnected);
+
+  const activeCount=candidates.length;
 
   /*
-   * 低於 6 張：
-   * 只要有下一張婚紗照，就直接補一張。
+   * 婚紗照數量採「一步一張」的隨機變化：
+   *
+   * 3 張：大多數情況增加，偶爾維持
+   * 4~5 張：可能增加、維持或減少
+   * 6 張：只會維持或減少
+   *
+   * 因此不會再出現「只要少於 6 張就立刻補滿」的問題。
+   * 整體數量會自然在 3~6 張之間流動。
    */
-  if(activeCount<CONFIG.maxPolaroids){
+  let action;
+
+  if(activeCount<=CONFIG.minPresetPhotos){
+    // 3 張時：70% 增加、30% 維持
+    action=Math.random()<0.70 ? "add" : "keep";
+  }else if(activeCount>=CONFIG.maxPolaroids){
+    // 6 張時：45% 移除、55% 維持
+    action=Math.random()<0.45 ? "remove" : "keep";
+  }else{
+    // 4~5 張：增加 / 維持 / 減少
+    const r=Math.random();
+
+    if(r<0.30){
+      action="add";
+    }else if(r<0.65){
+      action="keep";
+    }else{
+      action="remove";
+    }
+  }
+
+  // 維持目前數量
+  if(action==="keep"){
+    return;
+  }
+
+  // 增加一張新的婚紗照
+  if(action==="add"){
     const item=getNextPresetItem();
 
     if(item){
       addPresetPhoto(item);
     }
+
     return;
   }
 
-  /*
-   * 已經 6 張：
-   * 隨機決定這次是「保持」還是「換掉一張」。
-   * 保持時不做任何事，因此畫面有時會自然維持。
-   */
-  if(Math.random()<0.35){
-    return;
-  }
-
-  /*
-   * 換掉一張，但不能低於 3 張。
-   */
-  const candidates=
-    presetShowcase.active.filter(x=>x.el && x.el.isConnected);
-
-  if(candidates.length<=CONFIG.minPresetPhotos){
-    return;
-  }
-
-  const old=
-    candidates[Math.floor(Math.random()*candidates.length)];
-
-  removePresetEntry(old);
-
-  /*
-   * 先讓舊照片開始淡出，再補新照片。
-   * 這樣視覺上就是：
-   * 舊照片 ↑ 淡出 → 新照片淡入。
-   */
-  setTimeout(()=>{
-    const currentCount=presetShowcase.active.length;
-
-    if(currentCount<CONFIG.maxPolaroids){
-      const item=getNextPresetItem();
-
-      if(item){
-        addPresetPhoto(item);
-      }
+  // 移除一張，但永遠不低於 3 張
+  if(action==="remove"){
+    if(activeCount<=CONFIG.minPresetPhotos){
+      return;
     }
-  },CONFIG.presetFadeDuration+80);
+
+    const old=
+      candidates[Math.floor(Math.random()*candidates.length)];
+
+    removePresetEntry(old);
+
+    return;
+  }
 }
 
 function rememberKey(id){
