@@ -1,12 +1,19 @@
-```html
 <!doctype html>
 <html lang="zh-Hant">
 
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>婚禮現場照片牆｜劉育名 & 翁佳瑜</title>
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>
+  婚禮現場照片牆｜劉育名 & 翁佳瑜
+</title>
+
 
 <style>
 
@@ -26,8 +33,11 @@ body{
   width:100%;
   height:100%;
   overflow:hidden;
+
   background:#140e0e;
+
   color:var(--ink);
+
   font-family:
     "Noto Serif TC",
     "PingFang TC",
@@ -36,8 +46,10 @@ body{
 
 .wall{
   position:relative;
+
   width:100vw;
   height:100vh;
+
   overflow:hidden;
 
   background:
@@ -47,20 +59,28 @@ body{
     no-repeat;
 }
 
-/* 整體暗角 */
+
+/* =========================================================
+   背景遮罩
+========================================================= */
 
 .wall:after{
   content:"";
+
   position:absolute;
+
   inset:0;
+
   pointer-events:none;
 
   background:
+
     radial-gradient(
       circle at 50% 45%,
       transparent 32%,
       #08050666 100%
     ),
+
     linear-gradient(
       #0002,
       #0006
@@ -74,14 +94,17 @@ body{
 
 .brand{
   position:absolute;
+
   z-index:3;
 
   top:5%;
   left:50%;
 
-  transform:translateX(-50%);
+  transform:
+    translateX(-50%);
 
   text-align:center;
+
   white-space:nowrap;
 
   text-shadow:
@@ -111,7 +134,7 @@ body{
 
 
 /* =========================================================
-   QR Code
+   QR
 ========================================================= */
 
 .qr{
@@ -130,6 +153,7 @@ body{
   border-radius:14px;
 
   background:#fff;
+
   color:#49352d;
 
   text-align:center;
@@ -155,6 +179,7 @@ body{
   margin-top:4px;
 
   font-size:12px;
+
   font-weight:700;
 
   line-height:1.25;
@@ -162,7 +187,7 @@ body{
 
 
 /* =========================================================
-   照片區
+   照片舞台
 ========================================================= */
 
 .photo-stage{
@@ -176,7 +201,9 @@ body{
 }
 
 
-/* 中央婚紗照 */
+/* =========================================================
+   中央婚紗照
+========================================================= */
 
 .hero-photo{
   position:absolute;
@@ -184,8 +211,11 @@ body{
   left:50%;
   top:51%;
 
-  width:min(27vw,310px);
-  height:min(48vh,430px);
+  width:
+    min(27vw,310px);
+
+  height:
+    min(48vh,430px);
 
   transform:
     translate(-50%,-50%);
@@ -197,7 +227,8 @@ body{
 
   border-radius:16px;
 
-  background:#1a1212aa;
+  background:
+    #1a1212aa;
 
   box-shadow:
     0 18px 45px #0009;
@@ -207,7 +238,9 @@ body{
 }
 
 
-/* 周圍照片 */
+/* =========================================================
+   周圍照片
+========================================================= */
 
 .side-photo{
   position:absolute;
@@ -248,6 +281,16 @@ body{
 }
 
 
+/*
+ * 保留你目前設計：
+ * 周圍照片不顯示
+ */
+
+.side-photo{
+  display:none !important;
+}
+
+
 /* =========================================================
    左下通知
 ========================================================= */
@@ -260,7 +303,8 @@ body{
   left:50%;
   bottom:5%;
 
-  width:min(430px,42vw);
+  width:
+    min(430px,42vw);
 
   transform:
     translateX(-50%);
@@ -315,6 +359,7 @@ body{
   height:31px;
 
   display:grid;
+
   place-items:center;
 
   flex:none;
@@ -336,11 +381,13 @@ body{
 
 .notice-copy{
   min-width:0;
+
   flex:1;
 }
 
 .notice-name{
   font-size:12px;
+
   opacity:.8;
 }
 
@@ -360,9 +407,9 @@ body{
 
   object-fit:cover;
 
-  border-radius:8px;
-
   flex:none;
+
+  border-radius:8px;
 }
 
 
@@ -408,6 +455,7 @@ body{
 
 .float-msg .who{
   font-size:10px;
+
   opacity:.75;
 }
 
@@ -655,6 +703,7 @@ body{
     width:72px;
 
     padding:5px;
+
   }
 
   .qr img{
@@ -728,22 +777,13 @@ body{
 
 }
 
-
-/*
- * 保留目前照片牆的設定：
- * 周圍照片不顯示，只顯示中央婚紗照
- */
-
-.side-photo{
-  display:none !important;
-}
-
 </style>
 
 </head>
 
 
 <body>
+
 
 <main class="wall">
 
@@ -789,7 +829,7 @@ body{
 
 
   <!-- =====================================================
-       中央照片
+       中央婚紗照
   ====================================================== -->
 
   <section
@@ -807,7 +847,7 @@ body{
 
 
   <!-- =====================================================
-       浮動照片
+       浮動照片層
   ====================================================== -->
 
   <section
@@ -817,7 +857,7 @@ body{
 
 
   <!-- =====================================================
-       左下通知
+       左下祝福
   ====================================================== -->
 
   <section
@@ -841,46 +881,31 @@ body{
 
 <script>
 
+
 /* =========================================================
    CONFIG
 ========================================================= */
 
 const CONFIG = {
 
-  /*
-   * 你的新版 Google Apps Script Web App
-   */
-
   endpoint:
     'https://script.google.com/macros/s/AKfycbwiBfLfxWrImX3Z8Mi1qqxxHaReprYiiu8j7VMnaFKFQyRGmIJaQ5h2iifUXpReVQlB/exec',
-
-
-  /*
-   * 畫面最多顯示的照片數量
-   */
-
-  maxPhotos:6,
-
-
-  /*
-   * 左下最多幾則通知
-   */
-
-  maxNotices:4,
-
-
-  /*
-   * 同時最多幾個浮動祝福
-   */
-
-  maxFloats:8,
-
 
   /*
    * 每 1 秒檢查一次
    */
 
-  pollInterval:1000
+  pollInterval:
+    1000,
+
+  maxPhotos:
+    6,
+
+  maxNotices:
+    4,
+
+  maxFloats:
+    8
 
 };
 
@@ -925,67 +950,47 @@ const floatLayer =
 
 const state = {
 
-  /*
-   * 已知資料
-   */
+  items: [],
 
-  items:[],
+  known:
+    new Set(),
 
+  lastServerTime:
+    0,
 
-  /*
-   * 避免重複顯示
-   */
+  initial:
+    true,
 
-  known:new Set(),
+  heroIndex:
+    0,
 
-
-  /*
-   * 上次伺服器時間
-   */
-
-  lastServerTime:0,
-
-
-  /*
-   * 第一次載入
-   */
-
-  initial:true,
-
-
-  /*
-   * 中央婚紗照輪播 index
-   */
-
-  heroIndex:0,
-
-
-  /*
-   * 避免同時請求
-   */
-
-  syncing:false
+  syncing:
+    false
 
 };
 
 
 /* =========================================================
-   文字
+   取得文字
 ========================================================= */
 
 function getText(item){
 
   return String(
+
     item.text ||
+
     item.message ||
+
     ''
+
   ).trim();
 
 }
 
 
 /* =========================================================
-   圖片 URL
+   取得圖片
 ========================================================= */
 
 function getPhotoUrl(item){
@@ -1006,9 +1011,13 @@ function getPhotoUrl(item){
   ){
 
     return (
+
       'https://drive.google.com/thumbnail?id=' +
+
       item.photoId +
+
       '&sz=w1200'
+
     );
 
   }
@@ -1034,15 +1043,21 @@ function getKey(item){
     item.photoId ||
 
     (
+
       String(
         item.time || ''
       ) +
+
       '-' +
+
       String(
         item.name || ''
       ) +
+
       '-' +
+
       getText(item)
+
     )
 
   );
@@ -1065,7 +1080,9 @@ function normalize(
 
   const kind =
     item.kind ||
+
     item.type ||
+
     (
       url
         ? 'upload'
@@ -1086,18 +1103,24 @@ function normalize(
         getKey(item) ||
         'event-' + index,
 
-      kind,
+      kind:
+
+        kind,
 
       name:
+
         String(
           item.name ||
           '親友'
         ),
 
       text:
+
         getText(item),
 
-      url
+      url:
+
+        url
 
     }
   );
@@ -1106,12 +1129,12 @@ function normalize(
 
 
 /* =========================================================
-   隨機照片位置
+   照片位置
 ========================================================= */
 
 function positions(){
 
-  const p=[
+  const p = [
 
     ['7%','24%'],
 
@@ -1169,10 +1192,6 @@ function renderPhotos(){
     positions();
 
 
-  /*
-   * 找出畫面上的照片
-   */
-
   const existing =
     new Map(
 
@@ -1202,7 +1221,7 @@ function renderPhotos(){
 
 
   /*
-   * 移除已經不需要的照片
+   * 移除舊照片
    */
 
   existing.forEach(
@@ -1236,7 +1255,7 @@ function renderPhotos(){
 
 
   /*
-   * 加入新的照片
+   * 新照片
    */
 
   side.forEach(
@@ -1331,13 +1350,17 @@ function renderPhotos(){
       ];
 
 
+    const id =
+      getKey(p);
+
+
     if(
       hero.dataset.id !==
-      getKey(p)
+      id
     ){
 
       hero.dataset.id =
-        getKey(p);
+        id;
 
 
       hero.src =
@@ -1351,15 +1374,19 @@ function renderPhotos(){
 
 
 /* =========================================================
-   新通知
+   左下新通知
 ========================================================= */
 
 function addNotice(
   item
 ){
 
+  const message =
+    getText(item);
+
+
   if(
-    !getText(item) &&
+    !message &&
     !item.url
   ){
 
@@ -1369,17 +1396,15 @@ function addNotice(
 
 
   /*
-   * Emoji-only
+   * 純 Emoji
    */
 
   if(
 
-    getText(item) &&
+    message &&
 
     /^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u
-      .test(
-        getText(item)
-      )
+      .test(message)
 
   ){
 
@@ -1394,13 +1419,14 @@ function addNotice(
 
 
     e.textContent =
-      getText(item);
+      message;
 
 
     e.style.left =
       (
         18 +
-        Math.random() * 64
+        Math.random() *
+        64
       ) +
       '%';
 
@@ -1408,7 +1434,8 @@ function addNotice(
     e.style.bottom =
       (
         18 +
-        Math.random() * 22
+        Math.random() *
+        22
       ) +
       '%';
 
@@ -1452,7 +1479,10 @@ function addNotice(
     '<div class="avatar">' +
 
       escapeHtml(
-        item.name.slice(0,1)
+        item.name.slice(
+          0,
+          1
+        )
       ) +
 
     '</div>' +
@@ -1470,15 +1500,20 @@ function addNotice(
       '<div class="notice-line">' +
 
         (
+
           hasPhoto
 
-            ? '傳送了一張照片'
+            ?
+
+              '傳送了一張照片'
 
             :
 
-              '留下了一則祝福：' +
-              escapeHtml(
-                getText(item)
+              (
+                '留下了一則祝福：' +
+                escapeHtml(
+                  message
+                )
               )
 
         ) +
@@ -1510,7 +1545,7 @@ function addNotice(
 
 
   /*
-   * 不要超過最大數量
+   * 最多 4 筆
    */
 
   while(
@@ -1608,7 +1643,8 @@ function addFloat(
   el.style.left =
     (
       8 +
-      Math.random() * 78
+      Math.random() *
+      78
     ) +
     '%';
 
@@ -1616,7 +1652,8 @@ function addFloat(
   el.style.top =
     (
       20 +
-      Math.random() * 52
+      Math.random() *
+      52
     ) +
     '%';
 
@@ -1624,7 +1661,8 @@ function addFloat(
   el.style.setProperty(
     '--dx',
     (
-      Math.random() * 12 -
+      Math.random() *
+      12 -
       6
     ) +
     'vw'
@@ -1718,7 +1756,7 @@ function escapeHtml(
 
 
 /* =========================================================
-   處理收到的資料
+   處理資料
 ========================================================= */
 
 function process(
@@ -1734,7 +1772,7 @@ function process(
   }
 
 
-  const fresh=[];
+  const fresh = [];
 
 
   items
@@ -1747,7 +1785,7 @@ function process(
 
 
         /*
-         * 已經看過
+         * 已經存在
          */
 
         if(
@@ -1758,10 +1796,6 @@ function process(
 
         }
 
-
-        /*
-         * 記錄
-         */
 
         state.known.add(
           id
@@ -1782,7 +1816,7 @@ function process(
 
 
   /*
-   * 更新中央婚紗照
+   * 更新中央照片
    */
 
   renderPhotos();
@@ -1790,8 +1824,7 @@ function process(
 
   /*
    * 第一次載入：
-   *
-   * 不要把舊資料全部跳通知
+   * 舊資料不跳通知
    */
 
   if(
@@ -1800,10 +1833,6 @@ function process(
 
     fresh.forEach(
       item => {
-
-        /*
-         * 預設婚紗照不用通知
-         */
 
         if(
           item.kind ===
@@ -1816,7 +1845,7 @@ function process(
 
 
         /*
-         * 左下通知
+         * 新照片 / 新祝福
          */
 
         addNotice(
@@ -1825,7 +1854,7 @@ function process(
 
 
         /*
-         * 如果是祝福文字
+         * 新祝福文字
          */
 
         if(
@@ -1845,7 +1874,7 @@ function process(
 
 
   /*
-   * 防止記憶體無限增加
+   * 限制前端資料量
    */
 
   if(
@@ -1868,7 +1897,7 @@ function process(
 
 
 /* =========================================================
-   第一次同步
+   初始同步
 ========================================================= */
 
 async function initialSync(){
@@ -1889,8 +1918,11 @@ async function initialSync(){
   try{
 
     const url =
+
       CONFIG.endpoint +
+
       '?mode=initial&t=' +
+
       Date.now();
 
 
@@ -1934,21 +1966,22 @@ async function initialSync(){
     }
 
 
-    /*
-     * 記住伺服器時間
-     */
-
     if(
       data.serverTime
     ){
 
+      /*
+       * 稍微往前重疊 3 秒
+       *
+       * 避免初始載入期間剛好上傳的資料漏掉
+       */
+
       state.lastServerTime =
         Number(
           data.serverTime
-        );
+        ) - 3000;
 
     }
-
 
   }
   catch(error){
@@ -1971,7 +2004,6 @@ async function initialSync(){
 
 /* =========================================================
    Poll
-   每秒只抓新增資料
 ========================================================= */
 
 async function poll(){
@@ -1984,10 +2016,6 @@ async function poll(){
 
   }
 
-
-  /*
-   * 第一次還沒完成
-   */
 
   if(
     !state.lastServerTime
@@ -2047,10 +2075,6 @@ async function poll(){
       await response.json();
 
 
-    /*
-     * 有新資料
-     */
-
     if(
       data.ok &&
       Array.isArray(
@@ -2071,10 +2095,6 @@ async function poll(){
     }
 
 
-    /*
-     * 更新時間
-     */
-
     if(
       data.serverTime
     ){
@@ -2088,7 +2108,6 @@ async function poll(){
         );
 
     }
-
 
   }
   catch(error){
@@ -2116,7 +2135,7 @@ async function poll(){
 async function start(){
 
   /*
-   * 先載入初始資料
+   * 先載入
    */
 
   await initialSync();
@@ -2138,7 +2157,7 @@ start();
 
 
 /* =========================================================
-   中央婚紗照輪播
+   婚紗照輪播
 ========================================================= */
 
 setInterval(
@@ -2147,8 +2166,10 @@ setInterval(
     const presets =
       state.items.filter(
         item =>
+
           item.kind ===
           'preset' &&
+
           item.url
       );
 
@@ -2158,7 +2179,6 @@ setInterval(
     ){
 
       state.heroIndex++;
-
 
       renderPhotos();
 
@@ -2170,7 +2190,7 @@ setInterval(
 
 
 /* =========================================================
-   沒有祝福時的提示
+   沒有祝福時顯示提示
 ========================================================= */
 
 setInterval(
@@ -2190,8 +2210,10 @@ setInterval(
     const hasBlessing =
       state.items.some(
         item =>
+
           item.kind !==
           'preset' &&
+
           getText(item)
       );
 
@@ -2236,7 +2258,6 @@ setInterval(
 
 </script>
 
-
 </body>
+
 </html>
-```
