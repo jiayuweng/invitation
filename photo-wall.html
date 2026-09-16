@@ -25,7 +25,7 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
   window.__syncManagerActive=true;
   // Share one short-lived request with any legacy poller still on the page.
   const nativeFetch=window.fetch.bind(window);let sharedRequest=null,sharedAt=0;
-  window.fetch=function(input,init){const url=typeof input==='string'?input:(input&&input.url)||'';if(!url.startsWith(endpoint))return nativeFetch(input,init);const now=Date.now();if(sharedRequest&&now-sharedAt<900)return sharedRequest;sharedAt=now;sharedRequest=nativeFetch(input,init).finally(()=>{setTimeout(()=>{sharedRequest=null},900)});return sharedRequest};
+  window.fetch=function(input,init){const url=typeof input==='string'?input:(input&&input.url)||'';if(!url.startsWith(endpoint))return nativeFetch(input,init);const now=Date.now();if(sharedRequest&&now-sharedAt<900)return sharedRequest.then(response=>response.clone());sharedAt=now;sharedRequest=nativeFetch(input,init).finally(()=>{setTimeout(()=>{sharedRequest=null},900)});return sharedRequest.then(response=>response.clone())};
   const known=new Set(playlist.map(x=>String(x.sourceId||x.id||'')));
   let busy=false, timer=0;
   const unwrap=data=>{
