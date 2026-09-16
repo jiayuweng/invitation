@@ -288,10 +288,26 @@ html,body{
   .bottom-copy{left:4%;bottom:7%}
   .upload-copy{right:4%;bottom:7%;max-width:160px}
 }
+
+/* ---------- live stability ---------- */
+.live-card.queued{
+  opacity:0;
+  transform:translateY(20px) scale(.97);
+}
+.connection-dot{
+  position:absolute;z-index:40;left:14px;top:14px;
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.25);
+  box-shadow:0 0 0 3px rgba(255,255,255,.08);
+  opacity:.45;transition:opacity .3s,background .3s;
+}
+.connection-dot.online{background:#cde8c8;opacity:.55}
+.connection-dot.offline{background:#e7b2a8;opacity:.8}
 </style>
 </head>
 <body>
 <main class="wall">
+  <i class="connection-dot" id="connectionDot" aria-hidden="true"></i>
 
   <div class="brand">
     <b>Yu-Ming &amp; Jia-Yu</b>
@@ -331,7 +347,17 @@ const CONFIG={
   pollInterval:1000,
   maxCards:5,
   maxPolaroids:6,
-  maxBubbles:7
+  maxBubbles:7,
+
+  // 多人同時上傳時，一筆一筆播放，避免全部疊在一起
+  queueInterval:2200,
+
+  // 長時間播放時，只保留最近的事件記錄
+  maxKnown:500,
+
+  // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
+  minPollInterval:1000,
+  maxPollInterval:15000
 };
 
 const wall=document.querySelector(".wall");
@@ -343,7 +369,18 @@ const state={
   items:[],
   known:new Set(),
   initial:true,
-  syncing:false
+  syncing:false,
+
+  // 新資料佇列
+  displayQueue:[],
+
+  // 避免長時間運作時 Set 無限增長
+  knownOrder:[],
+
+  // 網路 / polling 狀態
+  online:navigator.onLine!==false,
+  pollTimer:null,
+  pollDelay:CONFIG.minPollInterval
 };
 
 function textOf(item){
@@ -390,12 +427,16 @@ function addCard(item){
   if(!message && !item.url)return;
 
   const el=document.createElement("article");
-  el.className="live-card";
+  el.className="live-card queued";
+  el.dataset.itemId=keyOf(item);
 
   const avatar=item.avatar||item.avatarUrl||"";
+
   el.innerHTML=
     '<div class="avatar">'+
-      (avatar?'<img src="'+esc(avatar)+'" alt="">':'<span>'+esc(item.name.slice(0,1))+'</span>')+
+    (avatar
+      ? '<img src="'+esc(avatar)+'" alt="">'
+      : '<span>'+esc(item.name.slice(0,1))+'</span>')+
     '</div>'+
     '<div class="live-copy">'+
       '<div class="live-name">'+esc(item.name)+'</div>'+
@@ -406,9 +447,31 @@ function addCard(item){
       '</div>'+
     '</div>'+
     '<div class="live-time">'+timeText(item.time)+'</div>'+
-    (item.url?'<img class="live-thumb" src="'+esc(item.url)+'" alt="">':"");
+    (item.url
+      ? '<img class="live-thumb" src="'+esc(item.url)+'" alt="">'
+      : "");
 
   feed.appendChild(el);
+
+  // 圖片載入失敗時，嘗試另一個 Drive URL
+  if(item.url && item.photoId){
+    const thumb=el.querySelector(".live-thumb");
+    if(thumb){
+      thumb.addEventListener("error",()=>{
+        if(thumb.dataset.fallback==="1")return;
+        thumb.dataset.fallback="1";
+        thumb.src=
+          "https://drive.google.com/uc?export=view&id="+
+          encodeURIComponent(item.photoId);
+      },{once:false});
+    }
+  }
+
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      el.classList.remove("queued");
+    });
+  });
 
   while(feed.children.length>CONFIG.maxCards){
     feed.firstElementChild.remove();
@@ -501,36 +564,77 @@ function addBubble(item){
   },8500);
 }
 
+function rememberKey(id){
+  if(state.known.has(id))return false;
+
+  state.known.add(id);
+  state.knownOrder.push(id);
+
+  // 長時間播放：限制 known Set 大小
+  while(state.knownOrder.length>CONFIG.maxKnown){
+    const old=state.knownOrder.shift();
+    state.known.delete(old);
+  }
+
+  return true;
+}
+
+function queueNewItem(item){
+  state.displayQueue.push(item);
+}
+
+function showNextQueued(){
+  if(!state.displayQueue.length)return;
+
+  const item=state.displayQueue.shift();
+
+  addCard(item);
+
+  if(item.url){
+    addPolaroid(item);
+  }
+
+  if(item.text){
+    addBubble(item);
+  }
+}
+
 function process(items){
   if(!Array.isArray(items))return;
 
   const fresh=[];
+
   items.map(normalize).forEach(item=>{
     const id=keyOf(item);
-    if(state.known.has(id))return;
 
-    state.known.add(id);
+    if(!rememberKey(id))return;
+
     state.items.push(item);
     fresh.push(item);
   });
 
   /*
-   * 初次載入：只建立畫面，不把舊資料全部做成「剛剛收到」動畫。
-   * 之後的新資料才做即時動畫。
+   * 初次載入：
+   * - 建立已知資料
+   * - 婚紗照才直接放到 Polaroid
+   * - 不把歷史祝福當成「剛收到」
    */
-  if(!state.initial){
-    fresh.forEach(item=>{
-      if(item.kind==="preset")return;
-      addCard(item);
-      if(item.url)addPolaroid(item);
-      if(item.text)addBubble(item);
-    });
+  if(state.initial){
+    fresh
+      .filter(x=>x.kind==="preset")
+      .slice(0,CONFIG.maxPolaroids)
+      .forEach(addPolaroid);
   }else{
-    fresh.filter(x=>x.kind==="preset").slice(0,6).forEach(addPolaroid);
+    // 後續新資料進佇列，一筆一筆播
+    fresh
+      .filter(x=>x.kind!=="preset")
+      .forEach(queueNewItem);
   }
 
-  if(state.items.length>150)
-    state.items=state.items.slice(-150);
+  // 限制前端資料量，避免婚禮長時間播放後記憶體持續增加
+  if(state.items.length>180){
+    state.items=state.items.slice(-180);
+  }
 
   state.initial=false;
 }
@@ -538,73 +642,225 @@ function process(items){
 function jsonpRequest(url,callbackName){
   return new Promise((resolve,reject)=>{
     const script=document.createElement("script");
+    let finished=false;
+
     const timeout=setTimeout(()=>{
-      cleanup();
-      reject(new Error("JSONP timeout"));
-    },15000);
+      finish(new Error("JSONP timeout"));
+    },CONFIG.maxPollInterval);
 
     function cleanup(){
       clearTimeout(timeout);
-      script.remove();
-      try{delete window[callbackName]}
-      catch(e){window[callbackName]=undefined}
+      script.onload=null;
+      script.onerror=null;
+      if(script.parentNode)script.parentNode.removeChild(script);
+
+      try{
+        delete window[callbackName];
+      }catch(e){
+        window[callbackName]=undefined;
+      }
+    }
+
+    function finish(error,data){
+      if(finished)return;
+      finished=true;
+      cleanup();
+
+      if(error)reject(error);
+      else resolve(data);
     }
 
     window[callbackName]=(data)=>{
-      cleanup();
-      resolve(data);
+      finish(null,data);
     };
 
     script.src=url;
     script.async=true;
+
     script.onerror=()=>{
-      cleanup();
-      reject(new Error("JSONP load failed"));
+      finish(new Error("JSONP load failed"));
     };
+
     document.head.appendChild(script);
   });
 }
 
 async function initialSync(){
   if(state.syncing)return;
+  if(!navigator.onLine){
+    state.online=false;
+    updateConnectionDot();
+    return;
+  }
+
   state.syncing=true;
 
-  const cb="weddingInitial_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  const cb=
+    "weddingInitial_"+
+    Date.now()+"_"+
+    Math.floor(Math.random()*10000);
 
   try{
-    const url=CONFIG.endpoint+
-      "?mode=initial&callback="+encodeURIComponent(cb)+"&t="+Date.now();
+    const url=
+      CONFIG.endpoint+
+      "?mode=initial"+
+      "&callback="+encodeURIComponent(cb)+
+      "&t="+Date.now();
 
     const data=await jsonpRequest(url,cb);
-    if(data&&data.ok&&Array.isArray(data.items))
+
+    if(data&&data.ok&&Array.isArray(data.items)){
       process(data.items);
+      state.online=true;
+      state.pollDelay=CONFIG.minPollInterval;
+    }else{
+      throw new Error(
+        data&&data.error
+          ? data.error
+          : "Invalid initial response"
+      );
+    }
   }catch(err){
+    state.online=navigator.onLine!==false;
     console.warn("初始資料載入失敗",err);
   }finally{
     state.syncing=false;
+    updateConnectionDot();
   }
 }
 
 async function poll(){
   if(state.syncing)return;
+
+  if(!navigator.onLine){
+    state.online=false;
+    updateConnectionDot();
+    schedulePoll();
+    return;
+  }
+
   state.syncing=true;
 
-  const cb="weddingPoll_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  const cb=
+    "weddingPoll_"+
+    Date.now()+"_"+
+    Math.floor(Math.random()*10000);
 
   try{
-    const url=CONFIG.endpoint+
-      "?mode=poll&callback="+encodeURIComponent(cb)+"&t="+Date.now();
+    const url=
+      CONFIG.endpoint+
+      "?mode=poll"+
+      "&callback="+encodeURIComponent(cb)+
+      "&t="+Date.now();
 
     const data=await jsonpRequest(url,cb);
 
-    if(data&&data.ok&&Array.isArray(data.items))
+    if(data&&data.ok&&Array.isArray(data.items)){
       process(data.items);
+
+      // 成功後恢復 1 秒更新
+      state.online=true;
+      state.pollDelay=CONFIG.minPollInterval;
+    }else{
+      throw new Error(
+        data&&data.error
+          ? data.error
+          : "Invalid poll response"
+      );
+    }
   }catch(err){
-    console.warn("同步暫時失敗",err);
+    state.online=navigator.onLine!==false;
+    state.pollDelay=Math.min(
+      Math.max(
+        state.pollDelay*2,
+        CONFIG.minPollInterval
+      ),
+      CONFIG.maxPollInterval
+    );
+
+    console.warn(
+      "同步暫時失敗，將於 "+
+      Math.round(state.pollDelay/1000)+
+      " 秒後重試",
+      err
+    );
   }finally{
     state.syncing=false;
+    updateConnectionDot();
+    schedulePoll();
   }
 }
+
+function schedulePoll(){
+  if(state.pollTimer){
+    clearTimeout(state.pollTimer);
+  }
+
+  state.pollTimer=setTimeout(
+    poll,
+    state.pollDelay
+  );
+}
+
+function updateConnectionDot(){
+  const dot=document.getElementById("connectionDot");
+  if(!dot)return;
+
+  dot.classList.toggle(
+    "online",
+    state.online && navigator.onLine!==false
+  );
+
+  dot.classList.toggle(
+    "offline",
+    !state.online || navigator.onLine===false
+  );
+}
+
+/*
+ * 網路恢復時不要等下一個 polling，
+ * 直接重新同步。
+ */
+window.addEventListener("online",()=>{
+  state.online=true;
+  state.pollDelay=CONFIG.minPollInterval;
+  updateConnectionDot();
+
+  if(state.pollTimer){
+    clearTimeout(state.pollTimer);
+    state.pollTimer=null;
+  }
+
+  poll();
+});
+
+window.addEventListener("offline",()=>{
+  state.online=false;
+  updateConnectionDot();
+
+  if(state.pollTimer){
+    clearTimeout(state.pollTimer);
+    state.pollTimer=null;
+  }
+});
+
+/*
+ * Chrome 分頁被切到背景再回來時立即補抓一次。
+ * 婚禮現場長時間播放比較不容易漏資料。
+ */
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible"){
+    state.pollDelay=CONFIG.minPollInterval;
+
+    if(!state.syncing){
+      if(state.pollTimer){
+        clearTimeout(state.pollTimer);
+        state.pollTimer=null;
+      }
+      poll();
+    }
+  }
+});
 
 function createPetals(){
   for(let i=0;i<12;i++){
@@ -620,16 +876,40 @@ function createPetals(){
 }
 
 createPetals();
-initialSync();
-setInterval(poll,CONFIG.pollInterval);
 
+updateConnectionDot();
+initialSync();
+
+/*
+ * 每 2.2 秒播放一筆新資料。
+ * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
+ */
+setInterval(showNextQueued,CONFIG.queueInterval);
+
+/*
+ * Poll 使用 setTimeout + adaptive backoff。
+ * 正常狀態每秒一次；斷線 / Apps Script 暫時失敗會自動放慢，
+ * 恢復後重新回到每秒。
+ */
+schedulePoll();
+
+/*
+ * 時間文字直接從卡片自己的 data-item-id 找資料，
+ * 不依賴 children index，避免卡片淘汰後對錯資料。
+ */
 setInterval(()=>{
-  document.querySelectorAll(".live-time").forEach((el,i)=>{
+  document.querySelectorAll(".live-time").forEach(el=>{
     const card=el.closest(".live-card");
     if(!card)return;
-    const idx=Array.from(feed.children).indexOf(card);
-    const item=state.items.filter(x=>x.kind!=="preset")[idx];
-    if(item)el.textContent=timeText(item.time);
+
+    const id=card.dataset.itemId;
+    const item=state.items.find(
+      x=>keyOf(x)===id
+    );
+
+    if(item){
+      el.textContent=timeText(item.time);
+    }
   });
 },10000);
 </script>
