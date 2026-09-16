@@ -180,12 +180,24 @@ html,body{
   to{opacity:0;transform:translateY(-55px) scale(.98)}
 }
 @keyframes polaroidIn{
-  from{opacity:0;transform:translateY(25px) scale(.9) rotate(var(--rot))}
-  to{opacity:1;transform:rotate(var(--rot))}
+  from{
+    opacity:0;
+    transform:translate3d(0,25px,0) scale(.82) rotate(var(--rot))
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0) scale(var(--scale,1)) rotate(var(--rot))
+  }
 }
 @keyframes polaroidOutUp{
-  0%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(var(--rot))}
-  100%{opacity:0;transform:translate3d(var(--float-x,0px),-28vh,0) scale(.92) rotate(var(--rot))}
+  0%{
+    opacity:1;
+    transform:translate3d(0,0,0) scale(var(--scale,1)) rotate(var(--rot))
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(var(--float-x,0px),-28vh,0) scale(.90) rotate(var(--rot))
+  }
 }
 @keyframes guestPhotoIn{
   from{opacity:0;transform:translate3d(0,35px,0) scale(.82) rotate(var(--rot))}
@@ -277,6 +289,7 @@ const CONFIG={
   pollInterval:1000,
   maxCards:5,
   maxPolaroids:6,
+  minPresetPhotos:3,
   maxBubbles:7,
 
   // 多人同時上傳時，一筆一筆播放，避免全部疊在一起
@@ -585,20 +598,81 @@ function addBubble(item){
    - 換下一張後淡入
 ========================================================= */
 
-const presetPositions=[
-  {left:"3%",top:"31%",rot:"-8deg"},
-  {left:"19%",top:"6%",rot:"8deg"},
-  {right:"19%",top:"18%",rot:"-7deg"},
-  {right:"3%",top:"38%",rot:"8deg"},
-  {right:"16%",bottom:"8%",rot:"-6deg"},
-  {left:"8%",bottom:"7%",rot:"6deg"}
-];
-
 const presetShowcase={
   items:[],
-  slots:[],
-  timer:null
+  active:[],
+  timer:null,
+  nextIndex:0
 };
+
+/*
+ * 婚紗照位置：
+ * 每次出現都重新隨機，不固定六個格子。
+ * 中央保留給新人主視覺，照片主要分布在四周。
+ */
+function randomPresetPosition(){
+  const zones=[
+    {left:3,  top:8,  width:22, height:24},
+    {left:18, top:5,  width:18, height:25},
+    {left:3,  top:34, width:21, height:27},
+    {left:72, top:7,  width:20, height:25},
+    {left:78, top:31, width:18, height:27},
+    {left:70, top:61, width:22, height:25},
+    {left:4,  top:67, width:21, height:24},
+    {left:20, top:67, width:18, height:25}
+  ];
+
+  const zone=zones[Math.floor(Math.random()*zones.length)];
+
+  return {
+    left:(zone.left + Math.random()*Math.max(2,zone.width-12))+"%",
+    top:(zone.top + Math.random()*Math.max(2,zone.height-14))+"%",
+    rot:(-10+Math.random()*20)+"deg",
+    scale:(.86+Math.random()*.24).toFixed(2)
+  };
+}
+
+function createPresetPhoto(item,animate=true){
+  if(!item || !item.url)return null;
+
+  const el=document.createElement("div");
+  el.className="polaroid preset-slide";
+
+  const pos=randomPresetPosition();
+
+  el.style.left=pos.left;
+  el.style.top=pos.top;
+  el.style.setProperty("--rot",pos.rot);
+  el.style.setProperty("--scale",pos.scale);
+  el.style.setProperty(
+    "--float-x",
+    (-50+Math.random()*100)+"px"
+  );
+
+  el.innerHTML=
+    '<img src="'+esc(item.url)+'" alt="">'+
+    '<span class="heart">♡</span>';
+
+  polaroidLayer.appendChild(el);
+
+  if(!animate){
+    el.style.animation="none";
+    el.style.opacity="1";
+    el.style.transform=
+      "scale("+pos.scale+") rotate("+pos.rot+")";
+  }
+
+  /*
+   * 圖片如果要消失，統一「往上飄＋淡出」。
+   */
+  el.addEventListener("animationend",(ev)=>{
+    if(ev.animationName==="polaroidOutUp"){
+      if(el.isConnected)el.remove();
+    }
+  });
+
+  return el;
+}
 
 function setupPresetSlideshow(presets){
   presetShowcase.items=Array.isArray(presets)
@@ -607,94 +681,60 @@ function setupPresetSlideshow(presets){
 
   if(!presetShowcase.items.length)return;
 
-  presetShowcase.slots=[];
+  presetShowcase.active=[];
 
-  const count=Math.min(
+  /*
+   * 初始不是固定六張：
+   * 隨機 3～6 張。
+   */
+  const max=Math.min(
     CONFIG.maxPolaroids,
     presetShowcase.items.length
   );
 
-  for(let i=0;i<count;i++){
-    const slot={
-      index:i,
-      itemIndex:i%presetShowcase.items.length,
-      el:null
-    };
+  const min=Math.min(
+    CONFIG.minPresetPhotos,
+    max
+  );
 
-    const el=document.createElement("div");
-    el.className="polaroid preset-slide";
+  const initialCount=
+    min + Math.floor(Math.random()*(max-min+1));
 
-    const pos=presetPositions[
-      i%presetPositions.length
-    ];
+  const shuffled=[...presetShowcase.items]
+    .sort(()=>Math.random()-.5);
 
-    Object.entries(pos).forEach(([k,v])=>{
-      el.style.setProperty(k,v);
-    });
-    el.style.setProperty("--rot",pos.rot);
+  for(let i=0;i<initialCount;i++){
+    const item=shuffled[i%shuffled.length];
+    const el=createPresetPhoto(item,false);
 
-    polaroidLayer.appendChild(el);
-
-    slot.el=el;
-    presetShowcase.slots.push(slot);
-
-    renderPresetSlot(slot,false);
+    if(el){
+      presetShowcase.active.push({
+        item,
+        el
+      });
+    }
   }
 
+  /*
+   * 每 5 秒做一次「隨機變化」。
+   * 有新資料時，優先補進空位；
+   * 沒有新資料時，隨機讓一張淡出，
+   * 但永遠維持至少 3 張。
+   */
   if(presetShowcase.timer){
     clearInterval(presetShowcase.timer);
   }
 
   presetShowcase.timer=setInterval(
-    rotateOnePreset,
+    refreshPresetPhotos,
     CONFIG.presetSlideInterval
   );
 }
 
-function renderPresetSlot(slot,animate){
-  const item=
-    presetShowcase.items[
-      slot.itemIndex%presetShowcase.items.length
-    ];
+function removePresetEntry(entry){
+  if(!entry || !entry.el)return;
 
-  const el=slot.el;
-  if(!el||!item)return;
-
-  const pos=presetPositions[
-    slot.index%presetPositions.length
-  ];
-
-  el.style.setProperty("--rot",pos.rot);
-
-  el.innerHTML=
-    '<img src="'+esc(item.url)+'" alt="">'+
-    '<span class="heart">♡</span>';
-
-  el.dataset.itemId=keyOf(item);
-  el.classList.remove("leaving");
-
-  if(!animate)return;
-
-  el.style.animation="none";
-  void el.offsetWidth;
-  el.style.animation="polaroidIn .8s ease both";
-}
-
-function rotateOnePreset(){
-  if(!presetShowcase.items.length)return;
-
-  // 每次只換一張，畫面會一直有照片，不會全部同時消失
-  const slot=
-    presetShowcase.slots[
-      rotateOnePreset.counter%
-      presetShowcase.slots.length
-    ];
-
-  rotateOnePreset.counter++;
-
-  if(!slot||!slot.el)return;
-
-  const el=slot.el;
+  const el=entry.el;
 
   el.classList.remove("leaving");
   el.style.animation="none";
@@ -702,15 +742,90 @@ function rotateOnePreset(){
   el.classList.add("leaving");
 
   setTimeout(()=>{
-    slot.itemIndex=
-      (slot.itemIndex+1)%
-      presetShowcase.items.length;
+    if(el.isConnected)el.remove();
 
-    renderPresetSlot(slot,true);
+    const idx=presetShowcase.active.indexOf(entry);
+    if(idx>=0){
+      presetShowcase.active.splice(idx,1);
+    }
   },CONFIG.presetFadeDuration);
 }
 
-rotateOnePreset.counter=0;
+function addPresetPhoto(item){
+  const el=createPresetPhoto(item,true);
+
+  if(el){
+    presetShowcase.active.push({
+      item,
+      el
+    });
+  }
+}
+
+function refreshPresetPhotos(){
+  const items=presetShowcase.items;
+
+  if(!items.length)return;
+
+  const activeCount=presetShowcase.active.length;
+
+  /*
+   * 低於 6 張：
+   * 只要有下一張婚紗照，就直接補一張。
+   */
+  if(activeCount<CONFIG.maxPolaroids){
+    const item=items[
+      presetShowcase.nextIndex%items.length
+    ];
+
+    presetShowcase.nextIndex++;
+
+    addPresetPhoto(item);
+    return;
+  }
+
+  /*
+   * 已經 6 張：
+   * 隨機決定這次是「保持」還是「換掉一張」。
+   * 保持時不做任何事，因此畫面有時會自然維持。
+   */
+  if(Math.random()<0.35){
+    return;
+  }
+
+  /*
+   * 換掉一張，但不能低於 3 張。
+   */
+  const candidates=
+    presetShowcase.active.filter(x=>x.el && x.el.isConnected);
+
+  if(candidates.length<=CONFIG.minPresetPhotos){
+    return;
+  }
+
+  const old=
+    candidates[Math.floor(Math.random()*candidates.length)];
+
+  removePresetEntry(old);
+
+  /*
+   * 先讓舊照片開始淡出，再補新照片。
+   * 這樣視覺上就是：
+   * 舊照片 ↑ 淡出 → 新照片淡入。
+   */
+  setTimeout(()=>{
+    const currentCount=presetShowcase.active.length;
+
+    if(currentCount<CONFIG.maxPolaroids){
+      const item=items[
+        presetShowcase.nextIndex%items.length
+      ];
+
+      presetShowcase.nextIndex++;
+      addPresetPhoto(item);
+    }
+  },CONFIG.presetFadeDuration+80);
+}
 
 function rememberKey(id){
   if(state.known.has(id))return false;
