@@ -23,6 +23,9 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
 (function startSyncManager(){
   const endpoint='https://script.google.com/macros/s/AKfycbwiBfLfxWrImX3Z8Mi1qqxxHaReprYiiu8j7VMnaFKFQyRGmIJaQ5h2iifUXpReVQlB/exec';
   window.__syncManagerActive=true;
+  // Share one short-lived request with any legacy poller still on the page.
+  const nativeFetch=window.fetch.bind(window);let sharedRequest=null,sharedAt=0;
+  window.fetch=function(input,init){const url=typeof input==='string'?input:(input&&input.url)||'';if(!url.startsWith(endpoint))return nativeFetch(input,init);const now=Date.now();if(sharedRequest&&now-sharedAt<900)return sharedRequest;sharedAt=now;sharedRequest=nativeFetch(input,init).finally(()=>{setTimeout(()=>{sharedRequest=null},900)});return sharedRequest};
   const known=new Set(playlist.map(x=>String(x.sourceId||x.id||'')));
   let busy=false, timer=0;
   const unwrap=data=>{
@@ -41,7 +44,7 @@ const queue=document.getElementById('queue'),photo=document.getElementById('stag
   };
   async function tick(){
     if(busy){schedule();return} busy=true;
-    try{const res=await fetch(endpoint,{cache:'no-store'});if(res.ok){for(const [i,raw] of unwrap(await res.json()).entries()){const item=normalize(raw,i);if(!known.has(item.sourceId)){known.add(item.sourceId);playlist.push(item)}} if(typeof renderGrid==='function')renderGrid()}}
+    try{const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),8000);const res=await fetch(endpoint,{cache:'no-store',signal:controller.signal});clearTimeout(timeout);if(res.ok){for(const [i,raw] of unwrap(await res.json()).entries()){const item=normalize(raw,i);if(!known.has(item.sourceId)){known.add(item.sourceId);playlist.push(item)}} if(typeof renderGrid==='function')renderGrid()}}
     catch(e){console.warn('照片同步暫時無法連線',e)} finally{busy=false;schedule()}
   }
   function schedule(){clearTimeout(timer);timer=setTimeout(tick,1000)}
