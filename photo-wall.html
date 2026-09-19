@@ -298,15 +298,17 @@ html,body{
 const CONFIG={
   endpoint:"https://script.google.com/macros/s/AKfycbydMwxvks8TSSGfMHkJvOTiUwdNXKzCHKHJ5JxbnYu-CHi9hGSilWeHbMjC3KUijzit/exec",
   pollInterval:1000,
-  maxCards:0,
+  maxCards:12,
   maxPolaroids:6,
-  minPresetPhotos:3,
   guestPhotoNormalMax:6,
   guestPhotoBurstMax:10,
-  maxBubbles:7,
+  photoBurstThreshold:3,
+  photoBurstHoldTime:5000,
+  minPresetPhotos:3,
+  maxBubbles:20,
 
-  // 多人同時上傳時，一筆一筆播放，避免全部疊在一起
-  queueInterval:2200,
+  // 純文字仍保留佇列，但快速顯示，讓大量祝福可以同時存在
+  queueInterval:700,
 
   // 長時間播放時，只保留最近的事件記錄
   maxKnown:500,
@@ -337,13 +339,8 @@ const state={
   initial:true,
   syncing:false,
 
-  // 純文字不再阻塞照片；只有純文字使用這個佇列。
+  // 新資料佇列
   displayQueue:[],
-
-  // 照片獨立處理：新照片優先立即顯示。
-  // 短時間大量照片時暫時允許場上最多 10 張。
-  photoBurstCount:0,
-  photoQueueLength:0,
 
   // 避免長時間運作時 Set 無限增長
   knownOrder:[],
@@ -398,8 +395,6 @@ function timeText(t){
 }
 
 function addCard(item){
-  // 保留函式以避免舊程式引用造成錯誤。
-  // 正式流程現在不再使用中央 live-card。
   const message=textOf(item);
   if(!message && !item.url)return;
 
@@ -419,7 +414,9 @@ function addCard(item){
       '<div class="live-name">'+esc(item.name)+'</div>'+
       '<div class="live-text">'+
         (item.url
-          ? (message?esc(message):"傳送了一張照片")
+          ? (message
+              ? '傳了圖片：'+esc(message)
+              : '傳了一張圖片')
           : esc(message))+
       '</div>'+
     '</div>'+
@@ -515,24 +512,45 @@ function addPolaroid(item){
 
   /*
    * 賓客照片平常最多 6 張。
-   * 如果短時間大量新照片湧入，放寬到最多 10 張。
-   * 超過上限時，移除最舊的一張，讓最新照片優先出現。
+   * 短時間真的湧入多張時，暫時放寬到 10 張，
+   * 讓最新照片可以直接出現。
    */
+  const guestMax=state.photoBurst
+    ? CONFIG.guestPhotoBurstMax
+    : CONFIG.guestPhotoNormalMax;
+
   const guests=Array.from(
     polaroidLayer.querySelectorAll(".guest-photo")
   );
 
-  const incomingBurst=
-    state.photoBurstCount>0 ||
-    state.photoQueueLength>0;
-
-  const guestMax=incomingBurst
-    ? CONFIG.guestPhotoBurstMax
-    : CONFIG.guestPhotoNormalMax;
-
   while(guests.length>=guestMax){
     const old=guests.shift();
     if(old)old.remove();
+  }
+
+  /*
+   * 如果第一個圖片網址載入失敗，再嘗試 Drive 常見圖片網址。
+   */
+  const img=el.querySelector("img");
+  if(img){
+    let tried=0;
+    const fallbacks=[];
+
+    if(item.photoId){
+      fallbacks.push(
+        "https://drive.google.com/thumbnail?id="+
+        encodeURIComponent(item.photoId)+"&sz=w1200"
+      );
+      fallbacks.push(
+        "https://drive.google.com/uc?export=view&id="+
+        encodeURIComponent(item.photoId)
+      );
+    }
+
+    img.addEventListener("error",()=>{
+      if(tried>=fallbacks.length)return;
+      img.src=fallbacks[tried++];
+    });
   }
 
   /*
@@ -583,19 +601,12 @@ function addBubble(item){
   el.className="float-msg";
 
   /*
-   * 文字從畫面下方不同位置出現。
-   * 刻意避開最中央標題區，讓視覺比較舒服。
+   * 祝福文字可以出現在整個畫面的各個位置，
+   * 不再限制只能左下 / 右下。
+   * 避免太靠邊，讓手機、大螢幕都比較容易看見。
    */
-  const side=Math.random();
-
-  let left;
-  if(side<0.5){
-    left=5+Math.random()*27;
-  }else{
-    left=68+Math.random()*25;
-  }
-
-  const bottom=3+Math.random()*25;
+  const left=4+Math.random()*88;
+  const bottom=5+Math.random()*78;
 
   el.style.left=left+"%";
   el.style.bottom=bottom+"%";
@@ -1101,8 +1112,8 @@ function rememberKey(id){
 }
 
 function queueNewItem(item){
-  // 純文字才進這個佇列。
-  // 有照片的事件不排在文字後面。
+  // 純文字進中央訊息 queue。
+  // 有照片的事件會在 process() 裡立即處理中央卡片 + 照片。
   if(item && !item.url){
     state.displayQueue.push(item);
   }
@@ -1113,35 +1124,10 @@ function showNextQueued(){
 
   const item=state.displayQueue.shift();
 
-  // 純文字只顯示在旁邊，不再建立中央 live-card。
-  if(item.text){
-    addBubble(item);
-  }
-}
-
-function showNewPhoto(item){
-  if(!item || !item.url)return;
-
-  // 照片直接顯示，不等待文字 queue。
-  state.photoBurstCount++;
-  state.photoQueueLength=Math.max(
-    0,
-    state.photoQueueLength-1
-  );
-
-  addPolaroid(item);
-
-  // 連續大量照片時維持 burst 狀態一小段時間，
-  // 讓場上可暫時保留到 10 張。
-  clearTimeout(showNewPhoto.burstTimer);
-  showNewPhoto.burstTimer=setTimeout(()=>{
-    state.photoBurstCount=0;
-    state.photoQueueLength=0;
-  },5000);
+  // 純文字維持原本的中央訊息卡＋側邊祝福。
+  addCard(item);
 
   if(item.text){
-    // 照片＋文字：文字同步出現在旁邊，
-    // 不進純文字播放佇列，也不阻塞下一張照片。
     addBubble(item);
   }
 }
@@ -1202,19 +1188,60 @@ function process(items){
     });
 
     /*
-     * 後續真正的新資料：
-     * - 有照片：立即顯示，照片優先
-     * - 純文字：只進旁邊訊息 queue
+     * 新資料分成兩條路：
+     * - 有照片：立即顯示，不等待文字 queue。
+     * - 純文字：依原本節奏進中央訊息 queue。
      *
-     * 同一批如果一次來很多照片，先記錄數量，
-     * addPolaroid 會暫時把上限放寬到 10 張。
+     * 這樣「照片＋祝福」不會因前面有很多文字而延遲，
+     * 多張照片同時進來也會直接顯示。
      */
     const photoItems=fresh.filter(x=>x.url);
     const textItems=fresh.filter(x=>!x.url);
 
-    state.photoQueueLength=photoItems.length;
+    const now=Date.now();
+    state.recentPhotoTimes=state.recentPhotoTimes.filter(
+      t=>now-t<CONFIG.photoBurstHoldTime
+    );
 
-    photoItems.forEach(showNewPhoto);
+    photoItems.forEach(()=>{
+      state.recentPhotoTimes.push(Date.now());
+    });
+
+    if(
+      photoItems.length>=CONFIG.photoBurstThreshold ||
+      state.recentPhotoTimes.length>=CONFIG.photoBurstThreshold
+    ){
+      state.photoBurst=true;
+
+      clearTimeout(state.photoBurstTimer);
+      state.photoBurstTimer=setTimeout(()=>{
+        state.photoBurst=false;
+
+        // 大量上傳結束後，回到平常最多 6 張。
+        const guests=Array.from(
+          polaroidLayer.querySelectorAll(".guest-photo")
+        );
+
+        while(guests.length>CONFIG.guestPhotoNormalMax){
+          const old=guests.shift();
+          if(old)old.remove();
+        }
+      },CONFIG.photoBurstHoldTime);
+    }
+
+    photoItems.forEach(item=>{
+      // 中央卡片立即出現
+      addCard(item);
+
+      // 照片也立即出現，不等待 queue
+      addPolaroid(item);
+
+      // 照片＋文字的祝福同步出現
+      if(item.text){
+        addBubble(item);
+      }
+    });
+
     textItems.forEach(queueNewItem);
   }
 
@@ -1479,8 +1506,8 @@ updateConnectionDot();
 initialSync();
 
 /*
- * 純文字每 2.2 秒顯示一筆。
- * 照片完全不走這個佇列，收到後立即顯示。
+ * 每 2.2 秒播放一筆新資料。
+ * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
  */
 setInterval(showNextQueued,CONFIG.queueInterval);
 
