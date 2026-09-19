@@ -2813,3 +2813,225 @@ main{
 }
 
 </style>
+
+
+<style>
+/* =========================================================
+   FINAL V2
+   中央：回到正常圓角對話框，偏白的暖黃色
+   旁邊：去掉灰底感，改成真正的柔和黃白光暈
+   不修改 JavaScript
+   ========================================================= */
+
+/* ---------- 中央訊息 ---------- */
+.live-feed{
+  width:min(660px,46vw) !important;
+  max-height:30vh !important;
+  gap:8px !important;
+}
+
+.live-card{
+  min-height:62px !important;
+  padding:9px 16px 9px 11px !important;
+  gap:11px !important;
+
+  /* 偏白的暖黃色，不要濃黃 */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,253,244,.93),
+      rgba(255,247,220,.88)
+    ) !important;
+
+  color:#604b38 !important;
+
+  /* 不使用深色外框，避免變形感 */
+  border:0 !important;
+  border-radius:18px !important;
+  clip-path:none !important;
+
+  /* 柔和黃白光，不要灰黑陰影 */
+  box-shadow:
+    0 0 0 1px rgba(255,250,226,.42),
+    0 0 18px rgba(255,235,174,.42),
+    0 7px 18px rgba(74,52,29,.10) !important;
+
+  backdrop-filter:blur(3px) !important;
+  -webkit-backdrop-filter:blur(3px) !important;
+
+  overflow:visible !important;
+}
+
+/* 完全取消之前造成「框變形」的手繪外框 */
+.live-card::before{
+  content:none !important;
+  display:none !important;
+}
+
+/* 愛心保留，但不要畫第二層框 */
+.live-card::after{
+  content:"♡" !important;
+  right:13px !important;
+  bottom:7px !important;
+  color:rgba(215,145,135,.78) !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.85) !important;
+}
+
+/* 中央頭像 */
+.live-card .avatar{
+  width:43px !important;
+  height:43px !important;
+  flex:0 0 43px !important;
+  border-radius:50% !important;
+  background:linear-gradient(145deg,#efc8b8,#dda493) !important;
+  border:1px solid rgba(255,255,255,.88) !important;
+  box-shadow:
+    0 2px 7px rgba(91,61,35,.10),
+    0 0 8px rgba(255,235,190,.25) !important;
+}
+
+/* 中央文字 */
+.live-card .live-copy{
+  min-width:0 !important;
+  flex:1 !important;
+}
+
+.live-card .live-name{
+  color:#735d48 !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1.25 !important;
+  text-shadow:none !important;
+}
+
+.live-card .live-name::before{
+  content:none !important;
+}
+
+.live-card .live-text{
+  color:#5f4a38 !important;
+  font-size:clamp(14px,1.02vw,17px) !important;
+  line-height:1.4 !important;
+  font-weight:600 !important;
+  text-shadow:0 1px 1px rgba(255,255,255,.65) !important;
+}
+
+.live-card .live-time{
+  color:#927b61 !important;
+  font-size:10px !important;
+  text-shadow:none !important;
+}
+
+/* 中央照片縮圖 */
+.live-card .live-thumb{
+  width:45px !important;
+  height:45px !important;
+  flex:0 0 45px !important;
+  border-radius:9px !important;
+  border:1px solid rgba(255,255,255,.82) !important;
+  box-shadow:0 2px 7px rgba(83,58,34,.10) !important;
+}
+
+
+/* ---------- 旁邊漂浮祝福 ---------- */
+.float-msg{
+  min-width:150px !important;
+  max-width:255px !important;
+  padding:11px 17px 12px !important;
+
+  /* 更白、更透，不再像灰色卡片 */
+  background:
+    radial-gradient(
+      circle at 22% 18%,
+      rgba(255,255,255,.82),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255,253,244,.82),
+      rgba(255,247,220,.66)
+    ) !important;
+
+  color:#654e39 !important;
+
+  /* 完全取消深色框 */
+  border:0 !important;
+  border-radius:14px !important;
+  clip-path:none !important;
+
+  /* 明顯但柔和的暖黃外光 */
+  box-shadow:
+    0 0 5px rgba(255,248,220,.82),
+    0 0 16px rgba(255,231,166,.62),
+    0 0 30px rgba(255,231,166,.28),
+    0 6px 17px rgba(71,48,27,.09) !important;
+
+  backdrop-filter:blur(2px) !important;
+  -webkit-backdrop-filter:blur(2px) !important;
+  isolation:isolate !important;
+}
+
+/* 取消之前的灰/棕色內框 */
+.float-msg::before{
+  content:none !important;
+  display:none !important;
+}
+
+/* 小花只留淡淡的裝飾 */
+.float-msg::after{
+  content:"✿" !important;
+  right:-7px !important;
+  bottom:-8px !important;
+  color:#e0a197 !important;
+  font-size:17px !important;
+  text-shadow:
+    0 0 5px rgba(255,241,203,.9),
+    0 1px 2px rgba(77,52,29,.10) !important;
+}
+
+/* 旁邊訊息文字 */
+.float-msg .who{
+  color:#80674e !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  margin-bottom:3px !important;
+  text-shadow:0 1px 1px rgba(255,255,255,.55) !important;
+}
+
+.float-msg .words{
+  color:#654c38 !important;
+  font-size:clamp(13px,1vw,17px) !important;
+  line-height:1.38 !important;
+  font-weight:600 !important;
+  text-shadow:0 1px 1px rgba(255,255,255,.65) !important;
+}
+
+
+/* ---------- 手機版 ---------- */
+@media(max-width:900px){
+  .live-feed{
+    width:min(88vw,660px) !important;
+  }
+
+  .live-card{
+    min-height:57px !important;
+    padding:8px 39px 8px 10px !important;
+    border-radius:16px !important;
+  }
+
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:40px !important;
+    height:40px !important;
+  }
+
+  .float-msg{
+    min-width:135px !important;
+    max-width:205px !important;
+    padding:9px 13px 10px !important;
+    border-radius:12px !important;
+  }
+}
+</style>
