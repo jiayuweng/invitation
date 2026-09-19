@@ -34,7 +34,7 @@ html,body{
 }
 .wall:after{
   content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(circle at 50% 46%,transparent 31%,rgba(0,0,0,.18) 100%);
+  background:radial-gradient(circle at 50% 46%,transparent 100%,rgba(0,0,0,.18) 100%);
 }
 
 /* ---------- QR：日系手繪紙卡 ---------- */
@@ -864,7 +864,7 @@ html,body{
 
 /* subtle sketchy heart accents */
 .wall::after{
-  content:'♡  ❀  ♡';
+  content:'';
   position:absolute;
   left:50%; bottom:3.5%; transform:translateX(-50%);
   z-index:3;
