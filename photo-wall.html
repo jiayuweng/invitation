@@ -900,7 +900,7 @@ html,body{
 
 <script>
 const CONFIG={
-  endpoint:"https://script.google.com/macros/s/AKfycbydMwxvks8TSSGfMHkJvOTiUwdNXKzCHKHJ5JxbnYu-CHi9hGSilWeHbMjC3KUijzit/exec",
+  endpoint:"https://script.google.com/macros/s/AKfycbyJ5XKfxOjKgQ_8phL-8pIxrMmrYe6rwmBtrcVUbD6DCTOCd8is5x5CZI0vyxJX5y4/exec",
   pollInterval:3000,
   maxCards:12,
   maxPolaroids:6,
@@ -1018,7 +1018,7 @@ function timeText(t){
 const CENTRAL_MESSAGE_MAX=5;
 
 function trimCentralMessages(){
-  const feed=document.getElementById('liveFeed');
+  const feed=document.getElementById('live-feed');
   if(!feed) return;
   const cards=Array.from(feed.querySelectorAll('.live-card'));
   while(cards.length>CENTRAL_MESSAGE_MAX){
@@ -1954,85 +1954,7 @@ function jsonpRequest(url,callbackName){
   });
 }
 
-async function loadPresetConfig(){
-  /*
-   * 固定婚紗照完全獨立於 initial。
-   *
-   * 不讀 Sheet
-   * 不讀 Drive
-   * 不參與 watermarkTime
-   *
-   * Apps Script 只從已建立的婚紗照快取回傳
-   * 40 張設定，因此不會再因 initial 卡住。
-   */
-  const cb =
-    "weddingPresetConfig_" +
-    Date.now() +
-    "_" +
-    Math.floor(Math.random() * 10000);
-
-  try{
-    const url =
-      CONFIG.endpoint +
-      "?mode=presetConfig" +
-      "&callback=" +
-      encodeURIComponent(cb) +
-      "&t=" +
-      Date.now();
-
-    const data =
-      await jsonpRequest(
-        url,
-        cb
-      );
-
-    if(
-      data &&
-      data.ok &&
-      Array.isArray(data.items)
-    ){
-      const presets =
-        data.items.filter(
-          item =>
-            item &&
-            item.url
-        );
-
-      if(presets.length){
-        setupPresetSlideshow(
-          presets
-        );
-
-        console.log(
-          "婚紗照設定載入完成：" +
-          presets.length +
-          " 張"
-        );
-      }else{
-        console.warn(
-          "婚紗照設定為空，請在 Apps Script 執行 refreshPresetPhotoConfig()"
-        );
-      }
-    }else{
-      console.warn(
-        "婚紗照設定回傳格式錯誤",
-        data
-      );
-    }
-
-  }catch(err){
-    /*
-     * 婚紗照失敗不影響賓客留言/照片。
-     */
-    console.warn(
-      "婚紗照設定載入失敗",
-      err
-    );
-  }
-}
-
-
-async function initialSyncLegacy(){
+async function initialSync(){
   if(state.syncing)return;
   if(!navigator.onLine){
     state.online=false;
@@ -2263,18 +2185,7 @@ function createPetals(){
 createPetals();
 
 updateConnectionDot();
-
-/*
- * 婚紗照：獨立從 presetConfig 快取載入。
- * 不再走 mode=initial。
- */
-loadPresetConfig();
-
-/*
- * 賓客留言 / 賓客照片：
- * 只透過 poll 即時取得。
- */
-schedulePoll();
+initialSync();
 
 /*
  * 每 2.2 秒播放一筆新資料。
