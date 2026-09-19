@@ -923,7 +923,7 @@ const CONFIG={
   maxConsecutiveFailures:2,
   failurePause:60000,
   // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
-  jsonpTimeout:15000,
+  jsonpTimeout:60000,
 
   // 婚紗照輪播
   presetSlideInterval:5000,
@@ -1912,43 +1912,21 @@ function jsonpRequest(url,callbackName){
   return new Promise((resolve,reject)=>{
     const script=document.createElement("script");
     let finished=false;
-    let timedOut=false;
-
-    // Apps Script 偶爾會在 timeout 後才把 JSONP 回傳回來。
-    // timeout 後保留 callback 一小段時間，避免瀏覽器出現
-    // "xxx is not defined"，也避免晚到的回應變成未捕獲錯誤。
-    const lateCleanupMs=120000;
 
     const timeout=setTimeout(()=>{
-      timedOut=true;
       finish(new Error("JSONP timeout"));
-
-      setTimeout(()=>{
-        try{
-          delete window[callbackName];
-        }catch(e){
-          window[callbackName]=undefined;
-        }
-      },lateCleanupMs);
     },CONFIG.jsonpTimeout);
-
-    function removeScript(){
-      script.onload=null;
-      script.onerror=null;
-      if(script.parentNode)script.parentNode.removeChild(script);
-    }
 
     function cleanup(){
       clearTimeout(timeout);
-      removeScript();
+      script.onload=null;
+      script.onerror=null;
+      if(script.parentNode)script.parentNode.removeChild(script);
 
-      // 正常成功時立即移除 callback；timeout 時交給 late cleanup。
-      if(!timedOut){
-        try{
-          delete window[callbackName];
-        }catch(e){
-          window[callbackName]=undefined;
-        }
+      try{
+        delete window[callbackName];
+      }catch(e){
+        window[callbackName]=undefined;
       }
     }
 
@@ -1962,9 +1940,6 @@ function jsonpRequest(url,callbackName){
     }
 
     window[callbackName]=(data)=>{
-      // timeout 後才到達的 Apps Script 回應只需要安靜地忽略，
-      // 不要再次 resolve/reject，也不要觸發 ReferenceError。
-      if(timedOut)return;
       finish(null,data);
     };
 
@@ -1990,14 +1965,14 @@ async function initialSync(){
   state.syncing=true;
 
   const cb=
-    "weddingInitial_"+
+    "weddingStartup_"+
     Date.now()+"_"+
     Math.floor(Math.random()*10000);
 
   try{
     const url=
       CONFIG.endpoint+
-      "?mode=initial"+
+      "?mode=poll"+
       "&callback="+encodeURIComponent(cb)+
       "&t="+Date.now();
 
@@ -2210,15 +2185,10 @@ function createPetals(){
 createPetals();
 
 updateConnectionDot();
-
-// 先讓畫面完整出現，再在背景連線 Apps Script。
-// 不讓 API 啟動時間卡住婚禮畫面的顯示。
-requestAnimationFrame(()=>{
-  initialSync();
-});
+initialSync();
 
 /*
- * 每 2.2 秒播放一筆新資料.
+ * 每 2.2 秒播放一筆新資料。
  * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
  */
 setInterval(showNextQueued,CONFIG.queueInterval);
