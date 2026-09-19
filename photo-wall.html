@@ -140,24 +140,22 @@ html,body{
   background:
     linear-gradient(
       135deg,
-      rgba(255,248,232,.30),
-      rgba(118,72,51,.30) 52%,
-      rgba(67,48,39,.34)
+      rgba(255,248,232,.28),
+      rgba(118,72,51,.28) 52%,
+      rgba(67,48,39,.32)
     );
-  border:1px solid rgba(255,246,225,.48);
+  border:1px solid rgba(255,246,225,.46);
   border-radius:28px;
   box-shadow:
     0 10px 28px rgba(38,20,12,.20),
-    0 2px 8px rgba(255,244,220,.08),
-    inset 0 1px 0 rgba(255,255,255,.24),
-    inset 0 -1px 0 rgba(35,18,10,.14);
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(35,18,10,.12);
   backdrop-filter:blur(8px) saturate(115%);
   -webkit-backdrop-filter:blur(8px) saturate(115%);
   animation:cardIn .7s cubic-bezier(.2,.75,.25,1) both;
-  overflow:visible;
 }
 
-/* 手機聊天泡泡的小尾巴 */
+/* 手機訊息泡泡尾巴 */
 .live-card::before{
   content:"";
   position:absolute;
@@ -165,35 +163,35 @@ html,body{
   bottom:14px;
   width:14px;
   height:14px;
-  background:rgba(154,105,79,.31);
-  border-left:1px solid rgba(255,246,225,.40);
-  border-bottom:1px solid rgba(255,246,225,.40);
+  background:rgba(118,72,51,.28);
+  border-left:1px solid rgba(255,246,225,.38);
+  border-bottom:1px solid rgba(255,246,225,.38);
   transform:rotate(45deg);
   border-bottom-left-radius:4px;
   z-index:-1;
 }
 
-/* 右下淡淡的愛心 */
+/* 淡淡的愛心 */
 .live-card::after{
   content:"♡";
   position:absolute;
   right:12px;
   bottom:7px;
-  color:rgba(255,231,207,.78);
+  color:rgba(255,231,207,.76);
   font-size:19px;
   line-height:1;
   text-shadow:0 2px 5px rgba(44,22,12,.24);
   pointer-events:none;
 }
 
-/* 圖片訊息的小縮圖 */
+/* 中央圖片縮圖 */
 .live-card .live-thumb{
   width:48px;
   height:48px;
   object-fit:cover;
   border-radius:14px;
   flex:none;
-  border:1px solid rgba(255,248,232,.58);
+  border:1px solid rgba(255,248,232,.55);
   box-shadow:0 3px 10px rgba(42,23,13,.18);
 }
 
