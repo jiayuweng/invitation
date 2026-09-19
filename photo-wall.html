@@ -901,7 +901,7 @@ html,body{
 <script>
 const CONFIG={
   endpoint:"https://script.google.com/macros/s/AKfycbydMwxvks8TSSGfMHkJvOTiUwdNXKzCHKHJ5JxbnYu-CHi9hGSilWeHbMjC3KUijzit/exec",
-  pollInterval:1000,
+  pollInterval:3000,
   maxCards:12,
   maxPolaroids:6,
   guestPhotoNormalMax:6,
@@ -918,12 +918,12 @@ const CONFIG={
   maxKnown:500,
 
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
-  minPollInterval:1000,
+  minPollInterval:3000,
   maxPollInterval:30000,
   maxConsecutiveFailures:2,
   failurePause:60000,
   // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
-  jsonpTimeout:60000,
+  jsonpTimeout:15000,
 
   // 婚紗照輪播
   presetSlideInterval:5000,
@@ -2003,11 +2003,23 @@ async function initialSync(){
   }finally{
     state.syncing=false;
     updateConnectionDot();
+
+    // 初始資料失敗也不要讓即時同步停止。
+    // 交給 polling 自動重試，成功後會恢復正常更新。
+    if(!state.initial && !state.pollTimer){
+      schedulePoll();
+    }else if(state.initial){
+      state.pollDelay=Math.max(CONFIG.minPollInterval,state.pollDelay);
+      schedulePoll();
+    }
   }
 }
 
 async function poll(){
-  if(state.syncing)return;
+  if(state.syncing){
+    schedulePoll();
+    return;
+  }
 
   // 若瀏覽器拒絕網路權限 / Apps Script 暫時無法存取，
   // 不要每秒持續重試造成瀏覽器反覆跳出權限提示。
@@ -2185,6 +2197,10 @@ function createPetals(){
 createPetals();
 
 updateConnectionDot();
+
+// 先建立可持續重試的輪詢，再抓初始資料。
+// 即使 Apps Script 冷啟動或第一次 JSONP 失敗，照片牆仍會自動恢復。
+schedulePoll();
 initialSync();
 
 /*
@@ -2195,10 +2211,9 @@ setInterval(showNextQueued,CONFIG.queueInterval);
 
 /*
  * Poll 使用 setTimeout + adaptive backoff。
- * 正常狀態正常約 3 秒一次；斷線 / Apps Script 暫時失敗會自動放慢。
- * 若連續失敗，會暫停一段時間，避免瀏覽器反覆觸發網路權限提示。
+ * 正常狀態約 3 秒一次；斷線 / Apps Script 暫時失敗會自動放慢。
+ * 初始同步失敗也會由 polling 自動接手重試。
  */
-schedulePoll();
 
 /*
  * 時間文字直接從卡片自己的 data-item-id 找資料，
@@ -2886,6 +2901,141 @@ main{
   .float-msg .words{
     font-size:12px;
   }
+}
+
+
+
+/* =========================================================
+   V2 FINAL — 浮動訊息框重新設計
+   目標：
+   - 不再像黃色 UI 卡片
+   - 與照片框的米白紙張語言一致
+   - 保留「黃色」但降飽和、偏蜂蜜奶油色
+   - 四個圓角，不做膠囊
+   - 兩道細手繪線
+   - 不搶中央主視覺
+   ========================================================= */
+
+.float-msg{
+  min-width:145px;
+  max-width:245px;
+  padding:10px 16px 11px;
+
+  color:#5f4930;
+
+  /* 半透明蜂蜜奶油紙 */
+  background:
+    radial-gradient(
+      ellipse at 18% 16%,
+      rgba(255,255,255,.48),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255,241,190,.84),
+      rgba(235,207,139,.70)
+    );
+
+  border:1px solid rgba(112,82,45,.48);
+  border-radius:8px 6px 9px 7px;
+
+  box-shadow:
+    0 6px 15px rgba(55,36,18,.13),
+    inset 0 1px 0 rgba(255,255,255,.48),
+    inset 0 -1px 0 rgba(122,88,42,.10);
+
+  clip-path:none;
+  overflow:visible;
+  isolation:isolate;
+}
+
+/* 第二道線故意稍微偏移，像鉛筆手繪 */
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:-3px -2px -3px -3px;
+  z-index:-1;
+
+  border:1px solid rgba(103,76,45,.40);
+  border-radius:9px 7px 10px 8px;
+
+  transform:rotate(-.45deg);
+
+  box-shadow:
+    1px 1px 0 rgba(255,246,214,.35),
+    -1px 0 0 rgba(103,76,45,.10);
+
+  pointer-events:none;
+}
+
+/* 小花不要太搶 */
+.float-msg::after{
+  content:"✿";
+  position:absolute;
+  right:-7px;
+  bottom:-8px;
+
+  color:#c78e80;
+  font-size:15px;
+  line-height:1;
+
+  text-shadow:0 1px 0 rgba(255,247,220,.9);
+  transform:rotate(-8deg);
+}
+
+/* 名稱更像紙卡上的手寫標籤 */
+.float-msg .who{
+  color:#806342;
+  font-size:10px;
+  font-weight:700;
+  line-height:1.2;
+  margin-bottom:3px;
+  letter-spacing:.15px;
+  text-shadow:0 1px 0 rgba(255,247,216,.55);
+}
+
+/* 祝福文字不要太粗，避免變成 UI */
+.float-msg .words{
+  color:#5b432d;
+  font-size:clamp(13px, .95vw, 16px);
+  line-height:1.38;
+  font-weight:500;
+  text-shadow:0 1px 0 rgba(255,246,211,.45);
+}
+
+/* 不同訊息稍微有色差，讓大量訊息不會變成一排同色卡 */
+.float-msg:nth-child(3n+1){
+  background:
+    radial-gradient(ellipse at 18% 16%,rgba(255,255,255,.50),transparent 32%),
+    linear-gradient(180deg,rgba(255,244,202,.84),rgba(239,216,157,.70));
+}
+.float-msg:nth-child(3n+2){
+  background:
+    radial-gradient(ellipse at 18% 16%,rgba(255,255,255,.48),transparent 32%),
+    linear-gradient(180deg,rgba(251,238,190,.84),rgba(231,207,148,.70));
+}
+.float-msg:nth-child(3n){
+  background:
+    radial-gradient(ellipse at 18% 16%,rgba(255,255,255,.48),transparent 32%),
+    linear-gradient(180deg,rgba(255,239,181,.82),rgba(226,199,132,.68));
+}
+
+/* 手機 */
+@media(max-width:560px){
+  .float-msg{
+    min-width:125px;
+    max-width:195px;
+    padding:9px 12px 10px;
+    border-radius:7px 6px 8px 7px;
+  }
+
+  .float-msg::before{
+    inset:-3px -2px -2px -3px;
+    border-radius:8px 7px 9px 8px;
+  }
+
+  .float-msg .who{font-size:9px}
+  .float-msg .words{font-size:12px}
 }
 
 </style>
