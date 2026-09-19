@@ -8,17 +8,13 @@
 :root{
   --cream:#fff3df;
   --cream2:#f8dfbf;
-  --glass:rgba(42,31,27,.62);
-  --glass2:rgba(255,248,236,.18);
-  --line:rgba(255,245,225,.5);
-  --shadow:0 18px 42px rgba(0,0,0,.38);
-
-  /* ===== 訊息框：可自行調整 ===== */
-  --message-glow-color: rgba(255,225,165,.72);
-  --message-glow-soft: rgba(255,235,195,.34);
-  --message-text-color: #fffaf0;
-  --message-name-color: rgba(255,248,232,.96);
-  --message-time-color: rgba(255,248,232,.72);
+  --paper:#f8edd5;
+  --paper2:#efe0bd;
+  --ink:#5b4532;
+  --olive:#7b8758;
+  --rose:#d9978b;
+  --gold:#b8945b;
+  --shadow:0 14px 30px rgba(56,37,21,.24);
 }
 *{box-sizing:border-box}
 html,body{
@@ -33,181 +29,373 @@ html,body{
 .wall:before{
   content:"";position:absolute;inset:0;z-index:0;
   background:
-    linear-gradient(90deg,rgba(11,7,4,.28),rgba(11,7,4,.06) 50%,rgba(11,7,4,.25)),
-    linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.34));
+    linear-gradient(90deg,rgba(11,7,4,.20),rgba(11,7,4,.035) 50%,rgba(11,7,4,.18)),
+    linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.27));
 }
 .wall:after{
   content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(circle at 50% 46%,transparent 28%,rgba(0,0,0,.22) 100%);
+  background:radial-gradient(circle at 50% 46%,transparent 31%,rgba(0,0,0,.18) 100%);
 }
 
-/* ---------- QR ---------- */
+/* ---------- QR：日系手繪紙卡 ---------- */
 .qr{
-  position:absolute;z-index:30;right:2.2vw;top:3.2vh;
-  width:112px;padding:9px 8px 10px;border-radius:15px;
-  background:rgba(255,255,255,.96);color:#4a382e;
-  text-align:center;text-decoration:none;
-  box-shadow:0 12px 30px rgba(0,0,0,.32);
+  position:absolute;
+  z-index:30;
+  right:2.2vw;
+  top:3.2vh;
+  width:118px;
+  padding:13px 10px 12px;
+  color:#5b4532;
+  text-align:center;
+  text-decoration:none;
+  background:
+    radial-gradient(circle at 15% 12%,rgba(255,255,255,.65),transparent 22%),
+    linear-gradient(180deg,rgba(255,249,231,.98),rgba(242,221,184,.97));
+  border:1px solid rgba(126,92,52,.48);
+  border-radius:3px 7px 5px 4px;
+  clip-path:polygon(1% 3%,97% 0,100% 18%,98% 38%,100% 58%,97% 80%,99% 98%,78% 96%,58% 99%,38% 97%,18% 100%,2% 96%,3% 76%,0 56%,3% 37%,1% 18%);
+  box-shadow:0 12px 24px rgba(55,35,17,.22),inset 0 0 0 1px rgba(255,255,255,.5);
+  transform:rotate(1.2deg);
 }
-.qr img{display:block;width:92px;height:92px;margin:auto}
-.qr span{display:block;margin-top:5px;font-size:12px;font-weight:700;line-height:1.3}
-
-/* ---------- center live feed ---------- */
+.qr::before{
+  content:"";
+  position:absolute;
+  inset:-7px -6px -8px -7px;
+  z-index:-1;
+  border:1.5px solid rgba(247,226,187,.95);
+  border-radius:7px 5px 8px 5px;
+  transform:rotate(-1.5deg);
+  box-shadow:0 0 0 1px rgba(105,73,39,.15);
+  pointer-events:none;
+}
+.qr::after{
+  content:"✿";
+  position:absolute;
+  right:-13px;
+  bottom:-12px;
+  width:31px;height:31px;
+  display:grid;place-items:center;
+  color:#fff3d3;font-size:17px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%,#df9c91 0 15%,transparent 17%),
+    radial-gradient(circle at 50% 18%,#fff3d3 0 25%,transparent 27%),
+    radial-gradient(circle at 82% 50%,#fff3d3 0 25%,transparent 27%),
+    radial-gradient(circle at 50% 82%,#fff3d3 0 25%,transparent 27%),
+    radial-gradient(circle at 18% 50%,#fff3d3 0 25%,transparent 27%);
+  box-shadow:0 2px 5px rgba(54,31,14,.2);
+  pointer-events:none;
+}
+.qr img{
+  display:block;
+  width:92px;height:92px;
+  margin:auto;
+  padding:4px;
+  background:#fffdf7;
+  border:1px solid rgba(126,88,48,.28);
+  border-radius:2px;
+}
+.qr span{
+  display:block;
+  margin-top:7px;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.3;
+  letter-spacing:.02em;
+}
+/* ---------- 中央訊息：手繪婚禮紙卡 ---------- */
 .live-feed{
-  position:absolute;z-index:14;left:50%;top:57%;
+  position:absolute;
+  z-index:14;
+  left:50%;
+  top:68%;
   transform:translateX(-50%);
-  width:min(570px,42vw);
-  max-height:45vh;
-  display:flex;flex-direction:column;gap:7px;
-  overflow:hidden;pointer-events:none;
-  mask-image:linear-gradient(to bottom,transparent 0,black 8%,black 88%,transparent 100%);
+  width:min(520px,38vw);
+  max-height:24vh;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  overflow:hidden;
+  pointer-events:none;
+  mask-image:linear-gradient(to bottom,transparent 0,black 10%,black 90%,transparent 100%);
 }
 .live-card{
-  display:flex;align-items:center;gap:13px;
-  min-height:76px;padding:10px 16px 10px 14px;
-  border:0;
-  border-radius:30px;
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(255,244,218,.34) 0%,
-      rgba(255,232,190,.22) 42%,
-      rgba(255,220,170,.09) 68%,
-      rgba(255,220,170,0) 100%
-    );
-  box-shadow:
-    0 0 10px var(--message-glow-color),
-    0 0 26px var(--message-glow-soft),
-    0 0 58px rgba(255,224,175,.18);
-  backdrop-filter:blur(4px);
-  -webkit-backdrop-filter:blur(4px);
-  color:var(--message-text-color);
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:48px;
+  padding:7px 14px 7px 9px;
+  color:#fffaf2;
+  background:rgba(55,40,31,.34);
+  border:1px solid rgba(255,248,232,.24);
+  border-radius:18px;
+  box-shadow:0 6px 18px rgba(20,12,8,.16);
+  backdrop-filter:blur(5px) saturate(110%);
+  -webkit-backdrop-filter:blur(5px) saturate(110%);
   animation:cardIn .7s cubic-bezier(.2,.75,.25,1) both;
 }
 .live-card::before{
   content:"";
   position:absolute;
-  inset:-18px -32px;
-  z-index:-1;
+  left:-5px;
+  top:17px;
+  width:9px;
+  height:9px;
+  background:rgba(55,40,31,.34);
+  border-left:1px solid rgba(255,248,232,.20);
+  border-bottom:1px solid rgba(255,248,232,.20);
+  transform:rotate(45deg);
+  border-radius:2px 0 0 0;
+}
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:9px;
+  bottom:5px;
+  font-size:13px;
+  color:rgba(255,235,220,.62);
+  font-weight:400;
+}
+.live-card .live-thumb{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid rgba(255,248,232,.36);
+  box-shadow:0 3px 10px rgba(20,10,5,.16);
+}
+.live-card .avatar{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
   border-radius:50%;
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(255,235,195,.30) 0%,
-      rgba(255,225,170,.17) 38%,
-      rgba(255,220,170,.07) 63%,
-      transparent 78%
-    );
-  filter:blur(8px);
-  pointer-events:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(232,176,145,.72);
+  border:1px solid rgba(255,248,236,.62);
+  color:#fffaf4;
+  font-size:16px;
+  box-shadow:0 3px 10px rgba(30,15,8,.14);
 }
-
-.live-card.fade{
-  opacity:.4;
+.live-card .live-name{
+  color:rgba(255,248,236,.92);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.2px;
 }
-.live-card.leaving{
-  animation:cardOutUp .95s ease forwards;
-  pointer-events:none;
+.live-card .live-text{
+  color:rgba(255,250,242,.96);
+  font-size:15px;
+  line-height:1.45;
+  text-shadow:0 1px 3px rgba(0,0,0,.24);
+}
+.live-card .live-time{
+  color:rgba(255,244,229,.62);
+  font-size:10px;
+  margin-left:auto;
+  white-space:nowrap;
+}
+.live-card::before{
+  content:"";
+  position:absolute;
+  left:-4px;
+  bottom:13px;
+  width:18px;height:18px;
+  background:#f1debc;
+  border-left:1px solid rgba(130,94,51,.42);
+  border-bottom:1px solid rgba(130,94,51,.42);
+  transform:rotate(45deg);
+  z-index:-1;
+}
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:15px;
+  bottom:8px;
+  color:#d78982;
+  font-size:20px;
+  line-height:1;
+  text-shadow:0 1px 0 rgba(255,255,255,.7);
+}
+.live-card .live-thumb{
+  width:48px;height:48px;
+  object-fit:cover;
+  border-radius:4px;
+  flex:none;
+  border:2px solid rgba(255,252,238,.9);
+  box-shadow:0 3px 8px rgba(66,42,21,.16);
 }
 .avatar{
-  width:48px;height:48px;border-radius:50%;flex:none;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,#e9c5a9,#956a63);
-  border:2px solid rgba(255,255,255,.78);
+  width:45px;height:45px;
+  border-radius:50%;
+  flex:none;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#e9b7a8,#c98f7d);
+  border:2px solid #fff6df;
   overflow:hidden;
-  box-shadow:0 3px 10px rgba(0,0,0,.22);
+  box-shadow:0 2px 5px rgba(70,40,20,.15);
 }
 .avatar img{width:100%;height:100%;object-fit:cover}
-.avatar span{font-size:21px;font-weight:700}
+.avatar span{font-size:20px;font-weight:700;color:#fffdf2}
 .live-copy{min-width:0;flex:1;text-align:left}
 .live-name{
-  font-size:clamp(13px,1.05vw,18px);
+  color:#7a5b3b;
+  font-size:clamp(12px,1vw,16px);
   font-weight:700;
-  color:var(--message-name-color);
-  text-shadow:0 1px 5px rgba(50,27,12,.34);
+  text-shadow:0 1px 0 rgba(255,255,255,.65);
 }
 .live-text{
-  margin-top:3px;font-size:clamp(14px,1.25vw,20px);
-  line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  color:var(--message-text-color);
-  text-shadow:0 1px 5px rgba(50,27,12,.34);
+  margin-top:2px;
+  color:#5a4330;
+  font-size:clamp(13px,1.1vw,18px);
+  line-height:1.32;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-weight:700;
+  text-shadow:0 1px 0 rgba(255,255,255,.6);
 }
 .live-time{
-  align-self:flex-start;padding-top:5px;white-space:nowrap;
-  font-size:13px;color:var(--message-time-color);
-  text-shadow:0 1px 4px rgba(50,27,12,.28)
+  align-self:flex-start;
+  padding-top:3px;
+  white-space:nowrap;
+  font-size:11px;
+  color:#8a6b48;
+  text-shadow:0 1px 0 rgba(255,255,255,.65);
 }
 .live-thumb{
-  width:62px;height:62px;object-fit:cover;border-radius:11px;flex:none;
-  border:1px solid rgba(255,255,255,.55);
+  width:58px;height:58px;
+  object-fit:cover;
+  border-radius:4px;
+  flex:none;
+  border:2px solid #fff8e5;
+  box-shadow:0 2px 6px rgba(57,34,16,.15);
 }
 
 /* ---------- floating layer ---------- */
 .floating-layer{
   position:absolute;z-index:10;inset:0;pointer-events:none;
 }
-.polaroid{
-  position:absolute;width:150px;padding:10px 10px 27px;
-  background:#f8f1e4;
-  border-radius:3px;
-  box-shadow:0 18px 34px rgba(0,0,0,.38);
+  .polaroid{
+  position:absolute;
+  width:150px;
+  padding:10px 10px 14px;
+  background:
+    linear-gradient(180deg,rgba(255,251,235,.97),rgba(244,226,193,.95));
+  border:1px solid rgba(126,88,47,.46);
+  border-radius:4px 7px 5px 6px;
+  clip-path:polygon(1% 2%,97% 0,100% 16%,98% 34%,100% 54%,98% 76%,100% 98%,80% 96%,60% 99%,40% 97%,19% 100%,2% 96%,3% 77%,0 57%,2% 37%,1% 18%);
+  box-shadow:0 12px 24px rgba(46,27,13,.22),inset 0 0 0 1px rgba(255,255,255,.5);
   transform:rotate(var(--rot));
   animation:polaroidIn .8s ease both;
+  isolation:isolate;
 }
-.polaroid.preset-slide{
-  animation:polaroidIn .8s ease both;
-}
-.polaroid.preset-slide.leaving{
-  animation:polaroidOutUp .9s ease forwards;
+.polaroid::before{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  z-index:2;
   pointer-events:none;
+  border:1.5px solid rgba(248,224,179,.94);
+  border-radius:7px 4px 8px 5px;
+  box-shadow:0 0 0 1px rgba(105,73,39,.16);
+  transform:rotate(-.8deg);
 }
-.polaroid.guest-photo{
-  animation:guestPhotoIn .7s cubic-bezier(.2,.75,.25,1) both;
-}
-.polaroid.guest-photo.leaving{
-  animation:polaroidOutUp .9s ease forwards;
-  pointer-events:none;
+.polaroid::after{
+  content:"✿";
+  position:absolute;
+  right:-15px;
+  bottom:-14px;
+  z-index:5;
+  width:34px;height:34px;
+  display:grid;place-items:center;
+  color:#fff3d1;font-size:18px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%,#e3a39a 0 15%,transparent 17%),
+    radial-gradient(circle at 50% 17%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 83% 50%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 50% 83%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 17% 50%,#fff4d4 0 25%,transparent 27%);
+  box-shadow:0 2px 5px rgba(50,28,12,.2);
+  transform:rotate(-8deg);
 }
 .polaroid img{
-  display:block;width:100%;aspect-ratio:1/1.08;object-fit:cover;
-  background:#ddd;
-}
-/* 橫式照片自動使用橫向相框 */
-.polaroid.landscape{
-  width:210px;
-}
-.polaroid.landscape img{
-  aspect-ratio:3/2;
-}
-.polaroid.square{
-  width:165px;
+  position:relative;
+  z-index:1;
+  display:block;
+  width:100%;
+  aspect-ratio:1/1.08;
+  object-fit:cover;
+  background:#ead8b8;
+  border:1px solid rgba(132,96,58,.25);
 }
 .polaroid .heart{
-  position:absolute;right:7px;bottom:5px;
-  color:#f39aa0;font-size:22px;text-shadow:0 2px 4px rgba(0,0,0,.15)
+  position:absolute;
+  left:-10px;
+  top:-15px;
+  z-index:5;
+  color:#f7ddb0;
+  font-size:22px;
+  line-height:1;
+  text-shadow:0 1px 0 #765538,0 2px 4px rgba(45,25,10,.25);
+  transform:rotate(-12deg);
 }
+.polaroid.landscape{width:210px}
+.polaroid.landscape img{aspect-ratio:3/2}
+.polaroid.square{width:165px}
 
 /* ---------- floating blessing bubbles ---------- */
-.float-msg{
-  position:absolute;max-width:205px;min-width:120px;
-  padding:11px 16px;border-radius:25px;
-  background:rgba(48,39,36,.68);
-  border:1px solid rgba(255,246,231,.28);
-  box-shadow:0 12px 26px rgba(0,0,0,.26);
-  backdrop-filter:blur(8px);
+  .float-msg{
+  position:absolute;
+  max-width:235px;
+  min-width:130px;
+  padding:11px 18px 12px;
+  color:#60442c;
+  background:
+    radial-gradient(circle at 15% 20%,rgba(255,255,255,.7),transparent 25%),
+    linear-gradient(180deg,rgba(255,248,226,.97),rgba(246,225,185,.95));
+  border:1px solid rgba(126,87,46,.43);
+  border-radius:5px 10px 6px 8px;
+  box-shadow:0 9px 18px rgba(47,28,14,.18),inset 0 0 0 1px rgba(255,255,255,.42);
+  clip-path:polygon(
+    1% 8%,12% 3%,25% 5%,38% 2%,52% 5%,66% 2%,81% 5%,98% 8%,
+    96% 23%,99% 40%,96% 57%,99% 75%,96% 94%,
+    82% 92%,67% 97%,53% 94%,39% 98%,24% 94%,8% 97%,2% 90%,
+    4% 72%,2% 55%,5% 38%,2% 20%
+  );
   animation:bubbleIn .65s ease both;
+  isolation:isolate;
+}
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  z-index:-1;
+  border:1px solid rgba(255,235,196,.75);
+  clip-path:polygon(1% 8%,14% 3%,28% 6%,42% 2%,57% 5%,72% 2%,98% 8%,96% 25%,99% 43%,96% 61%,98% 91%,82% 95%,65% 92%,50% 97%,35% 94%,19% 97%,3% 91%,5% 72%,2% 54%,5% 34%,2% 18%);
+  transform:rotate(-.7deg);
+}
+.float-msg::after{
+  content:"❧";
+  position:absolute;
+  right:8px;bottom:-8px;
+  color:#7d8c52;font-size:22px;line-height:1;
+  transform:rotate(-8deg);
+  text-shadow:0 1px 2px rgba(50,30,14,.20);
 }
 .float-msg .who{
-  font-size:12px;opacity:.72;margin-bottom:3px;
+  color:#795a3c;font-size:11px;font-weight:700;opacity:.92;margin-bottom:2px;
 }
 .float-msg .words{
-  font-size:clamp(14px,1.05vw,18px);
-  line-height:1.4;font-weight:600;word-break:break-word;
+  color:#60432c;font-size:clamp(13px,1vw,17px);
+  line-height:1.36;font-weight:700;word-break:break-word;
 }
-.float-msg.leaving{
-  animation:bubbleOutUp .95s ease forwards;
-  pointer-events:none;
-}
+.float-msg.leaving{animation:bubbleOutUp .95s ease forwards;pointer-events:none;}
 
 /* ---------- decorative emojis / petals ---------- */
 .emoji{
@@ -282,8 +470,8 @@ html,body{
 }
 
 @media(max-width:900px){
-  .live-feed{top:50%;width:88vw;max-height:40vh}
-  .live-card{min-height:62px;padding:7px 10px;border-radius:19px}
+  .live-feed{top:53%;width:88vw;max-height:38vh}
+  .live-card{min-height:60px;padding:7px 12px 7px 9px;border-radius:24px}
   .avatar{width:39px;height:39px}
   .live-thumb{width:49px;height:49px}
   .live-text{font-size:14px}
@@ -291,15 +479,15 @@ html,body{
   .polaroid{width:100px;padding:7px 7px 20px}
   .polaroid.landscape{width:135px}
   .polaroid.square{width:112px}
-  .float-msg{max-width:145px;padding:8px 11px}
+  .float-msg{max-width:150px;padding:8px 11px}
   .float-msg .words{font-size:12px}
-  .bottom-copy,  .qr{width:77px;right:9px;top:9px;padding:5px}
-  .qr img{width:64px;height:64px}
+  .bottom-copy,  .qr{width:77px;right:9px;top:9px;padding:6px 5px 7px}
+  .qr img{width:64px;height:64px;padding:3px}
   .qr span{font-size:9px}
 }
 @media(max-width:520px){
   .live-feed{top:42%;max-height:48vh}
-  .live-card{min-height:57px}
+  .live-card{min-height:57px;border-radius:22px}
   .live-name{font-size:11px}
   .live-text{font-size:13px}
   .live-thumb{width:43px;height:43px}
@@ -320,6 +508,378 @@ html,body{
 }
 .connection-dot.online{background:#cde8c8;opacity:.55}
 .connection-dot.offline{background:#e7b2a8;opacity:.8}
+
+
+/* =========================================================
+   日系手繪線條版 UI
+   只調整視覺 CSS，不改任何 HTML 結構與 JavaScript。
+   ========================================================= */
+
+/* QR：從「厚紙卡」改成淡米色手繪線框 */
+.qr{
+  background:rgba(250,241,216,.78);
+  border:1px solid rgba(91,69,50,.42);
+  border-radius:3px 6px 4px 5px;
+  box-shadow:0 8px 18px rgba(55,35,17,.16), inset 0 0 0 1px rgba(255,255,255,.38);
+}
+.qr::before{
+  inset:-6px -5px -7px -6px;
+  border:1px solid rgba(247,226,187,.9);
+  border-right-color:rgba(91,69,50,.28);
+  border-bottom-color:rgba(91,69,50,.28);
+  box-shadow:none;
+  transform:rotate(-1.3deg);
+}
+.qr::after{
+  width:27px;height:27px;
+  right:-12px;bottom:-11px;
+  font-size:15px;
+  opacity:.92;
+}
+.qr img{
+  background:rgba(255,253,247,.88);
+  border:1px solid rgba(91,69,50,.24);
+}
+
+/* 中央訊息：半透明米色紙 + 雙層手繪線 */
+.live-card{
+  color:#59432f;
+  background:
+    linear-gradient(180deg,rgba(255,248,226,.84),rgba(244,226,192,.68));
+  border:1px solid rgba(91,69,50,.22);
+  border-radius:4px 8px 5px 7px;
+  clip-path:none;
+  box-shadow:0 7px 17px rgba(55,35,17,.13), inset 0 0 0 1px rgba(255,255,255,.32);
+  overflow:visible;
+}
+.live-card::before{
+  left:-5px;bottom:13px;
+  width:17px;height:17px;
+  background:rgba(244,226,192,.82);
+  border-left:1px solid rgba(91,69,50,.24);
+  border-bottom:1px solid rgba(91,69,50,.24);
+}
+.live-card::after{
+  right:14px;bottom:7px;
+  color:#cf8b82;
+  font-size:19px;
+}
+/* 第二條手繪線，故意略微偏移 */
+.live-card > .live-thumb,
+.live-card > .avatar{
+  position:relative;
+}
+.live-card > .live-thumb::after{content:none}
+
+.live-card .live-thumb{
+  border:1px solid rgba(255,249,229,.95);
+  box-shadow:0 2px 5px rgba(66,42,21,.12);
+}
+.avatar{
+  background:rgba(217,151,139,.82);
+  color:#fff8eb;
+  border:1px solid rgba(255,247,226,.9);
+  box-shadow:0 2px 5px rgba(66,42,21,.12);
+}
+.live-name{color:#66503b;text-shadow:0 1px 0 rgba(255,255,255,.55)}
+.live-text{color:#4f3c2c;text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.live-time{color:#806b55}
+
+/* 照片框：拿掉厚重紙卡，改成「手繪雙線相框」 */
+.polaroid{
+  background:rgba(255,249,231,.38);
+  border:1px solid rgba(92,70,49,.42);
+  border-radius:2px 5px 3px 4px;
+  clip-path:none;
+  box-shadow:0 8px 18px rgba(46,27,13,.15);
+}
+.polaroid::before{
+  inset:-6px;
+  border:1px solid rgba(248,224,179,.82);
+  border-right-color:rgba(92,70,49,.38);
+  border-bottom-color:rgba(92,70,49,.30);
+  border-radius:5px 3px 6px 4px;
+  box-shadow:none;
+  transform:rotate(-.75deg);
+}
+.polaroid::after{
+  right:-12px;bottom:-12px;
+  width:29px;height:29px;
+  font-size:15px;
+  opacity:.9;
+  box-shadow:0 1px 4px rgba(50,28,12,.14);
+}
+.polaroid img{
+  background:rgba(234,216,184,.32);
+  border:1px solid rgba(92,70,49,.20);
+}
+.polaroid .heart{
+  color:#f4dfb7;
+  text-shadow:0 1px 0 #765538,0 1px 3px rgba(45,25,10,.18);
+}
+
+/* 旁邊祝福訊息也統一成同一套手繪線框 */
+.float-msg{
+  color:#5c4632;
+  background:rgba(250,239,210,.76);
+  border:1px solid rgba(91,69,50,.34);
+  border-radius:4px 8px 5px 7px;
+  box-shadow:0 7px 15px rgba(47,28,14,.13),inset 0 0 0 1px rgba(255,255,255,.28);
+  clip-path:none;
+}
+.float-msg::before{
+  border-color:rgba(91,69,50,.30);
+  transform:rotate(-.8deg);
+}
+.float-msg::after{
+  border-color:rgba(247,226,187,.82);
+  transform:rotate(.7deg);
+}
+
+/* 小手繪裝飾線：利用 outline 讓各框看起來像手工描過一次 */
+.qr,
+.live-card,
+.polaroid,
+.float-msg{
+  outline:1px solid rgba(255,247,224,.30);
+  outline-offset:2px;
+}
+
+@media(max-width:900px){
+  .live-card{
+    background:rgba(250,239,210,.78);
+    box-shadow:0 6px 14px rgba(55,35,17,.12),inset 0 0 0 1px rgba(255,255,255,.28);
+  }
+  .polaroid{box-shadow:0 6px 14px rgba(46,27,13,.13)}
+}
+
+
+/* ===== V2：日系手繪線稿 UI ===== */
+.live-feed{width:min(700px,48vw);gap:8px;top:66%;max-height:31vh;}
+.live-card{
+  min-height:68px;padding:9px 48px 9px 14px;gap:12px;
+  background:linear-gradient(180deg,rgba(255,248,228,.91),rgba(248,232,202,.86));
+  border:0;border-radius:18px;
+  clip-path:none;
+  box-shadow:0 7px 16px rgba(68,45,26,.12), inset 0 0 0 1px rgba(255,255,255,.45);
+  isolation:isolate;
+}
+.live-card::before{
+  content:"";position:absolute;inset:3px;z-index:-1;
+  border:1.25px solid rgba(91,69,50,.66);
+  border-radius:16px 20px 15px 18px;
+  transform:rotate(-.22deg);
+  box-shadow:0 0 0 1px rgba(255,255,255,.38);
+}
+.live-card::after{
+  content:"❧  ♡";right:13px;bottom:8px;
+  color:#8b8060;font-size:17px;letter-spacing:2px;
+  text-shadow:none;
+}
+.live-card .live-thumb{border:1px solid rgba(91,69,50,.45);box-shadow:none;border-radius:7px;background:#f7ead0;}
+.avatar{width:44px;height:44px;background:#dfb49f;border:1.5px solid #fff8e8;box-shadow:0 1px 4px rgba(68,45,26,.10)}
+.live-name{color:#6b5139;text-shadow:none;font-weight:700}
+.live-text{color:#5a4330;text-shadow:none;font-weight:600}
+.live-time{color:#80684d;text-shadow:none}
+
+/* 線稿花草角飾 */
+.live-card .live-copy::before{
+  content:"✿";position:absolute;left:-8px;top:7px;color:#8b9a69;font-size:11px;opacity:.75;transform:rotate(-18deg)
+}
+
+.polaroid{
+  background:rgba(250,241,218,.82);
+  border:0;border-radius:7px;
+  clip-path:none;
+  box-shadow:0 8px 18px rgba(55,37,22,.14), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+.polaroid::before{
+  inset:2px;z-index:2;
+  border:1.25px solid rgba(91,69,50,.68);
+  border-radius:6px 9px 7px 8px;
+  box-shadow:none;
+  transform:rotate(-.5deg);
+}
+.polaroid::after{
+  content:"✿";right:-12px;bottom:-12px;width:28px;height:28px;font-size:14px;
+  background:radial-gradient(circle at 50% 50%,#d99b91 0 13%,transparent 15%),
+             radial-gradient(circle at 50% 18%,#fff4d6 0 23%,transparent 25%),
+             radial-gradient(circle at 82% 50%,#fff4d6 0 23%,transparent 25%),
+             radial-gradient(circle at 50% 82%,#fff4d6 0 23%,transparent 25%),
+             radial-gradient(circle at 18% 50%,#fff4d6 0 23%,transparent 25%);
+  box-shadow:none;transform:rotate(-7deg);
+}
+.polaroid img{border:1px solid rgba(91,69,50,.22);background:#eee0c4;}
+.polaroid .heart{color:#e7d7b0;text-shadow:0 1px 0 #72573d;font-size:19px}
+
+.float-msg{
+  background:rgba(250,239,211,.80);
+  border:0;border-radius:13px;
+  clip-path:none;
+  box-shadow:0 7px 15px rgba(58,39,22,.12);
+  padding:10px 17px 11px;
+  isolation:isolate;
+}
+.float-msg::before{
+  inset:2px;z-index:-1;
+  border:1.2px solid rgba(91,69,50,.62);
+  border-radius:12px 16px 13px 15px;
+  clip-path:none;transform:rotate(.35deg);
+}
+.float-msg::after{content:"❧";right:9px;bottom:-7px;color:#81905f;font-size:20px;text-shadow:none}
+.float-msg .who{color:#745a40}.float-msg .words{color:#60452f;text-shadow:none;font-weight:600}
+
+.qr{
+  background:rgba(251,242,220,.90);
+  border:0;border-radius:10px;
+  clip-path:none;
+  box-shadow:0 8px 18px rgba(57,38,20,.13);
+}
+.qr::before{inset:2px;border:1.25px solid rgba(91,69,50,.68);border-radius:8px 11px 9px 10px;transform:rotate(-.7deg);box-shadow:none}
+.qr::after{content:"✿";right:-11px;bottom:-11px;width:27px;height:27px;font-size:14px;box-shadow:none}
+.qr img{border:1px solid rgba(91,69,50,.28);background:#fffdf7}
+.qr span{color:#654b34}
+
+@media(max-width:900px){
+ .live-feed{width:88vw;top:53%;gap:7px}
+ .live-card{min-height:58px;padding:7px 38px 7px 10px;border-radius:15px}
+ .live-card::before{border-radius:13px 17px 13px 15px}
+}
+
+
+/* ===== Japanese hand-drawn line UI V3 ===== */
+:root{
+  --lineInk:rgba(91,64,40,.78);
+  --lineSoft:rgba(122,91,61,.48);
+  --paper:rgba(255,247,226,.78);
+  --paper2:rgba(250,235,204,.64);
+  --pink:#d9948a;
+}
+
+/* PHOTO FRAME: light paper + imperfect ink outline */
+.polaroid{
+  padding:9px 9px 13px;
+  background:linear-gradient(145deg,rgba(255,251,237,.84),rgba(245,226,193,.68));
+  border:1px solid rgba(100,70,45,.28);
+  box-shadow:0 8px 20px rgba(43,28,16,.16), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+.polaroid::before{
+  inset:-5px;
+  border:1px solid var(--lineInk);
+  border-radius:7px 4px 9px 5px;
+  box-shadow:2px 1px 0 rgba(111,77,48,.25),-1px 2px 0 rgba(111,77,48,.14);
+  transform:rotate(-.7deg);
+}
+.polaroid::after{
+  right:-12px; bottom:-12px;
+  width:29px;height:29px;
+  font-size:15px;
+  background:radial-gradient(circle at 50% 50%,#d99b91 0 13%,transparent 15%),radial-gradient(circle at 50% 16%,#fff4d7 0 24%,transparent 26%),radial-gradient(circle at 84% 50%,#fff4d7 0 24%,transparent 26%),radial-gradient(circle at 50% 84%,#fff4d7 0 24%,transparent 26%),radial-gradient(circle at 16% 50%,#fff4d7 0 24%,transparent 26%);
+  color:transparent;
+}
+
+/* QR: same thin ink language as photos */
+.qr{
+  width:116px;
+  padding:12px 10px 11px;
+  background:linear-gradient(180deg,rgba(255,249,231,.86),rgba(242,221,184,.78));
+  border:1px solid rgba(102,73,46,.25);
+  box-shadow:0 8px 18px rgba(55,35,17,.14),inset 0 0 0 1px rgba(255,255,255,.42);
+}
+.qr::before{
+  inset:-5px -5px -6px -6px;
+  border:1px solid var(--lineInk);
+  box-shadow:2px 1px 0 rgba(111,77,48,.2),-1px 2px 0 rgba(111,77,48,.12);
+  transform:rotate(-1deg);
+}
+.qr::after{
+  right:-10px;bottom:-10px;width:27px;height:27px;font-size:14px;
+}
+.qr img{background:#fffdf5;border:1px solid rgba(92,66,43,.18);}
+
+/* CENTRAL MESSAGE: translucent hand-painted stationery */
+.live-feed{
+  width:min(640px,46vw);
+  gap:7px;
+  max-height:30vh;
+}
+.live-card{
+  min-height:62px;
+  padding:8px 17px 8px 12px;
+  gap:11px;
+  color:#5a402b;
+  background:
+    radial-gradient(circle at 8% 25%,rgba(255,255,255,.38),transparent 24%),
+    linear-gradient(180deg,rgba(255,249,232,.82),rgba(245,226,193,.72));
+  border:1px solid rgba(100,70,45,.22);
+  border-radius:6px 9px 5px 8px;
+  box-shadow:0 7px 18px rgba(53,34,19,.13),inset 0 0 0 1px rgba(255,255,255,.34);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+/* two imperfect ink strokes */
+.live-card::before{
+  left:4px;right:4px;bottom:auto;top:4px;
+  width:auto;height:auto;
+  background:none;
+  border:1px solid rgba(94,66,43,.72);
+  border-radius:7px 5px 8px 6px;
+  transform:rotate(-.18deg);
+  box-shadow:2px 2px 0 rgba(117,84,53,.18),-1px -1px 0 rgba(117,84,53,.11);
+  z-index:0;
+  pointer-events:none;
+}
+.live-card::after{
+  right:12px;bottom:8px;
+  color:#d98983;
+  font-size:19px;
+  text-shadow:none;
+}
+.live-card .live-thumb{
+  width:44px;height:44px;
+  border-radius:50%;
+  border:1px solid rgba(100,70,45,.32);
+  box-shadow:0 1px 0 rgba(255,255,255,.55), inset 0 0 0 2px rgba(255,249,232,.45);
+}
+.live-card .live-name{color:#60452f;text-shadow:0 1px 0 rgba(255,255,255,.45);}
+.live-card .live-text{color:#5a402b;text-shadow:0 1px 0 rgba(255,255,255,.5);}
+.live-card .live-time{color:#80644a;}
+
+/* little botanical corners, drawn with CSS text instead of image assets */
+.live-card .live-name::before{
+  content:'❧';
+  color:rgba(101,127,74,.72);
+  font-size:13px;
+  margin-right:5px;
+}
+
+/* side blessing / paper notes */
+.bubble{
+  background:linear-gradient(180deg,rgba(255,248,225,.82),rgba(244,222,184,.70)) !important;
+  color:#5d432e !important;
+  border:1px solid rgba(94,66,43,.42) !important;
+  box-shadow:0 7px 18px rgba(47,29,16,.13),inset 0 0 0 1px rgba(255,255,255,.35) !important;
+  clip-path:polygon(1% 7%,8% 4%,18% 6%,29% 3%,41% 6%,53% 3%,65% 5%,77% 3%,89% 6%,99% 4%,97% 22%,100% 42%,97% 62%,99% 82%,95% 96%,81% 93%,68% 97%,55% 94%,42% 98%,29% 94%,16% 97%,3% 93%,5% 76%,2% 58%,5% 38%,2% 20%);
+}
+
+/* subtle sketchy heart accents */
+.wall::after{
+  content:'♡  ❀  ♡';
+  position:absolute;
+  left:50%; bottom:3.5%; transform:translateX(-50%);
+  z-index:3;
+  color:rgba(255,244,218,.72);
+  font-size:14px;
+  letter-spacing:12px;
+  pointer-events:none;
+  text-shadow:0 1px 0 rgba(79,52,32,.18);
+}
+
+@media(max-width:900px){
+  .live-feed{width:min(88vw,640px);}
+  .live-card{min-height:56px;padding:7px 12px 7px 9px;}
+  .live-card .live-thumb{width:38px;height:38px;}
+}
 </style>
 </head>
 <body>
@@ -341,23 +901,29 @@ html,body{
 <script>
 const CONFIG={
   endpoint:"https://script.google.com/macros/s/AKfycbydMwxvks8TSSGfMHkJvOTiUwdNXKzCHKHJ5JxbnYu-CHi9hGSilWeHbMjC3KUijzit/exec",
-  pollInterval:1000,
-  maxCards:5,
+  pollInterval:3000,
+  maxCards:12,
   maxPolaroids:6,
+  guestPhotoNormalMax:6,
+  guestPhotoBurstMax:10,
+  photoBurstThreshold:3,
+  photoBurstHoldTime:5000,
   minPresetPhotos:3,
-  maxBubbles:7,
+  maxBubbles:20,
 
-  // 多人同時上傳時，一筆一筆播放，避免全部疊在一起
-  queueInterval:2200,
+  // 純文字仍保留佇列，但快速顯示，讓大量祝福可以同時存在
+  queueInterval:700,
 
   // 長時間播放時，只保留最近的事件記錄
   maxKnown:500,
 
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
-  minPollInterval:1000,
-  maxPollInterval:15000,
+  minPollInterval:3000,
+  maxPollInterval:30000,
+  maxConsecutiveFailures:2,
+  failurePause:60000,
   // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
-  jsonpTimeout:60000,
+  jsonpTimeout:10000,
 
   // 婚紗照輪播
   presetSlideInterval:5000,
@@ -392,7 +958,14 @@ const state={
   // 網路 / polling 狀態
   online:navigator.onLine!==false,
   pollTimer:null,
-  pollDelay:CONFIG.minPollInterval
+  pollDelay:CONFIG.minPollInterval,
+  consecutiveFailures:0,
+  pausedUntil:0,
+
+  // 照片大量進入時的暫時擴容狀態
+  recentPhotoTimes:[],
+  photoBurst:false,
+  photoBurstTimer:null
 };
 
 function textOf(item){
@@ -409,15 +982,23 @@ function keyOf(item){
     ((item.time||"")+"-"+(item.name||"")+"-"+textOf(item)));
 }
 function normalize(item,i){
-  return Object.assign({},item,{
+  const name=String(item.name||"親友");
+  const text=textOf(item);
+  let url=photoUrl(item);
+
+  // 純文字事件不補任何圖片；只有實際有 url/photoId 的資料才顯示照片。
+
+  const normalized=Object.assign({},item,{
     id:keyOf(item)||("event-"+i),
     sourceId:keyOf(item)||("event-"+i),
-    kind:item.kind||item.type||(photoUrl(item)?"upload":"blessing"),
-    name:String(item.name||"親友"),
-    text:textOf(item),
-    url:photoUrl(item),
+    kind:item.kind||item.type||(url?"upload":"blessing"),
+    name:name,
+    text:text,
+    url:url,
     time:Number(item.time||Date.now())
   });
+
+  return normalized;
 }
 function esc(v){
   return String(v)
@@ -432,6 +1013,18 @@ function timeText(t){
   const min=Math.floor(sec/60);
   if(min<60)return min+" 分鐘前";
   return Math.floor(min/60)+" 小時前";
+}
+
+const CENTRAL_MESSAGE_MAX=5;
+
+function trimCentralMessages(){
+  const feed=document.getElementById('liveFeed');
+  if(!feed) return;
+  const cards=Array.from(feed.querySelectorAll('.live-card'));
+  while(cards.length>CENTRAL_MESSAGE_MAX){
+    const old=cards.shift();
+    if(old) old.remove();
+  }
 }
 
 function addCard(item){
@@ -454,7 +1047,9 @@ function addCard(item){
       '<div class="live-name">'+esc(item.name)+'</div>'+
       '<div class="live-text">'+
         (item.url
-          ? (message?esc(message):"傳送了一張照片")
+          ? (message
+              ? '傳了圖片：'+esc(message)
+              : '傳了一張圖片')
           : esc(message))+
       '</div>'+
     '</div>'+
@@ -499,6 +1094,7 @@ function addCard(item){
       if(el.isConnected)el.remove();
     },950);
   },CONFIG.messageDisplayTime);
+  trimCentralMessages();
 }
 
 function applyPhotoOrientation(el,img){
@@ -549,13 +1145,46 @@ function addPolaroid(item){
   applyPhotoOrientation(el,el.querySelector("img"));
 
   /*
-   * 上傳照片最多保留 6 張。
+   * 賓客照片平常最多 6 張。
+   * 短時間真的湧入多張時，暫時放寬到 10 張，
+   * 讓最新照片可以直接出現。
    */
-  const guests=polaroidLayer.querySelectorAll(".guest-photo");
+  const guestMax=state.photoBurst
+    ? CONFIG.guestPhotoBurstMax
+    : CONFIG.guestPhotoNormalMax;
 
-  if(guests.length>CONFIG.maxPolaroids){
-    const old=guests[0];
+  const guests=Array.from(
+    polaroidLayer.querySelectorAll(".guest-photo")
+  );
+
+  while(guests.length>=guestMax){
+    const old=guests.shift();
     if(old)old.remove();
+  }
+
+  /*
+   * 如果第一個圖片網址載入失敗，再嘗試 Drive 常見圖片網址。
+   */
+  const img=el.querySelector("img");
+  if(img){
+    let tried=0;
+    const fallbacks=[];
+
+    if(item.photoId){
+      fallbacks.push(
+        "https://drive.google.com/thumbnail?id="+
+        encodeURIComponent(item.photoId)+"&sz=w1200"
+      );
+      fallbacks.push(
+        "https://drive.google.com/uc?export=view&id="+
+        encodeURIComponent(item.photoId)
+      );
+    }
+
+    img.addEventListener("error",()=>{
+      if(tried>=fallbacks.length)return;
+      img.src=fallbacks[tried++];
+    });
   }
 
   /*
@@ -606,19 +1235,12 @@ function addBubble(item){
   el.className="float-msg";
 
   /*
-   * 文字從畫面下方不同位置出現。
-   * 刻意避開最中央標題區，讓視覺比較舒服。
+   * 祝福文字可以出現在整個畫面的各個位置，
+   * 不再限制只能左下 / 右下。
+   * 避免太靠邊，讓手機、大螢幕都比較容易看見。
    */
-  const side=Math.random();
-
-  let left;
-  if(side<0.5){
-    left=5+Math.random()*27;
-  }else{
-    left=68+Math.random()*25;
-  }
-
-  const bottom=3+Math.random()*25;
+  const left=4+Math.random()*88;
+  const bottom=5+Math.random()*78;
 
   el.style.left=left+"%";
   el.style.bottom=bottom+"%";
@@ -1124,23 +1746,28 @@ function rememberKey(id){
 }
 
 function queueNewItem(item){
-  state.displayQueue.push(item);
+  // 純文字進中央訊息 queue。
+  // 有照片的事件會在 process() 裡立即處理中央卡片 + 照片。
+  if(item && !item.url){
+    state.displayQueue.push(item);
+  }
 }
 
 function showNextQueued(){
-  if(!state.displayQueue.length)return;
+  if(!state.displayQueue.length) return;
 
   const item=state.displayQueue.shift();
 
+  // 純文字：只顯示浮動祝福，不進中央訊息區
+  if(!item.photoUrl){
+    if(item.text) addBubble(item);
+    return;
+  }
+
+  // 有照片：中央顯示「傳了圖片＋文字」，同時旁邊顯示實際照片
   addCard(item);
-
-  if(item.url){
-    addPolaroid(item);
-  }
-
-  if(item.text){
-    addBubble(item);
-  }
+  addPolaroid(item);
+  if(item.text) addBubble(item);
 }
 
 function process(items){
@@ -1198,8 +1825,68 @@ function process(items){
       }
     });
 
-    // 後續真正的新資料才進播放佇列
-    fresh.forEach(queueNewItem);
+    /*
+     * 新資料分成兩條路：
+     * - 有照片：立即顯示，不等待文字 queue。
+     * - 純文字：依原本節奏進中央訊息 queue。
+     *
+     * 這樣「照片＋祝福」不會因前面有很多文字而延遲，
+     * 多張照片同時進來也會直接顯示。
+     */
+    const photoItems=fresh.filter(x=>x.url);
+    const textItems=fresh.filter(x=>!x.url);
+
+    const now=Date.now();
+    state.recentPhotoTimes=state.recentPhotoTimes.filter(
+      t=>now-t<CONFIG.photoBurstHoldTime
+    );
+
+    photoItems.forEach(()=>{
+      state.recentPhotoTimes.push(Date.now());
+    });
+
+    if(
+      photoItems.length>=CONFIG.photoBurstThreshold ||
+      state.recentPhotoTimes.length>=CONFIG.photoBurstThreshold
+    ){
+      state.photoBurst=true;
+
+      clearTimeout(state.photoBurstTimer);
+      state.photoBurstTimer=setTimeout(()=>{
+        state.photoBurst=false;
+
+        // 大量上傳結束後，回到平常最多 6 張。
+        const guests=Array.from(
+          polaroidLayer.querySelectorAll(".guest-photo")
+        );
+
+        while(guests.length>CONFIG.guestPhotoNormalMax){
+          const old=guests.shift();
+          if(old)old.remove();
+        }
+      },CONFIG.photoBurstHoldTime);
+    }
+
+    photoItems.forEach(item=>{
+      // 中央卡片立即出現
+      addCard(item);
+
+      // 照片也立即出現，不等待 queue
+      addPolaroid(item);
+
+      // 照片＋文字的祝福同步出現
+      if(item.text){
+        addBubble(item);
+      }
+    });
+
+    // 純文字祝福也全部立即顯示，不再一筆一筆等待 queue。
+    // 同一輪收到 5、10、20 則時，可以同時出現在畫面不同位置。
+    textItems.forEach(item=>{
+      if(item.text){
+        addBubble(item);
+      }
+    });
   }
 
   /*
@@ -1295,6 +1982,8 @@ async function initialSync(){
       process(data.items);
       state.online=true;
       state.pollDelay=CONFIG.minPollInterval;
+      state.consecutiveFailures=0;
+      state.pausedUntil=0;
     }else{
       throw new Error(
         data&&data.error
@@ -1304,15 +1993,36 @@ async function initialSync(){
     }
   }catch(err){
     state.online=navigator.onLine!==false;
-    console.warn("初始資料載入失敗",err);
+    state.consecutiveFailures++;
+
+    // initial 最多只等 10 秒；失敗後交給 polling，不再卡住近 1 分鐘。
+    console.warn("初始資料載入失敗，改由 polling 繼續嘗試。",err);
+
+    state.pollDelay=CONFIG.minPollInterval;
+    state.pausedUntil=0;
   }finally{
     state.syncing=false;
     updateConnectionDot();
+
+    // initial 結束後一定安排 polling。
+    schedulePoll();
   }
 }
 
 async function poll(){
   if(state.syncing)return;
+
+  // 若瀏覽器拒絕網路權限 / Apps Script 暫時無法存取，
+  // 不要每秒持續重試造成瀏覽器反覆跳出權限提示。
+  if(state.pausedUntil && Date.now()<state.pausedUntil){
+    state.pollDelay=Math.max(CONFIG.minPollInterval,Math.min(10000,state.pausedUntil-Date.now()));
+    schedulePoll();
+    return;
+  }
+  if(state.pausedUntil && Date.now()>=state.pausedUntil){
+    state.pausedUntil=0;
+    state.consecutiveFailures=0;
+  }
 
   if(!navigator.onLine){
     state.online=false;
@@ -1343,6 +2053,8 @@ async function poll(){
       // 成功後恢復 1 秒更新
       state.online=true;
       state.pollDelay=CONFIG.minPollInterval;
+      state.consecutiveFailures=0;
+      state.pausedUntil=0;
     }else{
       throw new Error(
         data&&data.error
@@ -1352,6 +2064,7 @@ async function poll(){
     }
   }catch(err){
     state.online=navigator.onLine!==false;
+    state.consecutiveFailures++;
     state.pollDelay=Math.min(
       Math.max(
         state.pollDelay*2,
@@ -1360,12 +2073,20 @@ async function poll(){
       CONFIG.maxPollInterval
     );
 
-    console.warn(
-      "同步暫時失敗，將於 "+
-      Math.round(state.pollDelay/1000)+
-      " 秒後重試",
-      err
-    );
+    if(state.consecutiveFailures>=CONFIG.maxConsecutiveFailures){
+      state.pausedUntil=Date.now()+CONFIG.failurePause;
+      console.warn(
+        "同步連續失敗，暫停自動重試 60 秒。若是瀏覽器權限提示，允許後會自動恢復。",
+        err
+      );
+    }else{
+      console.warn(
+        "同步暫時失敗，將於 "+
+        Math.round(state.pollDelay/1000)+
+        " 秒後重試",
+        err
+      );
+    }
   }finally{
     state.syncing=false;
     updateConnectionDot();
@@ -1406,6 +2127,8 @@ function updateConnectionDot(){
 window.addEventListener("online",()=>{
   state.online=true;
   state.pollDelay=CONFIG.minPollInterval;
+  state.consecutiveFailures=0;
+  state.pausedUntil=0;
   updateConnectionDot();
 
   if(state.pollTimer){
@@ -1432,6 +2155,11 @@ window.addEventListener("offline",()=>{
  */
 document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState==="visible"){
+    // 如果剛因權限 / 網路錯誤進入暫停期，不要因切換分頁又立刻重試。
+    if(state.pausedUntil && Date.now()<state.pausedUntil){
+      schedulePoll();
+      return;
+    }
     state.pollDelay=CONFIG.minPollInterval;
 
     if(!state.syncing){
@@ -1460,6 +2188,13 @@ function createPetals(){
 createPetals();
 
 updateConnectionDot();
+
+/*
+ * 先啟動 polling 排程，再執行 initial。
+ * initial 最多只等待 10 秒；如果 Apps Script initial 很慢，
+ * 網頁不會再繞圈圈近 1 分鐘才報錯。
+ */
+schedulePoll();
 initialSync();
 
 /*
@@ -1467,13 +2202,6 @@ initialSync();
  * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
  */
 setInterval(showNextQueued,CONFIG.queueInterval);
-
-/*
- * Poll 使用 setTimeout + adaptive backoff。
- * 正常狀態每秒一次；斷線 / Apps Script 暫時失敗會自動放慢，
- * 恢復後重新回到每秒。
- */
-schedulePoll();
 
 /*
  * 時間文字直接從卡片自己的 data-item-id 找資料，
@@ -1497,3 +2225,393 @@ setInterval(()=>{
 </script>
 </body>
 </html>
+<style>
+/* ===== V4：浮動訊息改成手繪紙卡，移除灰色 UI 感 ===== */
+.float-msg{
+  min-width:150px;
+  max-width:255px;
+  padding:12px 18px 13px;
+  color:#5a4029;
+  background:
+    radial-gradient(circle at 18% 22%,rgba(255,255,255,.32),transparent 28%),
+    linear-gradient(180deg,rgba(255,247,222,.94),rgba(244,221,181,.88));
+  border:0;
+  border-radius:0;
+  box-shadow:0 7px 16px rgba(61,39,20,.13);
+  clip-path:polygon(
+    1% 9%, 10% 5%, 22% 7%, 35% 3%, 48% 6%, 61% 4%, 74% 7%, 88% 4%, 98% 9%,
+    96% 24%, 99% 39%, 96% 55%, 99% 72%, 96% 91%, 86% 94%, 72% 91%, 58% 96%,
+    44% 93%, 30% 97%, 17% 93%, 4% 96%, 2% 82%, 5% 66%, 2% 51%, 5% 36%, 2% 22%
+  );
+  isolation:isolate;
+}
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:4px;
+  z-index:-1;
+  border:1.15px solid rgba(91,64,40,.64);
+  clip-path:polygon(
+    1% 9%, 12% 5%, 25% 7%, 39% 3%, 53% 6%, 68% 4%, 83% 7%, 98% 9%,
+    96% 27%, 99% 44%, 96% 61%, 98% 90%, 84% 94%, 69% 91%, 53% 96%,
+    37% 93%, 21% 97%, 4% 91%, 6% 72%, 2% 53%, 5% 34%, 2% 18%
+  );
+  transform:rotate(-.45deg);
+  box-shadow:none;
+}
+.float-msg::after{
+  content:"✿";
+  right:-7px;
+  bottom:-9px;
+  color:#d99a8d;
+  font-size:17px;
+  line-height:1;
+  text-shadow:0 1px 0 rgba(255,248,226,.9);
+  transform:rotate(-8deg);
+}
+.float-msg .who{
+  color:#765437;
+  font-size:11px;
+  font-weight:700;
+  margin-bottom:3px;
+  letter-spacing:.1px;
+}
+.float-msg .words{
+  color:#5a402b;
+  font-size:clamp(13px,1vw,17px);
+  line-height:1.38;
+  font-weight:600;
+  text-shadow:0 1px 0 rgba(255,249,231,.45);
+}
+
+/* 讓中央訊息也更像紙張，而不是 UI 卡片 */
+.live-card{
+  background:
+    linear-gradient(180deg,rgba(255,248,229,.91),rgba(247,229,198,.82));
+  border-radius:3px 8px 5px 6px;
+  box-shadow:0 6px 14px rgba(62,39,19,.10);
+}
+.live-card::before{
+  inset:2px;
+  border:1.15px solid rgba(91,64,40,.66);
+  border-radius:4px 9px 5px 7px;
+  transform:rotate(-.28deg);
+  box-shadow:none;
+}
+
+/* 手繪 QR：跟照片框、訊息框使用同一套線條 */
+.qr{
+  background:rgba(255,247,225,.94);
+  border:0;
+  border-radius:3px 7px 5px 4px;
+  box-shadow:0 7px 15px rgba(58,38,20,.12);
+  transform:rotate(1deg);
+}
+.qr::before{
+  inset:3px;
+  border:1.15px solid rgba(91,64,40,.66);
+  border-radius:4px 8px 5px 6px;
+  transform:rotate(-.7deg);
+  box-shadow:none;
+}
+
+/* =========================================================
+   V5 — Japanese hand-drawn paper UI refinement
+   - No jagged/saw-tooth message edges
+   - Taller central message cards
+   - Soft irregular hand-drawn double-line effect
+   - Keeps the existing JavaScript untouched
+   ========================================================= */
+
+.live-feed{
+  width:min(680px,48vw);
+  max-height:32vh;
+  gap:10px;
+}
+
+/* Central message: soft paper card, not a flat/thin strip */
+.live-card{
+  min-height:84px;
+  padding:13px 54px 13px 15px;
+  gap:13px;
+  color:#5d432d;
+
+  background:
+    radial-gradient(ellipse at 12% 18%,rgba(255,255,255,.48),transparent 34%),
+    radial-gradient(ellipse at 88% 78%,rgba(226,197,151,.18),transparent 42%),
+    linear-gradient(180deg,rgba(255,250,235,.94),rgba(245,226,192,.91));
+
+  border:1px solid rgba(112,78,43,.52);
+  border-radius:15px 12px 16px 13px;
+
+  /* soft hand-drawn double-line feeling, without jagged edges */
+  box-shadow:
+    0 8px 20px rgba(48,31,18,.14),
+    inset 0 0 0 1px rgba(255,255,255,.52),
+    inset 0 0 18px rgba(157,119,76,.07);
+
+  clip-path:none;
+  overflow:visible;
+}
+
+/* Slightly imperfect second pencil line */
+.live-card::before{
+  content:"";
+  position:absolute;
+  inset:-4px -3px -3px -4px;
+  z-index:-1;
+  border:1px solid rgba(103,75,47,.28);
+  border-radius:17px 14px 18px 15px;
+  transform:rotate(-.35deg);
+  filter:blur(.15px);
+  pointer-events:none;
+}
+
+/* Small botanical/heart detail — no triangular tail */
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:15px;
+  bottom:12px;
+  color:#c9857e;
+  font-size:23px;
+  line-height:1;
+  text-shadow:0 1px 0 rgba(255,255,255,.7);
+}
+
+/* Make the central content breathe vertically */
+.live-card .live-copy{
+  min-width:0;
+  padding-top:1px;
+}
+
+.live-card .live-name{
+  color:#76573b;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.25;
+}
+
+.live-card .live-text{
+  color:#5c402b;
+  font-size:clamp(15px,1.05vw,18px);
+  line-height:1.45;
+  font-weight:600;
+}
+
+.live-card .live-time{
+  color:#876c50;
+  font-size:12px;
+}
+
+.live-card .live-thumb{
+  width:50px;
+  height:50px;
+  border-radius:10px;
+  border:1px solid rgba(126,91,55,.36);
+  box-shadow:0 2px 8px rgba(66,42,21,.12);
+}
+
+/* Avatar becomes part of the paper illustration */
+.live-card .avatar{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:linear-gradient(145deg,#e7b9aa,#cf9685);
+  border:2px solid rgba(255,249,230,.96);
+  box-shadow:
+    0 2px 7px rgba(70,40,20,.12),
+    0 0 0 1px rgba(126,91,55,.18);
+}
+
+/* Floating blessing/message cards:
+   same paper language, but rounded — no saw-tooth sides */
+.float-msg{
+  max-width:270px;
+  min-width:170px;
+  padding:13px 17px 14px;
+
+  color:#60442c;
+  background:
+    radial-gradient(ellipse at 16% 20%,rgba(255,255,255,.46),transparent 34%),
+    linear-gradient(180deg,rgba(255,248,228,.94),rgba(244,224,188,.91));
+
+  border:1px solid rgba(116,81,47,.48);
+  border-radius:13px 11px 14px 12px;
+
+  box-shadow:
+    0 8px 18px rgba(47,28,14,.13),
+    inset 0 0 0 1px rgba(255,255,255,.48);
+
+  clip-path:none;
+  overflow:visible;
+}
+
+/* Soft offset sketch line instead of a jagged outline */
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:-4px -3px -3px -4px;
+  z-index:-1;
+  border:1px solid rgba(107,77,48,.28);
+  border-radius:15px 13px 16px 14px;
+  transform:rotate(.45deg);
+  filter:blur(.15px);
+  pointer-events:none;
+}
+
+/* Tiny botanical accent */
+.float-msg::after{
+  content:"❧";
+  position:absolute;
+  right:9px;
+  bottom:-7px;
+  color:#87925c;
+  font-size:19px;
+  line-height:1;
+  transform:rotate(-8deg);
+  text-shadow:0 1px 2px rgba(50,30,14,.12);
+}
+
+.float-msg .who{
+  color:#76583d;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.float-msg .words{
+  color:#60432c;
+  font-size:clamp(14px,1vw,17px);
+  line-height:1.42;
+  font-weight:600;
+}
+
+/* Keep the QR and photo-frame line language softer */
+.qr{
+  border-radius:10px 12px 9px 11px;
+  box-shadow:
+    0 8px 20px rgba(43,25,12,.17),
+    inset 0 0 0 1px rgba(255,255,255,.48);
+}
+
+@media (max-width:900px){
+  .live-feed{
+    width:min(680px,72vw);
+    max-height:34vh;
+  }
+  .live-card{
+    min-height:76px;
+    padding:11px 46px 11px 12px;
+  }
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:44px;
+    height:44px;
+  }
+  .live-card .live-text{
+    font-size:14px;
+  }
+}
+
+@media (max-width:560px){
+  .live-feed{
+    width:88vw;
+    max-height:35vh;
+    gap:7px;
+  }
+  .live-card{
+    min-height:68px;
+    padding:9px 39px 9px 10px;
+    gap:9px;
+    border-radius:12px;
+  }
+  .live-card::before{
+    inset:-3px -2px -2px -3px;
+    border-radius:14px;
+  }
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:38px;
+    height:38px;
+  }
+  .live-card .live-name{
+    font-size:11px;
+  }
+  .live-card .live-text{
+    font-size:12px;
+    line-height:1.35;
+  }
+  .live-card .live-time{
+    font-size:10px;
+  }
+  .live-card::after{
+    right:9px;
+    bottom:7px;
+    font-size:18px;
+  }
+  .float-msg{
+    max-width:205px;
+    min-width:135px;
+    padding:10px 13px 11px;
+    border-radius:11px 10px 12px 10px;
+  }
+}
+
+
+/* =========================================================
+   V6 — remove unintended outer/container frame
+   The photo wall should visually fill the whole viewport.
+   ========================================================= */
+
+html,
+body{
+  margin:0 !important;
+  padding:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+
+/* Never draw a page-level rectangular frame */
+.wall,
+.wall::before,
+.wall::after,
+.page,
+.container,
+.scene,
+.app,
+.stage,
+.viewport,
+#app,
+#root,
+main{
+  outline:none !important;
+}
+
+/* The actual artwork remains edge-to-edge */
+.wall{
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+}
+
+/* Do not let focus/selection outlines create a large rectangle */
+*:focus,
+*:focus-visible{
+  outline:none !important;
+}
+
+/* Keep the hand-drawn lines only on the intended UI components */
+.live-card,
+.float-msg,
+.qr,
+.polaroid{
+  outline:none !important;
+}
+
+</style>
