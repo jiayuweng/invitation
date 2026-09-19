@@ -314,8 +314,10 @@ const CONFIG={
   maxKnown:500,
 
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
-  minPollInterval:1000,
-  maxPollInterval:15000,
+  minPollInterval:3000,
+  maxPollInterval:30000,
+  maxConsecutiveFailures:2,
+  failurePause:60000,
   // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
   jsonpTimeout:60000,
 
@@ -352,7 +354,9 @@ const state={
   // 網路 / polling 狀態
   online:navigator.onLine!==false,
   pollTimer:null,
-  pollDelay:CONFIG.minPollInterval
+  pollDelay:CONFIG.minPollInterval,
+  consecutiveFailures:0,
+  pausedUntil:0
 };
 
 function textOf(item){
@@ -1338,6 +1342,8 @@ async function initialSync(){
       process(data.items);
       state.online=true;
       state.pollDelay=CONFIG.minPollInterval;
+      state.consecutiveFailures=0;
+      state.pausedUntil=0;
     }else{
       throw new Error(
         data&&data.error
@@ -1347,7 +1353,13 @@ async function initialSync(){
     }
   }catch(err){
     state.online=navigator.onLine!==false;
-    console.warn("初始資料載入失敗",err);
+    state.consecutiveFailures++;
+    if(state.consecutiveFailures>=CONFIG.maxConsecutiveFailures){
+      state.pausedUntil=Date.now()+CONFIG.failurePause;
+      console.warn("網路權限或 Apps Script 暫時無法存取，暫停自動重試 60 秒。",err);
+    }else{
+      console.warn("初始資料載入失敗",err);
+    }
   }finally{
     state.syncing=false;
     updateConnectionDot();
@@ -1356,6 +1368,18 @@ async function initialSync(){
 
 async function poll(){
   if(state.syncing)return;
+
+  // 若瀏覽器拒絕網路權限 / Apps Script 暫時無法存取，
+  // 不要每秒持續重試造成瀏覽器反覆跳出權限提示。
+  if(state.pausedUntil && Date.now()<state.pausedUntil){
+    state.pollDelay=Math.max(CONFIG.minPollInterval,Math.min(10000,state.pausedUntil-Date.now()));
+    schedulePoll();
+    return;
+  }
+  if(state.pausedUntil && Date.now()>=state.pausedUntil){
+    state.pausedUntil=0;
+    state.consecutiveFailures=0;
+  }
 
   if(!navigator.onLine){
     state.online=false;
@@ -1386,6 +1410,8 @@ async function poll(){
       // 成功後恢復 1 秒更新
       state.online=true;
       state.pollDelay=CONFIG.minPollInterval;
+      state.consecutiveFailures=0;
+      state.pausedUntil=0;
     }else{
       throw new Error(
         data&&data.error
@@ -1395,6 +1421,7 @@ async function poll(){
     }
   }catch(err){
     state.online=navigator.onLine!==false;
+    state.consecutiveFailures++;
     state.pollDelay=Math.min(
       Math.max(
         state.pollDelay*2,
@@ -1403,12 +1430,20 @@ async function poll(){
       CONFIG.maxPollInterval
     );
 
-    console.warn(
-      "同步暫時失敗，將於 "+
-      Math.round(state.pollDelay/1000)+
-      " 秒後重試",
-      err
-    );
+    if(state.consecutiveFailures>=CONFIG.maxConsecutiveFailures){
+      state.pausedUntil=Date.now()+CONFIG.failurePause;
+      console.warn(
+        "同步連續失敗，暫停自動重試 60 秒。若是瀏覽器權限提示，允許後會自動恢復。",
+        err
+      );
+    }else{
+      console.warn(
+        "同步暫時失敗，將於 "+
+        Math.round(state.pollDelay/1000)+
+        " 秒後重試",
+        err
+      );
+    }
   }finally{
     state.syncing=false;
     updateConnectionDot();
@@ -1449,6 +1484,8 @@ function updateConnectionDot(){
 window.addEventListener("online",()=>{
   state.online=true;
   state.pollDelay=CONFIG.minPollInterval;
+  state.consecutiveFailures=0;
+  state.pausedUntil=0;
   updateConnectionDot();
 
   if(state.pollTimer){
@@ -1475,6 +1512,11 @@ window.addEventListener("offline",()=>{
  */
 document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState==="visible"){
+    // 如果剛因權限 / 網路錯誤進入暫停期，不要因切換分頁又立刻重試。
+    if(state.pausedUntil && Date.now()<state.pausedUntil){
+      schedulePoll();
+      return;
+    }
     state.pollDelay=CONFIG.minPollInterval;
 
     if(!state.syncing){
@@ -1513,8 +1555,8 @@ setInterval(showNextQueued,CONFIG.queueInterval);
 
 /*
  * Poll 使用 setTimeout + adaptive backoff。
- * 正常狀態每秒一次；斷線 / Apps Script 暫時失敗會自動放慢，
- * 恢復後重新回到每秒。
+ * 正常狀態正常約 3 秒一次；斷線 / Apps Script 暫時失敗會自動放慢。
+ * 若連續失敗，會暫停一段時間，避免瀏覽器反覆觸發網路權限提示。
  */
 schedulePoll();
 
