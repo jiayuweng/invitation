@@ -110,36 +110,93 @@ html,body{
   left:50%;
   top:68%;
   transform:translateX(-50%);
-  width:min(620px,45vw);
-  max-height:29vh;
+  width:min(520px,38vw);
+  max-height:24vh;
   display:flex;
   flex-direction:column;
-  gap:9px;
+  gap:6px;
   overflow:hidden;
   pointer-events:none;
-  mask-image:linear-gradient(to bottom,transparent 0,black 7%,black 93%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0,black 10%,black 90%,transparent 100%);
 }
 .live-card{
   position:relative;
   display:flex;
   align-items:center;
-  gap:12px;
-  min-height:66px;
-  padding:10px 20px 10px 13px;
-  color:var(--ink);
-  background:
-    radial-gradient(circle at 8% 20%,rgba(255,255,255,.7),transparent 28%),
-    linear-gradient(180deg,rgba(255,249,228,.97),rgba(241,222,188,.95));
-  border:1px solid rgba(130,94,51,.42);
-  border-radius:5px 9px 4px 8px;
-  clip-path:polygon(
-    1% 7%, 10% 3%, 21% 5%, 34% 2%, 47% 5%, 61% 2%, 75% 5%, 88% 3%, 99% 8%,
-    97% 23%, 100% 39%, 97% 57%, 99% 76%, 96% 94%,
-    84% 92%, 70% 97%, 56% 94%, 43% 98%, 29% 94%, 16% 97%, 2% 91%,
-    4% 73%, 2% 55%, 5% 37%, 2% 20%
-  );
-  box-shadow:0 10px 24px rgba(52,33,17,.20),inset 0 0 0 1px rgba(255,255,255,.45);
+  gap:10px;
+  min-height:48px;
+  padding:7px 14px 7px 9px;
+  color:#fffaf2;
+  background:rgba(55,40,31,.34);
+  border:1px solid rgba(255,248,232,.24);
+  border-radius:18px;
+  box-shadow:0 6px 18px rgba(20,12,8,.16);
+  backdrop-filter:blur(5px) saturate(110%);
+  -webkit-backdrop-filter:blur(5px) saturate(110%);
   animation:cardIn .7s cubic-bezier(.2,.75,.25,1) both;
+}
+.live-card::before{
+  content:"";
+  position:absolute;
+  left:-5px;
+  top:17px;
+  width:9px;
+  height:9px;
+  background:rgba(55,40,31,.34);
+  border-left:1px solid rgba(255,248,232,.20);
+  border-bottom:1px solid rgba(255,248,232,.20);
+  transform:rotate(45deg);
+  border-radius:2px 0 0 0;
+}
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:9px;
+  bottom:5px;
+  font-size:13px;
+  color:rgba(255,235,220,.62);
+  font-weight:400;
+}
+.live-card .live-thumb{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid rgba(255,248,232,.36);
+  box-shadow:0 3px 10px rgba(20,10,5,.16);
+}
+.live-card .avatar{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(232,176,145,.72);
+  border:1px solid rgba(255,248,236,.62);
+  color:#fffaf4;
+  font-size:16px;
+  box-shadow:0 3px 10px rgba(30,15,8,.14);
+}
+.live-card .live-name{
+  color:rgba(255,248,236,.92);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.2px;
+}
+.live-card .live-text{
+  color:rgba(255,250,242,.96);
+  font-size:15px;
+  line-height:1.45;
+  text-shadow:0 1px 3px rgba(0,0,0,.24);
+}
+.live-card .live-time{
+  color:rgba(255,244,229,.62);
+  font-size:10px;
+  margin-left:auto;
+  white-space:nowrap;
 }
 .live-card::before{
   content:"";
@@ -2554,22 +2611,4 @@ main{
   outline:none !important;
 }
 
-</style>
-
-<style>
-/* ===== FIX：中央訊息區空白時完全不顯示任何底框 ===== */
-.live-feed{
-  background:transparent !important;
-  border:0 !important;
-  outline:0 !important;
-  box-shadow:none !important;
-  filter:none !important;
-  backdrop-filter:none !important;
-  -webkit-backdrop-filter:none !important;
-}
-
-/* 沒有任何訊息 / 圖片時，中央容器直接隱藏 */
-.live-feed:empty{
-  display:none !important;
-}
 </style>
