@@ -403,6 +403,18 @@ function timeText(t){
   return Math.floor(min/60)+" 小時前";
 }
 
+const CENTRAL_MESSAGE_MAX=5;
+
+function trimCentralMessages(){
+  const feed=document.getElementById('live-feed');
+  if(!feed) return;
+  const cards=Array.from(feed.querySelectorAll('.live-card'));
+  while(cards.length>CENTRAL_MESSAGE_MAX){
+    const old=cards.shift();
+    if(old) old.remove();
+  }
+}
+
 function addCard(item){
   const message=textOf(item);
   if(!message && !item.url)return;
@@ -470,6 +482,7 @@ function addCard(item){
       if(el.isConnected)el.remove();
     },950);
   },CONFIG.messageDisplayTime);
+  trimCentralMessages();
 }
 
 function applyPhotoOrientation(el,img){
@@ -1129,16 +1142,20 @@ function queueNewItem(item){
 }
 
 function showNextQueued(){
-  if(!state.displayQueue.length)return;
+  if(!state.displayQueue.length) return;
 
   const item=state.displayQueue.shift();
 
-  // 純文字維持原本的中央訊息卡＋側邊祝福。
-  addCard(item);
-
-  if(item.text){
-    addBubble(item);
+  // 純文字：只顯示浮動祝福，不進中央訊息區
+  if(!item.photoUrl){
+    if(item.text) addBubble(item);
+    return;
   }
+
+  // 有照片：中央顯示「傳了圖片＋文字」，同時旁邊顯示實際照片
+  addCard(item);
+  addPolaroid(item);
+  if(item.text) addBubble(item);
 }
 
 function process(items){
