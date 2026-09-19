@@ -880,6 +880,459 @@ html,body{
   .live-card{min-height:56px;padding:7px 12px 7px 9px;}
   .live-card .live-thumb{width:38px;height:38px;}
 }
+
+/* =========================================================
+   FINAL — 中央訊息框恢復成「半透明暖棕金 Chat」樣式
+   只改中央訊息，不動婚紗照 / QR / 浮動祝福
+   ========================================================= */
+
+.live-feed{
+  width:min(640px,42vw) !important;
+  max-height:31vh !important;
+  gap:10px !important;
+  top:66% !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  mask-image:linear-gradient(
+    to bottom,
+    transparent 0,
+    black 7%,
+    black 93%,
+    transparent 100%
+  ) !important;
+}
+
+.live-card{
+  position:relative !important;
+  min-height:76px !important;
+  padding:9px 52px 9px 12px !important;
+  gap:13px !important;
+  display:flex !important;
+  align-items:center !important;
+  color:#fff8ec !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(106,73,50,.72),
+      rgba(72,45,31,.66)
+    ) !important;
+
+  border:1.5px solid rgba(255,239,208,.72) !important;
+  border-radius:42px !important;
+  box-shadow:
+    0 7px 20px rgba(39,22,12,.22),
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(39,22,12,.20) !important;
+
+  backdrop-filter:blur(7px) saturate(110%) !important;
+  -webkit-backdrop-filter:blur(7px) saturate(110%) !important;
+  clip-path:none !important;
+  overflow:visible !important;
+  isolation:isolate !important;
+}
+
+/* 外圍第二道手繪線 */
+.live-card::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:-3px -4px -3px -4px !important;
+  z-index:-1 !important;
+  width:auto !important;
+  height:auto !important;
+  left:auto !important;
+  right:auto !important;
+  top:auto !important;
+  bottom:auto !important;
+
+  background:transparent !important;
+  border:1px solid rgba(255,231,191,.56) !important;
+  border-radius:44px 41px 43px 45px !important;
+  transform:rotate(-.25deg) !important;
+  box-shadow:0 0 0 1px rgba(103,67,43,.20) !important;
+  pointer-events:none !important;
+}
+
+/* 右下愛心 */
+.live-card::after{
+  content:"♡" !important;
+  position:absolute !important;
+  right:17px !important;
+  bottom:8px !important;
+  left:auto !important;
+  top:auto !important;
+  width:auto !important;
+  height:auto !important;
+
+  color:rgba(255,239,220,.92) !important;
+  font-size:24px !important;
+  line-height:1 !important;
+  letter-spacing:0 !important;
+  text-shadow:0 1px 2px rgba(44,23,13,.28) !important;
+  pointer-events:none !important;
+}
+
+.live-card .avatar{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  border-radius:50% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:linear-gradient(
+    135deg,
+    rgba(232,176,145,.92),
+    rgba(201,143,125,.88)
+  ) !important;
+  border:1px solid rgba(255,248,236,.75) !important;
+  color:#fffaf4 !important;
+  font-size:17px !important;
+  box-shadow:0 3px 10px rgba(30,15,8,.18) !important;
+  overflow:hidden !important;
+}
+
+.live-card .live-thumb{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  object-fit:cover !important;
+  border-radius:10px !important;
+  border:1px solid rgba(255,248,236,.65) !important;
+  box-shadow:0 3px 10px rgba(30,15,8,.18) !important;
+}
+
+.live-card .live-copy{
+  min-width:0 !important;
+  flex:1 !important;
+  text-align:left !important;
+}
+
+.live-card .live-name{
+  color:rgba(255,248,236,.94) !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  letter-spacing:.2px !important;
+  text-shadow:0 1px 3px rgba(44,23,13,.22) !important;
+}
+
+.live-card .live-name::before{
+  content:none !important;
+}
+
+.live-card .live-text{
+  margin-top:2px !important;
+  color:rgba(255,250,242,.98) !important;
+  font-size:15px !important;
+  line-height:1.45 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  font-weight:600 !important;
+  text-shadow:0 1px 3px rgba(0,0,0,.28) !important;
+}
+
+.live-card .live-time{
+  align-self:flex-start !important;
+  padding-top:3px !important;
+  margin-left:auto !important;
+  color:rgba(255,244,229,.72) !important;
+  font-size:10px !important;
+  white-space:nowrap !important;
+  text-shadow:0 1px 2px rgba(44,23,13,.20) !important;
+}
+
+@media(max-width:900px){
+  .live-feed{
+    width:min(680px,72vw) !important;
+    max-height:34vh !important;
+    top:53% !important;
+  }
+
+  .live-card{
+    min-height:76px !important;
+    padding:11px 46px 11px 12px !important;
+    border-radius:38px !important;
+  }
+
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:44px !important;
+    height:44px !important;
+    flex-basis:44px !important;
+  }
+
+  .live-card .live-text{
+    font-size:14px !important;
+  }
+}
+
+@media(max-width:560px){
+  .live-feed{
+    width:88vw !important;
+    max-height:35vh !important;
+    gap:7px !important;
+  }
+
+  .live-card{
+    min-height:68px !important;
+    padding:9px 39px 9px 10px !important;
+    gap:9px !important;
+    border-radius:34px !important;
+  }
+
+  .live-card::before{
+    inset:-3px -2px -2px -3px !important;
+    border-radius:36px !important;
+  }
+
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:38px !important;
+    height:38px !important;
+    flex-basis:38px !important;
+  }
+
+  .live-card .live-name{
+    font-size:11px !important;
+  }
+
+  .live-card .live-text{
+    font-size:12px !important;
+    line-height:1.35 !important;
+  }
+
+  .live-card .live-time{
+    font-size:10px !important;
+  }
+
+  .live-card::after{
+    right:9px !important;
+    bottom:7px !important;
+    font-size:18px !important;
+  }
+}
+
+</style>
+<style>
+
+/* =========================================================
+   WEDDING DESIGN — 統一成參考圖的溫柔手繪婚禮風
+   只調整照片框／浮動訊息／中央訊息／QR，不改 JavaScript。
+   ========================================================= */
+
+/* QR：像右上角的小型手繪婚禮相框 */
+.qr{
+  width:126px !important;
+  padding:11px 10px 13px !important;
+  background:rgba(255,249,233,.90) !important;
+  border:1px solid rgba(112,78,46,.22) !important;
+  border-radius:7px 10px 8px 9px !important;
+  box-shadow:0 9px 22px rgba(54,34,18,.18),inset 0 0 0 1px rgba(255,255,255,.58) !important;
+  transform:rotate(1deg) !important;
+}
+.qr::before{
+  content:"" !important;
+  inset:-5px -5px -6px -5px !important;
+  border:1.4px solid rgba(255,241,209,.95) !important;
+  border-right-color:rgba(119,83,49,.42) !important;
+  border-bottom-color:rgba(119,83,49,.30) !important;
+  border-radius:8px 6px 9px 7px !important;
+  transform:rotate(-1deg) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.35) !important;
+}
+.qr img{
+  width:96px !important;
+  height:96px !important;
+  padding:4px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(103,72,43,.18) !important;
+  border-radius:3px !important;
+}
+.qr span{
+  margin-top:8px !important;
+  color:#6b5038 !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  letter-spacing:.08em !important;
+}
+.qr::after{
+  content:"✿" !important;
+  right:-12px !important;
+  bottom:-12px !important;
+  width:28px !important;
+  height:28px !important;
+  font-size:14px !important;
+}
+
+/* 婚紗照：白色拍立得＋淡金手繪外框＋小花 */
+.polaroid{
+  width:166px;
+  padding:9px 9px 16px !important;
+  background:rgba(255,251,240,.94) !important;
+  border:1px solid rgba(126,91,55,.14) !important;
+  border-radius:5px 8px 6px 7px !important;
+  box-shadow:0 10px 23px rgba(52,32,16,.18),inset 0 0 0 1px rgba(255,255,255,.72) !important;
+}
+.polaroid.landscape{width:220px !important}
+.polaroid.square{width:174px !important}
+.polaroid::before{
+  inset:-5px !important;
+  border:1.35px solid rgba(255,239,205,.96) !important;
+  border-right-color:rgba(118,84,50,.40) !important;
+  border-bottom-color:rgba(118,84,50,.28) !important;
+  border-radius:7px 5px 8px 6px !important;
+  transform:rotate(-.65deg) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.28) !important;
+}
+.polaroid img{
+  background:#eee1c8 !important;
+  border:1px solid rgba(118,84,50,.18) !important;
+}
+.polaroid::after{
+  content:"✿" !important;
+  right:-13px !important;
+  bottom:-13px !important;
+  width:30px !important;
+  height:30px !important;
+  font-size:15px !important;
+}
+.polaroid .heart{
+  color:#f3e0b7 !important;
+  text-shadow:0 1px 0 #77573a,0 2px 4px rgba(45,25,10,.18) !important;
+}
+
+/* 左右祝福訊息：參考圖的柔和米白圓角紙卡 */
+.float-msg{
+  min-width:165px !important;
+  max-width:270px !important;
+  padding:11px 17px 12px !important;
+  background:
+    radial-gradient(circle at 16% 20%,rgba(255,255,255,.62),transparent 27%),
+    linear-gradient(180deg,rgba(255,250,236,.91),rgba(248,231,199,.83)) !important;
+  border:0 !important;
+  border-radius:26px 30px 27px 31px !important;
+  box-shadow:0 9px 20px rgba(54,34,18,.16),inset 0 0 0 1px rgba(255,255,255,.55) !important;
+  clip-path:none !important;
+}
+.float-msg::before{
+  content:"" !important;
+  inset:-3px -4px -3px -4px !important;
+  border:1.2px solid rgba(255,244,218,.92) !important;
+  border-radius:29px 32px 28px 33px !important;
+  transform:rotate(-.45deg) !important;
+  box-shadow:0 0 0 1px rgba(129,92,55,.13) !important;
+}
+.float-msg::after{
+  content:"✿" !important;
+  right:-6px !important;
+  bottom:-8px !important;
+  color:#d99489 !important;
+  font-size:17px !important;
+  text-shadow:0 1px 0 rgba(255,249,230,.9) !important;
+}
+.float-msg .who{
+  color:#806247 !important;
+  font-size:11px !important;
+  margin-bottom:3px !important;
+}
+.float-msg .words{
+  color:#604731 !important;
+  font-size:clamp(13px,1vw,17px) !important;
+  line-height:1.38 !important;
+  font-weight:600 !important;
+}
+
+/* 中央訊息：參考圖的半透明暖棕金 Chat 氣泡
+   稍微縮窄、提高高度，避免扁扁一條。 */
+.live-feed{
+  width:min(570px,38vw) !important;
+  max-height:31vh !important;
+  gap:8px !important;
+  top:66% !important;
+}
+.live-card{
+  min-height:84px !important;
+  padding:11px 48px 11px 12px !important;
+  gap:12px !important;
+  color:#fff9ed !important;
+  background:
+    linear-gradient(180deg,rgba(111,78,54,.70),rgba(74,48,34,.62)) !important;
+  border:1.5px solid rgba(255,241,214,.80) !important;
+  border-radius:44px !important;
+  box-shadow:
+    0 8px 20px rgba(42,24,13,.22),
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 0 rgba(45,25,14,.15) !important;
+  backdrop-filter:blur(6px) saturate(112%) !important;
+  -webkit-backdrop-filter:blur(6px) saturate(112%) !important;
+  clip-path:none !important;
+  overflow:visible !important;
+}
+.live-card::before{
+  content:"" !important;
+  inset:-3px -4px -3px -4px !important;
+  z-index:-1 !important;
+  background:transparent !important;
+  border:1px solid rgba(255,233,195,.66) !important;
+  border-radius:46px 43px 45px 47px !important;
+  transform:rotate(-.25deg) !important;
+  box-shadow:0 0 0 1px rgba(117,78,48,.16) !important;
+}
+.live-card::after{
+  content:"♡" !important;
+  right:16px !important;
+  bottom:9px !important;
+  color:rgba(255,241,224,.95) !important;
+  font-size:23px !important;
+  text-shadow:0 1px 2px rgba(48,26,14,.25) !important;
+}
+.live-card .avatar{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  border-radius:50% !important;
+  background:linear-gradient(135deg,#e6b6a6,#cb927f) !important;
+  border:1.5px solid rgba(255,249,236,.84) !important;
+  color:#fffaf4 !important;
+  box-shadow:0 3px 9px rgba(31,16,8,.16) !important;
+}
+.live-card .live-thumb{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  border-radius:50% !important;
+  border:1.5px solid rgba(255,249,236,.82) !important;
+  box-shadow:0 3px 9px rgba(31,16,8,.15) !important;
+}
+.live-card .live-name{
+  color:rgba(255,247,231,.96) !important;
+  font-size:13px !important;
+  line-height:1.25 !important;
+  text-shadow:0 1px 2px rgba(49,26,13,.22) !important;
+}
+.live-card .live-text{
+  color:#fffaf0 !important;
+  font-size:clamp(14px,1vw,17px) !important;
+  line-height:1.42 !important;
+  font-weight:500 !important;
+  text-shadow:0 1px 2px rgba(49,26,13,.28) !important;
+}
+.live-card .live-time{
+  color:rgba(255,244,225,.72) !important;
+  font-size:11px !important;
+}
+
+/* 手機版維持比例，不讓卡片變成細長條 */
+@media(max-width:900px){
+  .live-feed{width:min(88vw,570px) !important;top:53% !important;gap:7px !important}
+  .live-card{min-height:76px !important;padding:10px 40px 10px 10px !important;border-radius:38px !important}
+  .live-card .avatar,.live-card .live-thumb{width:43px !important;height:43px !important;flex-basis:43px !important}
+  .qr{width:82px !important;padding:7px 6px 8px !important}
+  .qr img{width:68px !important;height:68px !important}
+  .qr span{font-size:10px !important;margin-top:5px !important}
+}
+
 </style>
 </head>
 <body>
@@ -889,7 +1342,7 @@ html,body{
 
   <a class="qr" href="https://jiayuweng.github.io/invitation/upload.html" target="_blank" rel="noopener">
     <img src="https://quickchart.io/qr?size=220&amp;text=https%3A%2F%2Fjiayuweng.github.io%2Finvitation%2Fupload.html" alt="QR Code">
-    <span>掃碼上傳照片<br>留下祝福</span>
+    <span>留下祝福</span>
   </a>
   </div>
 
@@ -901,7 +1354,7 @@ html,body{
 <script>
 const CONFIG={
   endpoint:"https://script.google.com/macros/s/AKfycbydMwxvks8TSSGfMHkJvOTiUwdNXKzCHKHJ5JxbnYu-CHi9hGSilWeHbMjC3KUijzit/exec",
-  pollInterval:1000,
+  pollInterval:3000,
   maxCards:12,
   maxPolaroids:6,
   guestPhotoNormalMax:6,
@@ -918,12 +1371,12 @@ const CONFIG={
   maxKnown:500,
 
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
-  minPollInterval:1000,
+  minPollInterval:3000,
   maxPollInterval:30000,
   maxConsecutiveFailures:2,
   failurePause:60000,
   // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
-  jsonpTimeout:60000,
+  jsonpTimeout:45000,
 
   // 婚紗照輪播
   presetSlideInterval:5000,
@@ -1912,21 +2365,43 @@ function jsonpRequest(url,callbackName){
   return new Promise((resolve,reject)=>{
     const script=document.createElement("script");
     let finished=false;
+    let timedOut=false;
+
+    // Apps Script 偶爾會在 timeout 後才把 JSONP 回傳回來。
+    // timeout 後保留 callback 一小段時間，避免瀏覽器出現
+    // "xxx is not defined"，也避免晚到的回應變成未捕獲錯誤。
+    const lateCleanupMs=120000;
 
     const timeout=setTimeout(()=>{
+      timedOut=true;
       finish(new Error("JSONP timeout"));
+
+      setTimeout(()=>{
+        try{
+          delete window[callbackName];
+        }catch(e){
+          window[callbackName]=undefined;
+        }
+      },lateCleanupMs);
     },CONFIG.jsonpTimeout);
 
-    function cleanup(){
-      clearTimeout(timeout);
+    function removeScript(){
       script.onload=null;
       script.onerror=null;
       if(script.parentNode)script.parentNode.removeChild(script);
+    }
 
-      try{
-        delete window[callbackName];
-      }catch(e){
-        window[callbackName]=undefined;
+    function cleanup(){
+      clearTimeout(timeout);
+      removeScript();
+
+      // 正常成功時立即移除 callback；timeout 時交給 late cleanup。
+      if(!timedOut){
+        try{
+          delete window[callbackName];
+        }catch(e){
+          window[callbackName]=undefined;
+        }
       }
     }
 
@@ -1940,6 +2415,9 @@ function jsonpRequest(url,callbackName){
     }
 
     window[callbackName]=(data)=>{
+      // timeout 後才到達的 Apps Script 回應只需要安靜地忽略，
+      // 不要再次 resolve/reject，也不要觸發 ReferenceError。
+      if(timedOut)return;
       finish(null,data);
     };
 
@@ -2007,7 +2485,10 @@ async function initialSync(){
 }
 
 async function poll(){
-  if(state.syncing)return;
+  if(state.syncing){
+    schedulePoll();
+    return;
+  }
 
   // 若瀏覽器拒絕網路權限 / Apps Script 暫時無法存取，
   // 不要每秒持續重試造成瀏覽器反覆跳出權限提示。
@@ -2185,10 +2666,15 @@ function createPetals(){
 createPetals();
 
 updateConnectionDot();
-initialSync();
+
+// 先讓畫面完整出現，再在背景連線 Apps Script。
+// 不讓 API 啟動時間卡住婚禮畫面的顯示。
+requestAnimationFrame(()=>{
+  initialSync();
+});
 
 /*
- * 每 2.2 秒播放一筆新資料。
+ * 每 2.2 秒播放一筆新資料.
  * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
  */
 setInterval(showNextQueued,CONFIG.queueInterval);
@@ -2611,427 +3097,4 @@ main{
   outline:none !important;
 }
 
-
-
-/* =========================================================
-   FINAL DIALOG STYLE
-   中央：黃色透明玻璃氣泡
-   旁邊：無邊框柔光祝福訊息
-   只覆蓋視覺 CSS，不修改 HTML / JavaScript
-   ========================================================= */
-
-/* ---------- 中央訊息 ---------- */
-.live-feed{
-  width:min(700px,48vw);
-  max-height:32vh;
-  gap:10px;
-}
-
-.live-card{
-  min-height:76px;
-  padding:10px 52px 10px 13px;
-  gap:12px;
-  color:#fff9e8;
-  background:
-    radial-gradient(ellipse at 12% 18%,rgba(255,255,235,.30),transparent 32%),
-    radial-gradient(ellipse at 85% 82%,rgba(255,204,91,.16),transparent 42%),
-    linear-gradient(180deg,
-      rgba(116,83,38,.50),
-      rgba(176,126,49,.43));
-  border:1px solid rgba(255,232,156,.58);
-  border-radius:24px;
-  box-shadow:
-    0 8px 22px rgba(47,27,10,.16),
-    0 0 12px rgba(255,214,105,.24),
-    0 0 30px rgba(255,205,84,.13),
-    inset 0 1px 0 rgba(255,250,214,.48),
-    inset 0 -1px 0 rgba(255,210,104,.18);
-  backdrop-filter:blur(6px) saturate(125%);
-  -webkit-backdrop-filter:blur(6px) saturate(125%);
-  overflow:visible;
-  isolation:isolate;
-}
-
-/* 外圈只做亮光，不畫深色手繪框 */
-.live-card::before{
-  content:"";
-  position:absolute;
-  inset:-3px;
-  z-index:-1;
-  border:1px solid rgba(255,225,137,.34);
-  border-radius:26px;
-  box-shadow:
-    0 0 9px rgba(255,220,116,.20),
-    0 0 20px rgba(255,214,91,.10);
-  pointer-events:none;
-}
-
-.live-card::after{
-  content:"♡";
-  position:absolute;
-  right:15px;
-  bottom:9px;
-  color:rgba(255,238,183,.88);
-  font-size:23px;
-  line-height:1;
-  text-shadow:0 0 7px rgba(255,215,109,.32);
-}
-
-.live-card .live-copy{
-  min-width:0;
-  flex:1;
-  padding-top:1px;
-}
-
-.live-card .live-name{
-  color:rgba(255,248,221,.94);
-  font-size:13px;
-  font-weight:700;
-  line-height:1.25;
-  text-shadow:0 1px 3px rgba(58,35,13,.30);
-}
-
-.live-card .live-text{
-  color:#fff9e9;
-  font-size:clamp(15px,1.05vw,18px);
-  line-height:1.42;
-  font-weight:600;
-  text-shadow:0 1px 3px rgba(55,31,9,.30);
-}
-
-.live-card .live-time{
-  color:rgba(255,244,210,.78);
-  font-size:11px;
-  text-shadow:0 1px 3px rgba(54,31,10,.25);
-}
-
-.live-card .avatar{
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  background:linear-gradient(145deg,rgba(238,183,139,.92),rgba(204,140,104,.86));
-  border:1.5px solid rgba(255,247,215,.88);
-  box-shadow:
-    0 2px 8px rgba(54,31,12,.18),
-    0 0 8px rgba(255,211,122,.16);
-}
-
-.live-card .live-thumb{
-  width:50px;
-  height:50px;
-  border-radius:12px;
-  border:1px solid rgba(255,240,190,.72);
-  box-shadow:0 2px 9px rgba(54,31,12,.16);
-}
-
-/* ---------- 旁邊祝福訊息 ---------- */
-.float-msg{
-  min-width:150px;
-  max-width:255px;
-  padding:12px 18px 13px;
-  color:#5b432c;
-  background:
-    radial-gradient(ellipse at 20% 18%,rgba(255,255,244,.55),transparent 35%),
-    radial-gradient(ellipse at 82% 82%,rgba(255,220,157,.18),transparent 46%),
-    linear-gradient(180deg,
-      rgba(255,248,226,.72),
-      rgba(246,226,188,.54));
-  border:0 !important;
-  border-radius:14px 12px 15px 13px;
-  box-shadow:
-    0 7px 16px rgba(49,30,14,.08),
-    0 0 10px rgba(255,224,156,.18),
-    0 0 25px rgba(255,216,133,.10),
-    inset 0 1px 0 rgba(255,255,241,.34);
-  clip-path:none !important;
-  isolation:isolate;
-  backdrop-filter:blur(2px) saturate(110%);
-  -webkit-backdrop-filter:blur(2px) saturate(110%);
-}
-
-/* 完全取消原本的手繪框，只留下很淡的擴散光 */
-.float-msg::before{
-  content:"";
-  position:absolute;
-  inset:-8px;
-  z-index:-1;
-  border:0 !important;
-  border-radius:18px;
-  box-shadow:
-    0 0 13px rgba(255,231,176,.20),
-    0 0 28px rgba(255,220,143,.10);
-  background:rgba(255,236,184,.035);
-  clip-path:none !important;
-  transform:none !important;
-  pointer-events:none;
-}
-
-.float-msg::after{
-  content:"✿";
-  right:-8px;
-  bottom:-8px;
-  color:rgba(225,165,132,.76);
-  font-size:17px;
-  line-height:1;
-  text-shadow:0 0 7px rgba(255,231,178,.42);
-  transform:rotate(-8deg);
-}
-
-.float-msg .who{
-  color:rgba(105,78,52,.88);
-  font-size:11px;
-  font-weight:700;
-  margin-bottom:3px;
-  text-shadow:0 1px 2px rgba(255,250,225,.42);
-}
-
-.float-msg .words{
-  color:#60462f;
-  font-size:clamp(13px,1vw,17px);
-  line-height:1.38;
-  font-weight:600;
-  text-shadow:0 1px 2px rgba(255,250,228,.48);
-}
-
-@media(max-width:900px){
-  .live-feed{width:min(88vw,680px);max-height:34vh}
-  .live-card{min-height:64px;padding:8px 42px 8px 10px;border-radius:21px}
-  .live-card .avatar,
-  .live-card .live-thumb{width:43px;height:43px}
-  .live-card .live-text{font-size:14px}
-  .float-msg{max-width:205px;min-width:135px;padding:10px 13px 11px}
-}
-
-@media(max-width:560px){
-  .live-feed{width:88vw;max-height:35vh;gap:7px}
-  .live-card{min-height:58px;padding:8px 38px 8px 9px;border-radius:19px}
-  .live-card .avatar,
-  .live-card .live-thumb{width:38px;height:38px}
-  .live-card .live-name{font-size:11px}
-  .live-card .live-text{font-size:12px}
-  .live-card .live-time{font-size:10px}
-}
-
-</style>
-
-
-<style>
-/* =========================================================
-   FINAL V2
-   中央：回到正常圓角對話框，偏白的暖黃色
-   旁邊：去掉灰底感，改成真正的柔和黃白光暈
-   不修改 JavaScript
-   ========================================================= */
-
-/* ---------- 中央訊息 ---------- */
-.live-feed{
-  width:min(660px,46vw) !important;
-  max-height:30vh !important;
-  gap:8px !important;
-}
-
-.live-card{
-  min-height:62px !important;
-  padding:9px 16px 9px 11px !important;
-  gap:11px !important;
-
-  /* 偏白的暖黃色，不要濃黃 */
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,253,244,.93),
-      rgba(255,247,220,.88)
-    ) !important;
-
-  color:#604b38 !important;
-
-  /* 不使用深色外框，避免變形感 */
-  border:0 !important;
-  border-radius:18px !important;
-  clip-path:none !important;
-
-  /* 柔和黃白光，不要灰黑陰影 */
-  box-shadow:
-    0 0 0 1px rgba(255,250,226,.42),
-    0 0 18px rgba(255,235,174,.42),
-    0 7px 18px rgba(74,52,29,.10) !important;
-
-  backdrop-filter:blur(3px) !important;
-  -webkit-backdrop-filter:blur(3px) !important;
-
-  overflow:visible !important;
-}
-
-/* 完全取消之前造成「框變形」的手繪外框 */
-.live-card::before{
-  content:none !important;
-  display:none !important;
-}
-
-/* 愛心保留，但不要畫第二層框 */
-.live-card::after{
-  content:"♡" !important;
-  right:13px !important;
-  bottom:7px !important;
-  color:rgba(215,145,135,.78) !important;
-  font-size:18px !important;
-  line-height:1 !important;
-  text-shadow:0 1px 0 rgba(255,255,255,.85) !important;
-}
-
-/* 中央頭像 */
-.live-card .avatar{
-  width:43px !important;
-  height:43px !important;
-  flex:0 0 43px !important;
-  border-radius:50% !important;
-  background:linear-gradient(145deg,#efc8b8,#dda493) !important;
-  border:1px solid rgba(255,255,255,.88) !important;
-  box-shadow:
-    0 2px 7px rgba(91,61,35,.10),
-    0 0 8px rgba(255,235,190,.25) !important;
-}
-
-/* 中央文字 */
-.live-card .live-copy{
-  min-width:0 !important;
-  flex:1 !important;
-}
-
-.live-card .live-name{
-  color:#735d48 !important;
-  font-size:13px !important;
-  font-weight:700 !important;
-  line-height:1.25 !important;
-  text-shadow:none !important;
-}
-
-.live-card .live-name::before{
-  content:none !important;
-}
-
-.live-card .live-text{
-  color:#5f4a38 !important;
-  font-size:clamp(14px,1.02vw,17px) !important;
-  line-height:1.4 !important;
-  font-weight:600 !important;
-  text-shadow:0 1px 1px rgba(255,255,255,.65) !important;
-}
-
-.live-card .live-time{
-  color:#927b61 !important;
-  font-size:10px !important;
-  text-shadow:none !important;
-}
-
-/* 中央照片縮圖 */
-.live-card .live-thumb{
-  width:45px !important;
-  height:45px !important;
-  flex:0 0 45px !important;
-  border-radius:9px !important;
-  border:1px solid rgba(255,255,255,.82) !important;
-  box-shadow:0 2px 7px rgba(83,58,34,.10) !important;
-}
-
-
-/* ---------- 旁邊漂浮祝福 ---------- */
-.float-msg{
-  min-width:150px !important;
-  max-width:255px !important;
-  padding:11px 17px 12px !important;
-
-  /* 更白、更透，不再像灰色卡片 */
-  background:
-    radial-gradient(
-      circle at 22% 18%,
-      rgba(255,255,255,.82),
-      transparent 34%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(255,253,244,.82),
-      rgba(255,247,220,.66)
-    ) !important;
-
-  color:#654e39 !important;
-
-  /* 完全取消深色框 */
-  border:0 !important;
-  border-radius:14px !important;
-  clip-path:none !important;
-
-  /* 明顯但柔和的暖黃外光 */
-  box-shadow:
-    0 0 5px rgba(255,248,220,.82),
-    0 0 16px rgba(255,231,166,.62),
-    0 0 30px rgba(255,231,166,.28),
-    0 6px 17px rgba(71,48,27,.09) !important;
-
-  backdrop-filter:blur(2px) !important;
-  -webkit-backdrop-filter:blur(2px) !important;
-  isolation:isolate !important;
-}
-
-/* 取消之前的灰/棕色內框 */
-.float-msg::before{
-  content:none !important;
-  display:none !important;
-}
-
-/* 小花只留淡淡的裝飾 */
-.float-msg::after{
-  content:"✿" !important;
-  right:-7px !important;
-  bottom:-8px !important;
-  color:#e0a197 !important;
-  font-size:17px !important;
-  text-shadow:
-    0 0 5px rgba(255,241,203,.9),
-    0 1px 2px rgba(77,52,29,.10) !important;
-}
-
-/* 旁邊訊息文字 */
-.float-msg .who{
-  color:#80674e !important;
-  font-size:11px !important;
-  font-weight:700 !important;
-  margin-bottom:3px !important;
-  text-shadow:0 1px 1px rgba(255,255,255,.55) !important;
-}
-
-.float-msg .words{
-  color:#654c38 !important;
-  font-size:clamp(13px,1vw,17px) !important;
-  line-height:1.38 !important;
-  font-weight:600 !important;
-  text-shadow:0 1px 1px rgba(255,255,255,.65) !important;
-}
-
-
-/* ---------- 手機版 ---------- */
-@media(max-width:900px){
-  .live-feed{
-    width:min(88vw,660px) !important;
-  }
-
-  .live-card{
-    min-height:57px !important;
-    padding:8px 39px 8px 10px !important;
-    border-radius:16px !important;
-  }
-
-  .live-card .avatar,
-  .live-card .live-thumb{
-    width:40px !important;
-    height:40px !important;
-  }
-
-  .float-msg{
-    min-width:135px !important;
-    max-width:205px !important;
-    padding:9px 13px 10px !important;
-    border-radius:12px !important;
-  }
-}
 </style>
