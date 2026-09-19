@@ -382,17 +382,7 @@ function normalize(item,i){
   const text=textOf(item);
   let url=photoUrl(item);
 
-  // ==============================
-  // 測試模式：
-  // TEST 開頭/內容的測試資料若沒有圖片，
-  // 統一補同一張圖片，方便測試：
-  // 「中央圖片訊息 + 旁邊圖片 + 旁邊文字」
-  // 正式非 TEST 資料完全不受影響。
-  // ==============================
-  const isTestItem=/TEST/i.test(name+" "+text);
-  if(isTestItem && !url){
-    url="assets/hero-forest.jpg";
-  }
+  // 純文字事件不補任何圖片；只有實際有 url/photoId 的資料才顯示照片。
 
   const normalized=Object.assign({},item,{
     id:keyOf(item)||("event-"+i),
