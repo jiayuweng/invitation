@@ -2555,3 +2555,21 @@ main{
 }
 
 </style>
+
+<style>
+/* ===== FIX：中央訊息區空白時完全不顯示任何底框 ===== */
+.live-feed{
+  background:transparent !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  filter:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+/* 沒有任何訊息 / 圖片時，中央容器直接隱藏 */
+.live-feed:empty{
+  display:none !important;
+}
+</style>
