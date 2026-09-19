@@ -34,7 +34,7 @@ html,body{
 }
 .wall:after{
   content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:transparent;
+  background:radial-gradient(circle at 50% 46%,transparent 31%,rgba(0,0,0,.18) 100%);
 }
 
 /* ---------- QR：日系手繪紙卡 ---------- */
@@ -127,15 +127,12 @@ html,body{
   min-height:48px;
   padding:7px 14px 7px 9px;
   color:#fffaf2;
-  background:rgba(74,52,28,.42);
-  border:none;
+  background:rgba(55,40,31,.34);
+  border:1px solid rgba(255,248,232,.24);
   border-radius:18px;
-  box-shadow:
-    0 0 0 1px rgba(255,220,112,.10),
-    0 0 14px rgba(255,214,92,.24),
-    0 6px 22px rgba(35,18,6,.18);
-  backdrop-filter:blur(5px) saturate(115%);
-  -webkit-backdrop-filter:blur(5px) saturate(115%);
+  box-shadow:0 6px 18px rgba(20,12,8,.16);
+  backdrop-filter:blur(5px) saturate(110%);
+  -webkit-backdrop-filter:blur(5px) saturate(110%);
   animation:cardIn .7s cubic-bezier(.2,.75,.25,1) both;
 }
 .live-card::before{
@@ -145,9 +142,9 @@ html,body{
   top:17px;
   width:9px;
   height:9px;
-  background:rgba(74,52,28,.42);
-  border:none;
-  box-shadow:-2px 2px 8px rgba(255,214,92,.16);
+  background:rgba(55,40,31,.34);
+  border-left:1px solid rgba(255,248,232,.20);
+  border-bottom:1px solid rgba(255,248,232,.20);
   transform:rotate(45deg);
   border-radius:2px 0 0 0;
 }
@@ -1915,21 +1912,43 @@ function jsonpRequest(url,callbackName){
   return new Promise((resolve,reject)=>{
     const script=document.createElement("script");
     let finished=false;
+    let timedOut=false;
+
+    // Apps Script 偶爾會在 timeout 後才把 JSONP 回傳回來。
+    // timeout 後保留 callback 一小段時間，避免瀏覽器出現
+    // "xxx is not defined"，也避免晚到的回應變成未捕獲錯誤。
+    const lateCleanupMs=120000;
 
     const timeout=setTimeout(()=>{
+      timedOut=true;
       finish(new Error("JSONP timeout"));
+
+      setTimeout(()=>{
+        try{
+          delete window[callbackName];
+        }catch(e){
+          window[callbackName]=undefined;
+        }
+      },lateCleanupMs);
     },CONFIG.jsonpTimeout);
 
-    function cleanup(){
-      clearTimeout(timeout);
+    function removeScript(){
       script.onload=null;
       script.onerror=null;
       if(script.parentNode)script.parentNode.removeChild(script);
+    }
 
-      try{
-        delete window[callbackName];
-      }catch(e){
-        window[callbackName]=undefined;
+    function cleanup(){
+      clearTimeout(timeout);
+      removeScript();
+
+      // 正常成功時立即移除 callback；timeout 時交給 late cleanup。
+      if(!timedOut){
+        try{
+          delete window[callbackName];
+        }catch(e){
+          window[callbackName]=undefined;
+        }
       }
     }
 
@@ -1943,6 +1962,9 @@ function jsonpRequest(url,callbackName){
     }
 
     window[callbackName]=(data)=>{
+      // timeout 後才到達的 Apps Script 回應只需要安靜地忽略，
+      // 不要再次 resolve/reject，也不要觸發 ReferenceError。
+      if(timedOut)return;
       finish(null,data);
     };
 
@@ -2006,19 +2028,11 @@ async function initialSync(){
   }finally{
     state.syncing=false;
     updateConnectionDot();
-
-    // 初始同步失敗也要繼續由 polling 自動重試
-    if(!state.pollTimer){
-      schedulePoll();
-    }
   }
 }
 
 async function poll(){
-  if(state.syncing){
-    schedulePoll();
-    return;
-  }
+  if(state.syncing)return;
 
   // 若瀏覽器拒絕網路權限 / Apps Script 暫時無法存取，
   // 不要每秒持續重試造成瀏覽器反覆跳出權限提示。
@@ -2197,12 +2211,14 @@ createPetals();
 
 updateConnectionDot();
 
-// 先建立輪詢，初始 JSONP 失敗時仍會自動重試
-schedulePoll();
-initialSync();
+// 先讓畫面完整出現，再在背景連線 Apps Script。
+// 不讓 API 啟動時間卡住婚禮畫面的顯示。
+requestAnimationFrame(()=>{
+  initialSync();
+});
 
 /*
- * 每 2.2 秒播放一筆新資料。
+ * 每 2.2 秒播放一筆新資料.
  * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
  */
 setInterval(showNextQueued,CONFIG.queueInterval);
@@ -2623,386 +2639,6 @@ main{
 .qr,
 .polaroid{
   outline:none !important;
-}
-
-
-/* ===== FINAL CENTRAL MESSAGE STYLE — match reference ===== */
-.live-feed{
-  width:min(640px,42vw);
-  max-height:31vh;
-  gap:10px;
-  top:66%;
-  left:50%;
-  transform:translateX(-50%);
-  mask-image:linear-gradient(to bottom,transparent 0,black 7%,black 93%,transparent 100%);
-}
-
-.live-card{
-  position:relative;
-  min-height:76px;
-  padding:9px 52px 9px 12px;
-  gap:13px;
-  display:flex;
-  align-items:center;
-  color:#fff8ec;
-  background:
-    linear-gradient(180deg,rgba(106,73,50,.72),rgba(72,45,31,.66));
-  border:1.5px solid rgba(255,239,208,.72);
-  border-radius:42px;
-  box-shadow:
-    0 7px 20px rgba(39,22,12,.22),
-    inset 0 1px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(39,22,12,.20);
-  backdrop-filter:blur(7px) saturate(110%);
-  -webkit-backdrop-filter:blur(7px) saturate(110%);
-  clip-path:none;
-  overflow:visible;
-  isolation:isolate;
-}
-
-/* 外圍第二道手繪線，不再做成尖角／紙卡 */
-.live-card::before{
-  content:"";
-  position:absolute;
-  inset:-3px -4px -3px -4px;
-  z-index:-1;
-  background:transparent;
-  border:1px solid rgba(255,231,191,.56);
-  border-radius:44px 41px 43px 45px;
-  transform:rotate(-.25deg);
-  box-shadow:0 0 0 1px rgba(103,67,43,.20);
-  pointer-events:none;
-}
-
-/* 右下愛心 */
-.live-card::after{
-  content:"♡";
-  position:absolute;
-  right:17px;
-  bottom:8px;
-  color:rgba(255,239,220,.92);
-  font-size:24px;
-  line-height:1;
-  text-shadow:0 1px 2px rgba(44,23,13,.28);
-  pointer-events:none;
-}
-
-.live-card .avatar{
-  width:48px;
-  height:48px;
-  flex:0 0 48px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:rgba(224,157,128,.94);
-  border:2px solid rgba(255,245,224,.92);
-  color:#fffdf5;
-  font-size:20px;
-  box-shadow:0 2px 7px rgba(35,18,10,.20),inset 0 1px 0 rgba(255,255,255,.25);
-}
-
-.live-card:nth-child(2) .avatar{background:rgba(119,145,75,.94)}
-.live-card:nth-child(3) .avatar{background:rgba(198,157,76,.94)}
-.live-card:nth-child(4) .avatar{background:rgba(192,121,103,.94)}
-.live-card:nth-child(5) .avatar{background:rgba(111,139,91,.94)}
-
-.live-card .live-copy{
-  min-width:0;
-  flex:1;
-  text-align:left;
-  padding-top:1px;
-}
-
-.live-card .live-name{
-  color:rgba(255,246,226,.96);
-  font-size:13px;
-  line-height:1.25;
-  font-weight:700;
-  text-shadow:0 1px 2px rgba(45,24,13,.35);
-}
-
-.live-card .live-name::before{
-  content:none;
-}
-
-.live-card .live-text{
-  margin-top:4px;
-  color:#fffaf0;
-  font-size:clamp(15px,1.05vw,18px);
-  line-height:1.35;
-  font-weight:500;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  text-shadow:0 1px 3px rgba(44,22,12,.34);
-}
-
-.live-card .live-time{
-  align-self:flex-start;
-  padding-top:5px;
-  margin-left:auto;
-  white-space:nowrap;
-  color:rgba(255,239,214,.86);
-  font-size:11px;
-  text-shadow:0 1px 2px rgba(44,22,12,.32);
-}
-
-.live-card .live-thumb{
-  width:46px;
-  height:46px;
-  flex:0 0 46px;
-  object-fit:cover;
-  border-radius:11px;
-  border:1px solid rgba(255,243,220,.58);
-  box-shadow:0 2px 7px rgba(35,18,10,.20);
-  background:rgba(246,227,194,.28);
-}
-
-@media(max-width:900px){
-  .live-feed{width:min(88vw,640px);top:53%;max-height:36vh;gap:8px}
-  .live-card{min-height:64px;padding:8px 43px 8px 10px;border-radius:34px}
-  .live-card::before{inset:-2px -3px -2px -3px;border-radius:36px 34px 35px 37px}
-  .live-card .avatar{width:42px;height:42px;flex-basis:42px}
-  .live-card .live-thumb{width:40px;height:40px;flex-basis:40px}
-  .live-card .live-text{font-size:14px}
-  .live-card .live-time{display:block;font-size:10px}
-}
-
-@media(max-width:560px){
-  .live-feed{width:90vw;top:42%;max-height:43vh;gap:7px}
-  .live-card{min-height:58px;padding:7px 36px 7px 8px;gap:8px;border-radius:30px}
-  .live-card::before{border-radius:32px}
-  .live-card .avatar{width:36px;height:36px;flex-basis:36px;font-size:16px}
-  .live-card .live-thumb{width:36px;height:36px;flex-basis:36px;border-radius:9px}
-  .live-card .live-name{font-size:10px}
-  .live-card .live-text{font-size:12px;margin-top:2px}
-  .live-card .live-time{font-size:9px}
-  .live-card::after{right:10px;bottom:6px;font-size:19px}
-}
-
-
-/* =========================================================
-   FINAL MESSAGE BOX — 黃金手繪線框版
-   - 參考中央訊息框的色調
-   - 改成暖黃色半透明紙感
-   - 左右不做膠囊圓弧
-   - 保留四個圓角
-   - 雙層略微錯位的手繪線條
-   ========================================================= */
-
-.float-msg{
-  min-width:170px;
-  max-width:270px;
-  padding:12px 18px 13px;
-
-  color:#5b432b;
-
-  background:
-    radial-gradient(
-      ellipse at 15% 18%,
-      rgba(255,255,255,.42),
-      transparent 34%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(250,220,143,.82),
-      rgba(224,183,92,.68)
-    );
-
-  border:1.5px solid rgba(117,82,35,.62);
-
-  /* 四角圓角，但左右不做膠囊 */
-  border-radius:9px 7px 10px 8px;
-
-  box-shadow:
-    0 7px 18px rgba(58,38,18,.16),
-    inset 0 1px 0 rgba(255,255,255,.46),
-    inset 0 -1px 0 rgba(133,91,35,.12);
-
-  clip-path:none;
-  overflow:visible;
-  isolation:isolate;
-}
-
-/* 第二道手繪線：稍微錯位，製造手工描邊感 */
-.float-msg::before{
-  content:"";
-  position:absolute;
-  inset:-4px -3px -3px -4px;
-  z-index:-1;
-
-  border:1.25px solid rgba(104,72,32,.55);
-  border-radius:10px 8px 11px 9px;
-
-  transform:rotate(-.35deg);
-
-  box-shadow:
-    1px 1px 0 rgba(255,239,188,.42),
-    -1px 0 0 rgba(104,72,32,.12);
-
-  pointer-events:none;
-}
-
-/* 右下只留很淡的手繪小愛心，不再有紙卡尖角 */
-.float-msg::after{
-  content:"♡";
-  position:absolute;
-  right:8px;
-  bottom:-8px;
-
-  color:#b88943;
-  font-size:18px;
-  line-height:1;
-
-  text-shadow:
-    0 1px 0 rgba(255,245,210,.75),
-    0 1px 2px rgba(82,52,22,.16);
-
-  transform:rotate(-7deg);
-}
-
-/* 文字改成和中央框一致的深咖啡色 */
-.float-msg .who{
-  color:#75562f;
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:4px;
-  letter-spacing:.1px;
-  text-shadow:0 1px 0 rgba(255,238,186,.45);
-}
-
-.float-msg .words{
-  color:#5a4028;
-  font-size:clamp(14px,1vw,17px);
-  line-height:1.42;
-  font-weight:600;
-  text-shadow:0 1px 0 rgba(255,241,196,.42);
-}
-
-/* 手機版仍維持「四角圓角矩形」，不變成膠囊 */
-@media(max-width:560px){
-  .float-msg{
-    min-width:135px;
-    max-width:205px;
-    padding:10px 13px 11px;
-    border-radius:8px 7px 9px 7px;
-  }
-
-  .float-msg::before{
-    inset:-3px -2px -2px -3px;
-    border-radius:9px 8px 10px 8px;
-  }
-
-  .float-msg .who{
-    font-size:10px;
-  }
-
-  .float-msg .words{
-    font-size:12px;
-  }
-}
-
-
-
-/* =========================================================
-   FINAL HARMONY — 浮動祝福框
-   只調整 float-msg；中央 live-card 保留原本深棕透明聊天框
-   ========================================================= */
-
-.float-msg{
-  min-width:155px;
-  max-width:250px;
-  padding:10px 16px 11px;
-
-  color:#5c4631;
-
-  /* 淡奶油米白，讓背景透出來 */
-  background:
-    radial-gradient(
-      ellipse at 18% 16%,
-      rgba(255,255,255,.50),
-      transparent 34%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(255,248,225,.70),
-      rgba(244,226,191,.60)
-    );
-
-  border:1.4px solid rgba(111,78,46,.66);
-  border-radius:8px 6px 9px 7px;
-
-  box-shadow:
-    0 6px 15px rgba(55,36,18,.12),
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 0 -1px 0 rgba(117,83,46,.08);
-
-  clip-path:none;
-  overflow:visible;
-  isolation:isolate;
-}
-
-/* 第二道手繪線：明顯但不搶畫面 */
-.float-msg::before{
-  content:"";
-  position:absolute;
-  inset:-4px -3px -3px -4px;
-  z-index:-1;
-
-  border:1px solid rgba(101,72,46,.58);
-  border-radius:10px 7px 11px 8px;
-  transform:rotate(-.45deg);
-
-  box-shadow:
-    1px 1px 0 rgba(255,248,220,.45),
-    -1px 0 0 rgba(101,72,46,.10);
-
-  pointer-events:none;
-}
-
-/* 小小粉色花朵，與照片框呼應 */
-.float-msg::after{
-  content:"✿";
-  position:absolute;
-  right:-7px;
-  bottom:-8px;
-  color:#d09a8e;
-  font-size:14px;
-  line-height:1;
-  text-shadow:0 1px 0 rgba(255,250,228,.9);
-  transform:rotate(-8deg);
-}
-
-.float-msg .who{
-  color:#765a3d;
-  font-size:10px;
-  font-weight:700;
-  line-height:1.2;
-  margin-bottom:3px;
-  letter-spacing:.1px;
-}
-
-.float-msg .words{
-  color:#5b432e;
-  font-size:clamp(13px,.95vw,16px);
-  line-height:1.4;
-  font-weight:500;
-  text-shadow:0 1px 0 rgba(255,250,228,.55);
-}
-
-@media(max-width:560px){
-  .float-msg{
-    min-width:125px;
-    max-width:200px;
-    padding:9px 12px 10px;
-    border-radius:7px 6px 8px 7px;
-  }
-  .float-msg::before{
-    inset:-3px -2px -2px -3px;
-    border-radius:9px 7px 10px 8px;
-  }
-  .float-msg .who{font-size:9px}
-  .float-msg .words{font-size:12px}
 }
 
 </style>
