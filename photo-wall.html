@@ -900,8 +900,8 @@ html,body{
 
 <script>
 const CONFIG={
-  endpoint:"https://script.google.com/macros/s/AKfycbyJ5XKfxOjKgQ_8phL-8pIxrMmrYe6rwmBtrcVUbD6DCTOCd8is5x5CZI0vyxJX5y4/exec",
-  pollInterval:3000,
+  endpoint:"https://script.google.com/macros/s/AKfycbydMwxvks8TSSGfMHkJvOTiUwdNXKzCHKHJ5JxbnYu-CHi9hGSilWeHbMjC3KUijzit/exec",
+  pollInterval:1000,
   maxCards:12,
   maxPolaroids:6,
   guestPhotoNormalMax:6,
@@ -918,7 +918,7 @@ const CONFIG={
   maxKnown:500,
 
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
-  minPollInterval:3000,
+  minPollInterval:1000,
   maxPollInterval:30000,
   maxConsecutiveFailures:2,
   failurePause:60000,
@@ -2609,6 +2609,207 @@ main{
 .qr,
 .polaroid{
   outline:none !important;
+}
+
+
+
+/* =========================================================
+   FINAL DIALOG STYLE
+   中央：黃色透明玻璃氣泡
+   旁邊：無邊框柔光祝福訊息
+   只覆蓋視覺 CSS，不修改 HTML / JavaScript
+   ========================================================= */
+
+/* ---------- 中央訊息 ---------- */
+.live-feed{
+  width:min(700px,48vw);
+  max-height:32vh;
+  gap:10px;
+}
+
+.live-card{
+  min-height:76px;
+  padding:10px 52px 10px 13px;
+  gap:12px;
+  color:#fff9e8;
+  background:
+    radial-gradient(ellipse at 12% 18%,rgba(255,255,235,.30),transparent 32%),
+    radial-gradient(ellipse at 85% 82%,rgba(255,204,91,.16),transparent 42%),
+    linear-gradient(180deg,
+      rgba(116,83,38,.50),
+      rgba(176,126,49,.43));
+  border:1px solid rgba(255,232,156,.58);
+  border-radius:24px;
+  box-shadow:
+    0 8px 22px rgba(47,27,10,.16),
+    0 0 12px rgba(255,214,105,.24),
+    0 0 30px rgba(255,205,84,.13),
+    inset 0 1px 0 rgba(255,250,214,.48),
+    inset 0 -1px 0 rgba(255,210,104,.18);
+  backdrop-filter:blur(6px) saturate(125%);
+  -webkit-backdrop-filter:blur(6px) saturate(125%);
+  overflow:visible;
+  isolation:isolate;
+}
+
+/* 外圈只做亮光，不畫深色手繪框 */
+.live-card::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  z-index:-1;
+  border:1px solid rgba(255,225,137,.34);
+  border-radius:26px;
+  box-shadow:
+    0 0 9px rgba(255,220,116,.20),
+    0 0 20px rgba(255,214,91,.10);
+  pointer-events:none;
+}
+
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:15px;
+  bottom:9px;
+  color:rgba(255,238,183,.88);
+  font-size:23px;
+  line-height:1;
+  text-shadow:0 0 7px rgba(255,215,109,.32);
+}
+
+.live-card .live-copy{
+  min-width:0;
+  flex:1;
+  padding-top:1px;
+}
+
+.live-card .live-name{
+  color:rgba(255,248,221,.94);
+  font-size:13px;
+  font-weight:700;
+  line-height:1.25;
+  text-shadow:0 1px 3px rgba(58,35,13,.30);
+}
+
+.live-card .live-text{
+  color:#fff9e9;
+  font-size:clamp(15px,1.05vw,18px);
+  line-height:1.42;
+  font-weight:600;
+  text-shadow:0 1px 3px rgba(55,31,9,.30);
+}
+
+.live-card .live-time{
+  color:rgba(255,244,210,.78);
+  font-size:11px;
+  text-shadow:0 1px 3px rgba(54,31,10,.25);
+}
+
+.live-card .avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:linear-gradient(145deg,rgba(238,183,139,.92),rgba(204,140,104,.86));
+  border:1.5px solid rgba(255,247,215,.88);
+  box-shadow:
+    0 2px 8px rgba(54,31,12,.18),
+    0 0 8px rgba(255,211,122,.16);
+}
+
+.live-card .live-thumb{
+  width:50px;
+  height:50px;
+  border-radius:12px;
+  border:1px solid rgba(255,240,190,.72);
+  box-shadow:0 2px 9px rgba(54,31,12,.16);
+}
+
+/* ---------- 旁邊祝福訊息 ---------- */
+.float-msg{
+  min-width:150px;
+  max-width:255px;
+  padding:12px 18px 13px;
+  color:#5b432c;
+  background:
+    radial-gradient(ellipse at 20% 18%,rgba(255,255,244,.55),transparent 35%),
+    radial-gradient(ellipse at 82% 82%,rgba(255,220,157,.18),transparent 46%),
+    linear-gradient(180deg,
+      rgba(255,248,226,.72),
+      rgba(246,226,188,.54));
+  border:0 !important;
+  border-radius:14px 12px 15px 13px;
+  box-shadow:
+    0 7px 16px rgba(49,30,14,.08),
+    0 0 10px rgba(255,224,156,.18),
+    0 0 25px rgba(255,216,133,.10),
+    inset 0 1px 0 rgba(255,255,241,.34);
+  clip-path:none !important;
+  isolation:isolate;
+  backdrop-filter:blur(2px) saturate(110%);
+  -webkit-backdrop-filter:blur(2px) saturate(110%);
+}
+
+/* 完全取消原本的手繪框，只留下很淡的擴散光 */
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  z-index:-1;
+  border:0 !important;
+  border-radius:18px;
+  box-shadow:
+    0 0 13px rgba(255,231,176,.20),
+    0 0 28px rgba(255,220,143,.10);
+  background:rgba(255,236,184,.035);
+  clip-path:none !important;
+  transform:none !important;
+  pointer-events:none;
+}
+
+.float-msg::after{
+  content:"✿";
+  right:-8px;
+  bottom:-8px;
+  color:rgba(225,165,132,.76);
+  font-size:17px;
+  line-height:1;
+  text-shadow:0 0 7px rgba(255,231,178,.42);
+  transform:rotate(-8deg);
+}
+
+.float-msg .who{
+  color:rgba(105,78,52,.88);
+  font-size:11px;
+  font-weight:700;
+  margin-bottom:3px;
+  text-shadow:0 1px 2px rgba(255,250,225,.42);
+}
+
+.float-msg .words{
+  color:#60462f;
+  font-size:clamp(13px,1vw,17px);
+  line-height:1.38;
+  font-weight:600;
+  text-shadow:0 1px 2px rgba(255,250,228,.48);
+}
+
+@media(max-width:900px){
+  .live-feed{width:min(88vw,680px);max-height:34vh}
+  .live-card{min-height:64px;padding:8px 42px 8px 10px;border-radius:21px}
+  .live-card .avatar,
+  .live-card .live-thumb{width:43px;height:43px}
+  .live-card .live-text{font-size:14px}
+  .float-msg{max-width:205px;min-width:135px;padding:10px 13px 11px}
+}
+
+@media(max-width:560px){
+  .live-feed{width:88vw;max-height:35vh;gap:7px}
+  .live-card{min-height:58px;padding:8px 38px 8px 9px;border-radius:19px}
+  .live-card .avatar,
+  .live-card .live-thumb{width:38px;height:38px}
+  .live-card .live-name{font-size:11px}
+  .live-card .live-text{font-size:12px}
+  .live-card .live-time{font-size:10px}
 }
 
 </style>
