@@ -1353,7 +1353,7 @@ html,body{
 
 <script>
 const CONFIG={
-  endpoint:"https://script.google.com/macros/s/AKfycbydMwxvks8TSSGfMHkJvOTiUwdNXKzCHKHJ5JxbnYu-CHi9hGSilWeHbMjC3KUijzit/exec",
+  endpoint:"https://script.google.com/macros/s/AKfycbyJ5XKfxOjKgQ_8phL-8pIxrMmrYe6rwmBtrcVUbD6DCTOCd8is5x5CZI0vyxJX5y4/exec",
   pollInterval:3000,
   maxCards:12,
   maxPolaroids:6,
@@ -1395,7 +1395,7 @@ const floatLayer=document.getElementById("floatingLayer");
 const state={
   items:[],
   known:new Set(),
-  initial:true,
+  pollInitialized:false,
   syncing:false,
 
   // 新資料佇列
@@ -1404,8 +1404,8 @@ const state={
   // 避免長時間運作時 Set 無限增長
   knownOrder:[],
 
-  // 初次同步完成後的資料時間水位。
-  // 後續只接受比這個時間更新的資料，避免舊訊息重播。
+  // 第一次 poll 只建立時間水位，不播放舊資料。
+  // 後續只接受比這個時間更新的資料。
   watermarkTime:0,
 
   // 網路 / polling 狀態
@@ -2229,136 +2229,67 @@ function process(items){
   const normalized=items.map(normalize);
   const fresh=[];
 
-  /*
-   * 非常重要：
-   * initial 回傳的是「歷史資料快照」，只拿來建立初始畫面。
-   * 記住當下資料中最新的時間，之後 polling 只接受
-   * time 嚴格大於這個時間的資料。
-   *
-   * 這樣即使：
-   * - known Set 因長時間播放而淘汰舊 ID
-   * - 網路斷線後重新抓回最近 30 筆
-   * - 分頁切回前景又重新 poll
-   *
-   * 舊祝福都不會再次進入播放佇列。
-   */
-  if(state.initial){
-    let maxInitialTime=0;
-
+  // Poll-only：第一次 poll 只建立時間水位，不重播歷史資料。
+  // 婚紗照完全由 presetConfig 管理。
+  if(!state.pollInitialized){
+    let maxTime=0;
     normalized.forEach(item=>{
       const t=Number(item.time)||0;
-      if(t>maxInitialTime)maxInitialTime=t;
-
-      const id=keyOf(item);
-      if(!rememberKey(id))return;
-
+      if(t>maxTime)maxTime=t;
+      rememberKey(keyOf(item));
       state.items.push(item);
-      fresh.push(item);
     });
-
-    state.watermarkTime=maxInitialTime;
-  }else{
-    normalized.forEach(item=>{
-      const id=keyOf(item);
-      const t=Number(item.time)||0;
-
-      /*
-       * 只接受 initial 快照之後真正新增的資料。
-       * preset 是靜態婚紗照，不應該在 polling 時重新播放。
-       */
-      if(item.kind==="preset")return;
-      if(t<=state.watermarkTime)return;
-      if(!rememberKey(id))return;
-
-      state.items.push(item);
-      fresh.push(item);
-
-      if(t>state.watermarkTime){
-        state.watermarkTime=t;
-      }
-    });
-
-    /*
-     * 新資料分成兩條路：
-     * - 有照片：立即顯示，不等待文字 queue。
-     * - 純文字：依原本節奏進中央訊息 queue。
-     *
-     * 這樣「照片＋祝福」不會因前面有很多文字而延遲，
-     * 多張照片同時進來也會直接顯示。
-     */
-    const photoItems=fresh.filter(x=>x.url);
-    const textItems=fresh.filter(x=>!x.url);
-
-    const now=Date.now();
-    state.recentPhotoTimes=state.recentPhotoTimes.filter(
-      t=>now-t<CONFIG.photoBurstHoldTime
-    );
-
-    photoItems.forEach(()=>{
-      state.recentPhotoTimes.push(Date.now());
-    });
-
-    if(
-      photoItems.length>=CONFIG.photoBurstThreshold ||
-      state.recentPhotoTimes.length>=CONFIG.photoBurstThreshold
-    ){
-      state.photoBurst=true;
-
-      clearTimeout(state.photoBurstTimer);
-      state.photoBurstTimer=setTimeout(()=>{
-        state.photoBurst=false;
-
-        // 大量上傳結束後，回到平常最多 6 張。
-        const guests=Array.from(
-          polaroidLayer.querySelectorAll(".guest-photo")
-        );
-
-        while(guests.length>CONFIG.guestPhotoNormalMax){
-          const old=guests.shift();
-          if(old)old.remove();
-        }
-      },CONFIG.photoBurstHoldTime);
-    }
-
-    photoItems.forEach(item=>{
-      // 中央卡片立即出現
-      addCard(item);
-
-      // 照片也立即出現，不等待 queue
-      addPolaroid(item);
-
-      // 照片＋文字的祝福同步出現
-      if(item.text){
-        addBubble(item);
-      }
-    });
-
-    // 純文字祝福也全部立即顯示，不再一筆一筆等待 queue。
-    // 同一輪收到 5、10、20 則時，可以同時出現在畫面不同位置。
-    textItems.forEach(item=>{
-      if(item.text){
-        addBubble(item);
-      }
-    });
-  }
-
-  /*
-   * 初次載入：
-   * - 婚紗照交給「輪播器」
-   * - 歷史祝福只建立資料，不進播放佇列
-   */
-  if(state.initial){
-    setupPresetSlideshow(
-      fresh.filter(x=>x.kind==="preset")
-    );
-  }
-
-  // 限制前端資料量，避免婚禮長時間播放後記憶體持續增加
-  if(state.items.length>180){
+    state.watermarkTime=maxTime;
+    state.pollInitialized=true;
     state.items=state.items.slice(-180);
+    return;
   }
 
-  state.initial=false;
+  normalized.forEach(item=>{
+    const id=keyOf(item);
+    const t=Number(item.time)||0;
+    if(item.kind==="preset")return;
+    if(t<=state.watermarkTime)return;
+    if(!rememberKey(id))return;
+    state.items.push(item);
+    fresh.push(item);
+    if(t>state.watermarkTime)state.watermarkTime=t;
+  });
+
+  if(!fresh.length){
+    if(state.items.length>180)state.items=state.items.slice(-180);
+    return;
+  }
+
+  const photoItems=fresh.filter(x=>x.url);
+  const textItems=fresh.filter(x=>!x.url);
+  const now=Date.now();
+  state.recentPhotoTimes=state.recentPhotoTimes.filter(t=>now-t<CONFIG.photoBurstHoldTime);
+  photoItems.forEach(()=>state.recentPhotoTimes.push(Date.now()));
+
+  if(photoItems.length>=CONFIG.photoBurstThreshold || state.recentPhotoTimes.length>=CONFIG.photoBurstThreshold){
+    state.photoBurst=true;
+    clearTimeout(state.photoBurstTimer);
+    state.photoBurstTimer=setTimeout(()=>{
+      state.photoBurst=false;
+      const guests=Array.from(polaroidLayer.querySelectorAll(".guest-photo"));
+      while(guests.length>CONFIG.guestPhotoNormalMax){
+        const old=guests.shift();
+        if(old)old.remove();
+      }
+    },CONFIG.photoBurstHoldTime);
+  }
+
+  photoItems.forEach(item=>{
+    addCard(item);
+    addPolaroid(item);
+    if(item.text)addBubble(item);
+  });
+  textItems.forEach(item=>{
+    if(item.text)addBubble(item);
+  });
+
+  if(state.items.length>180)state.items=state.items.slice(-180);
 }
 
 function jsonpRequest(url,callbackName){
@@ -2432,55 +2363,18 @@ function jsonpRequest(url,callbackName){
   });
 }
 
-async function initialSync(){
-  if(state.syncing)return;
-  if(!navigator.onLine){
-    state.online=false;
-    updateConnectionDot();
-    return;
-  }
-
-  state.syncing=true;
-
-  const cb=
-    "weddingInitial_"+
-    Date.now()+"_"+
-    Math.floor(Math.random()*10000);
-
+async function loadPresetConfig(){
+  const cb="weddingPreset_"+Date.now()+"_"+Math.floor(Math.random()*10000);
   try{
-    const url=
-      CONFIG.endpoint+
-      "?mode=initial"+
-      "&callback="+encodeURIComponent(cb)+
-      "&t="+Date.now();
-
+    const url=CONFIG.endpoint+"?mode=presetConfig&callback="+encodeURIComponent(cb)+"&t="+Date.now();
     const data=await jsonpRequest(url,cb);
-
     if(data&&data.ok&&Array.isArray(data.items)){
-      process(data.items);
-      state.online=true;
-      state.pollDelay=CONFIG.minPollInterval;
-      state.consecutiveFailures=0;
-      state.pausedUntil=0;
-    }else{
-      throw new Error(
-        data&&data.error
-          ? data.error
-          : "Invalid initial response"
-      );
+      setupPresetSlideshow(data.items);
+      return;
     }
+    throw new Error(data&&data.error?data.error:"Invalid presetConfig response");
   }catch(err){
-    state.online=navigator.onLine!==false;
-    state.consecutiveFailures++;
-    if(state.consecutiveFailures>=CONFIG.maxConsecutiveFailures){
-      state.pausedUntil=Date.now()+CONFIG.failurePause;
-      console.warn("網路權限或 Apps Script 暫時無法存取，暫停自動重試 60 秒。",err);
-    }else{
-      console.warn("初始資料載入失敗",err);
-    }
-  }finally{
-    state.syncing=false;
-    updateConnectionDot();
+    console.warn("婚紗照設定載入失敗，賓客即時同步仍會繼續。",err);
   }
 }
 
@@ -2667,29 +2561,15 @@ createPetals();
 
 updateConnectionDot();
 
-// 先讓畫面完整出現，再在背景連線 Apps Script。
-// 不讓 API 啟動時間卡住婚禮畫面的顯示。
+// Poll-only 啟動：presetConfig 只呼叫一次；poll 負責新的賓客資料。
+// 兩者互不等待，婚紗照圖片會由瀏覽器逐張載入。
 requestAnimationFrame(()=>{
-  initialSync();
+  loadPresetConfig();
+  poll();
 });
 
-/*
- * 每 2.2 秒播放一筆新資料.
- * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
- */
 setInterval(showNextQueued,CONFIG.queueInterval);
 
-/*
- * Poll 使用 setTimeout + adaptive backoff。
- * 正常狀態正常約 3 秒一次；斷線 / Apps Script 暫時失敗會自動放慢。
- * 若連續失敗，會暫停一段時間，避免瀏覽器反覆觸發網路權限提示。
- */
-schedulePoll();
-
-/*
- * 時間文字直接從卡片自己的 data-item-id 找資料，
- * 不依賴 children index，避免卡片淘汰後對錯資料。
- */
 setInterval(()=>{
   document.querySelectorAll(".live-time").forEach(el=>{
     const card=el.closest(".live-card");
