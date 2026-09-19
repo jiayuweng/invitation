@@ -34,6 +34,37 @@ html,body{
   background:radial-gradient(circle at 50% 46%,transparent 28%,rgba(0,0,0,.22) 100%);
 }
 
+/* ---------- header ---------- */
+.brand{
+  position:absolute;z-index:20;top:15.5%;left:50%;
+  transform:translateX(-50%);text-align:center;
+  color:var(--cream);white-space:nowrap;
+  text-shadow:0 4px 20px rgba(0,0,0,.55);
+}
+.brand b{
+  display:block;
+  font-family:"Baskerville","Times New Roman",serif;
+  font-size:clamp(34px,4.3vw,72px);
+  line-height:1.05;font-weight:500;font-style:italic;
+  letter-spacing:-.025em;
+}
+.brand span{
+  display:block;margin-top:13px;
+  font-family:"Times New Roman",serif;
+  font-size:clamp(10px,1.1vw,18px);
+  letter-spacing:.42em;
+}
+.brand .divider{
+  width:130px;height:1px;margin:18px auto 0;
+  background:rgba(255,238,208,.72);position:relative;
+}
+.brand .divider:after{
+  content:"♡";position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-55%);
+  padding:0 10px;background:transparent;
+  color:#fff1d9;font-size:17px;
+}
+
 /* ---------- QR ---------- */
 .qr{
   position:absolute;z-index:30;right:2.2vw;top:3.2vh;
@@ -44,6 +75,20 @@ html,body{
 }
 .qr img{display:block;width:92px;height:92px;margin:auto}
 .qr span{display:block;margin-top:5px;font-size:12px;font-weight:700;line-height:1.3}
+
+/* ---------- center intro ---------- */
+.center-copy{
+  position:absolute;z-index:7;left:50%;top:39%;
+  transform:translateX(-50%);width:min(460px,34vw);
+  text-align:center;color:#fff0d7;
+  text-shadow:0 3px 14px rgba(0,0,0,.5);
+  pointer-events:none;
+}
+.center-copy .cn{
+  font-size:clamp(23px,2.1vw,38px);
+  line-height:1.55;letter-spacing:.08em;
+}
+.center-copy .cn.small{margin-top:3px}
 
 /* ---------- center live feed ---------- */
 .live-feed{
@@ -128,16 +173,6 @@ html,body{
   display:block;width:100%;aspect-ratio:1/1.08;object-fit:cover;
   background:#ddd;
 }
-/* 橫式照片自動使用橫向相框 */
-.polaroid.landscape{
-  width:210px;
-}
-.polaroid.landscape img{
-  aspect-ratio:3/2;
-}
-.polaroid.square{
-  width:165px;
-}
 .polaroid .heart{
   position:absolute;right:7px;bottom:5px;
   color:#f39aa0;font-size:22px;text-shadow:0 2px 4px rgba(0,0,0,.15)
@@ -180,6 +215,40 @@ html,body{
   animation:petalFall var(--dur) linear infinite;
 }
 
+/* ---------- bottom handwritten-style copy ---------- */
+.bottom-copy{
+  position:absolute;z-index:15;left:7%;bottom:10%;
+  color:#fff0d7;text-shadow:0 3px 12px rgba(0,0,0,.55);
+  font-size:clamp(19px,2vw,34px);line-height:1.6;
+  transform:rotate(-3deg);
+}
+.bottom-copy:after{
+  content:"";display:block;width:90px;height:35px;
+  border-bottom:2px solid rgba(255,240,215,.85);
+  border-radius:50%;transform:rotate(-7deg);
+}
+.upload-copy{
+  position:absolute;z-index:15;right:7%;bottom:10%;
+  max-width:260px;color:#fff0d7;text-shadow:0 3px 12px rgba(0,0,0,.55);
+  font-size:clamp(17px,1.55vw,28px);line-height:1.6;
+  transform:rotate(3deg);
+}
+.upload-copy .arrow{
+  font-size:45px;line-height:.6;display:block;text-align:right;
+  transform:rotate(-18deg);margin-bottom:6px;
+}
+
+/* ---------- reminder ---------- */
+.reminder{
+  position:absolute;z-index:25;left:50%;bottom:3%;
+  transform:translateX(-50%);
+  padding:9px 18px;border-radius:18px;
+  background:rgba(32,24,20,.62);
+  border:1px solid rgba(255,245,225,.25);
+  color:#fff0d7;font-size:15px;
+  animation:remind 5s ease both;pointer-events:none;
+}
+
 /* ---------- animations ---------- */
 @keyframes cardIn{
   from{opacity:0;transform:translateY(28px) scale(.97)}
@@ -190,24 +259,12 @@ html,body{
   to{opacity:0;transform:translateY(-55px) scale(.98)}
 }
 @keyframes polaroidIn{
-  from{
-    opacity:0;
-    transform:translate3d(0,25px,0) scale(.82) rotate(var(--rot))
-  }
-  to{
-    opacity:1;
-    transform:translate3d(0,0,0) scale(var(--scale,1)) rotate(var(--rot))
-  }
+  from{opacity:0;transform:translateY(25px) scale(.9) rotate(var(--rot))}
+  to{opacity:1;transform:rotate(var(--rot))}
 }
 @keyframes polaroidOutUp{
-  0%{
-    opacity:1;
-    transform:translate3d(0,0,0) scale(var(--scale,1)) rotate(var(--rot))
-  }
-  100%{
-    opacity:0;
-    transform:translate3d(var(--float-x,0px),-28vh,0) scale(.90) rotate(var(--rot))
-  }
+  0%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(var(--rot))}
+  100%{opacity:0;transform:translate3d(var(--float-x,0px),-28vh,0) scale(.92) rotate(var(--rot))}
 }
 @keyframes guestPhotoIn{
   from{opacity:0;transform:translate3d(0,35px,0) scale(.82) rotate(var(--rot))}
@@ -238,6 +295,11 @@ html,body{
 }
 
 @media(max-width:900px){
+  .brand{top:9%}
+  .brand b{font-size:clamp(29px,7vw,52px)}
+  .brand span{font-size:10px;letter-spacing:.32em}
+  .center-copy{top:30%;width:80vw}
+  .center-copy .cn{font-size:20px}
   .live-feed{top:50%;width:88vw;max-height:40vh}
   .live-card{min-height:62px;padding:7px 10px;border-radius:19px}
   .avatar{width:39px;height:39px}
@@ -245,22 +307,25 @@ html,body{
   .live-text{font-size:14px}
   .live-time{display:none}
   .polaroid{width:100px;padding:7px 7px 20px}
-  .polaroid.landscape{width:135px}
-  .polaroid.square{width:112px}
   .float-msg{max-width:145px;padding:8px 11px}
   .float-msg .words{font-size:12px}
-  .bottom-copy,  .qr{width:77px;right:9px;top:9px;padding:5px}
+  .bottom-copy,.upload-copy{font-size:15px}
+  .qr{width:77px;right:9px;top:9px;padding:5px}
   .qr img{width:64px;height:64px}
   .qr span{font-size:9px}
 }
 @media(max-width:520px){
+  .brand{top:8%}
+  .center-copy{display:none}
   .live-feed{top:42%;max-height:48vh}
   .live-card{min-height:57px}
   .live-name{font-size:11px}
   .live-text{font-size:13px}
   .live-thumb{width:43px;height:43px}
   .polaroid:nth-child(n+3){display:none}
-  }
+  .bottom-copy{left:4%;bottom:7%}
+  .upload-copy{right:4%;bottom:7%;max-width:160px}
+}
 
 /* ---------- live stability ---------- */
 .live-card.queued{
@@ -281,17 +346,37 @@ html,body{
 <body>
 <main class="wall">
   <i class="connection-dot" id="connectionDot" aria-hidden="true"></i>
-</div>
+
+  <div class="brand">
+    <b>Yu-Ming &amp; Jia-Yu</b>
+    <span>OUR WEDDING DAY</span>
+    <div class="divider"></div>
+  </div>
 
   <a class="qr" href="https://jiayuweng.github.io/invitation/upload.html" target="_blank" rel="noopener">
     <img src="https://quickchart.io/qr?size=220&amp;text=https%3A%2F%2Fjiayuweng.github.io%2Finvitation%2Fupload.html" alt="QR Code">
     <span>掃碼上傳照片<br>留下祝福</span>
   </a>
+
+  <div class="center-copy">
+    <div class="cn">謝謝你們</div>
+    <div class="cn small">讓這一天更美好 ♡</div>
   </div>
 
   <section class="live-feed" id="liveFeed"></section>
   <section class="floating-layer" id="polaroidLayer"></section>
   <section class="floating-layer" id="floatingLayer"></section>
+
+  <div class="bottom-copy">
+    每一張照片<br>
+    都是珍貴的回憶 ♡
+  </div>
+
+  <div class="upload-copy">
+    <span class="arrow">↗</span>
+    歡迎上傳照片<br>
+    留下你的祝福 ♡
+  </div>
 </main>
 
 <script>
@@ -300,7 +385,10 @@ const CONFIG={
   pollInterval:1000,
   maxCards:5,
   maxPolaroids:6,
-  minPresetPhotos:3,
+  burstMaxPolaroids:10,
+  burstQueueThreshold:3,
+  minPresetPolaroids:3,
+  maxPresetPolaroids:6,
   maxBubbles:7,
 
   // 多人同時上傳時，一筆一筆播放，避免全部疊在一起
@@ -312,8 +400,6 @@ const CONFIG={
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
   minPollInterval:1000,
   maxPollInterval:15000,
-  // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
-  jsonpTimeout:60000,
 
   // 婚紗照輪播
   presetSlideInterval:5000,
@@ -335,15 +421,12 @@ const state={
   initial:true,
   syncing:false,
 
-  // 新資料佇列
+  // 新資料佇列：照片與純文字分開，照片優先
   displayQueue:[],
+  photoQueue:[],
 
   // 避免長時間運作時 Set 無限增長
   knownOrder:[],
-
-  // 初次同步完成後的資料時間水位。
-  // 後續只接受比這個時間更新的資料，避免舊訊息重播。
-  watermarkTime:0,
 
   // 網路 / polling 狀態
   online:navigator.onLine!==false,
@@ -392,7 +475,8 @@ function timeText(t){
 
 function addCard(item){
   const message=textOf(item);
-  if(!message && !item.url)return;
+  // 純文字不進主畫面卡片；只有有照片的事件才進主畫面
+  if(!item.url)return;
 
   const el=document.createElement("article");
   el.className="live-card queued";
@@ -457,27 +541,6 @@ function addCard(item){
   },CONFIG.messageDisplayTime);
 }
 
-function applyPhotoOrientation(el,img){
-  if(!el || !img)return;
-
-  const apply=()=>{
-    const w=img.naturalWidth || 0;
-    const h=img.naturalHeight || 0;
-    if(!w || !h)return;
-
-    el.classList.remove("landscape","square");
-
-    if(w / h > 1.15){
-      el.classList.add("landscape");
-    }else if(Math.abs(w / h - 1) < 0.15){
-      el.classList.add("square");
-    }
-  };
-
-  if(img.complete) apply();
-  else img.addEventListener("load",apply,{once:true});
-}
-
 function addPolaroid(item){
   if(!item.url)return;
 
@@ -485,33 +548,57 @@ function addPolaroid(item){
   el.className="polaroid guest-photo";
 
   /*
-   * 上傳照片也使用避讓演算法，避免跟婚紗照疊在一起。
-   * 暫時先加入 DOM，計算位置後再顯示。
+   * 每次隨機選擇左右區域，再在區域內隨機位置。
+   * 中央主視覺保留給新人與祝福，不讓賓客照片蓋住中心。
    */
-  polaroidLayer.appendChild(el);
+  const side=Math.random()<0.5 ? "left" : "right";
 
-  const pos=randomPresetPosition();
+  let left, top;
 
-  el.style.left=pos.left;
-  el.style.top=pos.top;
-  el.style.setProperty("--rot",pos.rot);
+  if(side==="left"){
+    left=(3+Math.random()*22);
+    top=(10+Math.random()*68);
+  }else{
+    left=(75+Math.random()*21);
+    top=(10+Math.random()*68);
+  }
+
+  const rot=(-10+Math.random()*20);
+  const scale=(0.88+Math.random()*0.22);
+
+  el.style.left=left+"%";
+  el.style.top=top+"%";
+  el.style.setProperty("--rot",rot+"deg");
   el.style.setProperty("--float-x",((-35+Math.random()*70))+"px");
-  el.style.setProperty("--scale",pos.scale);
+  el.style.setProperty("--scale",scale);
+
+  /*
+   * 避免太靠近 QR Code。
+   */
+  if(top<20 && side==="right"){
+    el.style.top=(22+Math.random()*52)+"%";
+  }
 
   el.innerHTML=
     '<img src="'+esc(item.url)+'" alt="">'+
     '<span class="heart">♡</span>';
 
-  applyPhotoOrientation(el,el.querySelector("img"));
+  polaroidLayer.appendChild(el);
 
   /*
-   * 上傳照片最多保留 6 張。
+   * 平常最多 6 張；如果照片佇列開始堆積，暫時放寬到 10 張。
+   * 這樣大量賓客同時上傳時，不會讓新照片一直等候。
    */
   const guests=polaroidLayer.querySelectorAll(".guest-photo");
+  const burstMode=state.photoQueue.length>=CONFIG.burstQueueThreshold;
+  const capacity=burstMode?CONFIG.burstMaxPolaroids:CONFIG.maxPolaroids;
 
-  if(guests.length>CONFIG.maxPolaroids){
+  if(guests.length>capacity){
     const old=guests[0];
-    if(old)old.remove();
+    if(old){
+      old.classList.add("leaving");
+      setTimeout(()=>{if(old.isConnected)old.remove()},500);
+    }
   }
 
   /*
@@ -617,286 +704,20 @@ function addBubble(item){
    - 換下一張後淡入
 ========================================================= */
 
+const presetPositions=[
+  {left:"3%",top:"31%",rot:"-8deg"},
+  {left:"19%",top:"6%",rot:"8deg"},
+  {right:"19%",top:"18%",rot:"-7deg"},
+  {right:"3%",top:"38%",rot:"8deg"},
+  {right:"16%",bottom:"8%",rot:"-6deg"},
+  {left:"8%",bottom:"7%",rot:"6deg"}
+];
+
 const presetShowcase={
   items:[],
-  active:[],
-  timer:null,
-  nextIndex:0,
-  shownHistory:[],
-  historyLimit:0
+  slots:[],
+  timer:null
 };
-
-/*
- * 婚紗照位置：
- * 每次出現都重新隨機，不固定六個格子。
- * 中央保留給新人主視覺，照片主要分布在四周。
- */
-function randomPresetPosition(){
-  /*
-   * 不再只靠「隨機」：
-   * 每次會產生多個候選位置，檢查是否與畫面上其他照片太接近。
-   * 找到不重疊的位置才使用。
-   *
-   * 座標使用百分比，所以手機 / 平板 / 大螢幕都會跟著縮放。
-   */
-  const zones=[
-    {left:3,  top:8,  width:19, height:22},
-    {left:22, top:5,  width:17, height:23},
-    {left:3,  top:34, width:19, height:24},
-    {left:22, top:67, width:17, height:22},
-
-    {left:77, top:7,  width:19, height:22},
-    {left:72, top:33, width:19, height:24},
-    {left:79, top:62, width:18, height:23},
-    {left:60, top:68, width:17, height:21}
-  ];
-
-  /*
-   * Polaroid 大約佔畫面 14~18% 寬、20~25% 高。
-   * margin 讓照片之間不要貼太近。
-   */
-  const photoW=15;
-  const photoH=22;
-  const gap=2.5;
-
-  const occupied=[];
-
-  presetShowcase.active.forEach(entry=>{
-    if(!entry.el || !entry.el.isConnected)return;
-
-    const left=parseFloat(entry.el.style.left);
-    const top=parseFloat(entry.el.style.top);
-
-    if(!isNaN(left) && !isNaN(top)){
-      occupied.push({
-        left,
-        top,
-        right:left+photoW,
-        bottom:top+photoH
-      });
-    }
-  });
-
-  /*
-   * 賓客剛上傳的照片也算進避讓範圍，
-   * 避免婚紗照跟賓客照片完全疊在一起。
-   */
-  polaroidLayer.querySelectorAll(".guest-photo").forEach(el=>{
-    const left=parseFloat(el.style.left);
-    const top=parseFloat(el.style.top);
-
-    if(!isNaN(left) && !isNaN(top)){
-      occupied.push({
-        left,
-        top,
-        right:left+photoW,
-        bottom:top+photoH
-      });
-    }
-  });
-
-  function overlaps(a,b){
-    return !(
-      a.right+gap < b.left ||
-      a.left-gap > b.right ||
-      a.bottom+gap < b.top ||
-      a.top-gap > b.bottom
-    );
-  }
-
-  /*
-   * 最多嘗試 80 次。
-   * 找不到完全不重疊的位置，就選「重疊面積最小」的候選。
-   */
-  let best=null;
-  let bestScore=Infinity;
-
-  for(let i=0;i<80;i++){
-    const zone=
-      zones[Math.floor(Math.random()*zones.length)];
-
-    const left=
-      zone.left+
-      Math.random()*Math.max(0,zone.width-photoW);
-
-    const top=
-      zone.top+
-      Math.random()*Math.max(0,zone.height-photoH);
-
-    const candidate={
-      left,
-      top,
-      right:left+photoW,
-      bottom:top+photoH
-    };
-
-    let score=0;
-    let collision=false;
-
-    occupied.forEach(other=>{
-      const xOverlap=
-        Math.max(
-          0,
-          Math.min(candidate.right,other.right)-
-          Math.max(candidate.left,other.left)
-        );
-
-      const yOverlap=
-        Math.max(
-          0,
-          Math.min(candidate.bottom,other.bottom)-
-          Math.max(candidate.top,other.top)
-        );
-
-      const area=xOverlap*yOverlap;
-
-      if(area>0){
-        collision=true;
-        score+=area;
-      }
-
-      /*
-       * 即使沒有真正重疊，也把太近的位置視為扣分。
-       */
-      const cx=(candidate.left+candidate.right)/2;
-      const cy=(candidate.top+candidate.bottom)/2;
-      const ox=(other.left+other.right)/2;
-      const oy=(other.top+other.bottom)/2;
-
-      const dx=Math.abs(cx-ox);
-      const dy=Math.abs(cy-oy);
-
-      if(dx<photoW+gap && dy<photoH+gap){
-        score+=(photoW+gap-dx)*0.35;
-        score+=(photoH+gap-dy)*0.35;
-      }
-    });
-
-    if(!collision && score<bestScore){
-      bestScore=score;
-      best=candidate;
-    }
-
-    if(!collision && score<1){
-      best=candidate;
-      break;
-    }
-  }
-
-  /*
-   * 萬一畫面已經很多照片，仍然保證有位置可用。
-   */
-  if(!best){
-    const zone=zones[
-      Math.floor(Math.random()*zones.length)
-    ];
-
-    best={
-      left:zone.left+
-        Math.random()*Math.max(0,zone.width-photoW),
-      top:zone.top+
-        Math.random()*Math.max(0,zone.height-photoH)
-    };
-  }
-
-  return {
-    left:best.left+"%",
-    top:best.top+"%",
-    rot:(-10+Math.random()*20)+"deg",
-    scale:(0.86+Math.random()*0.24).toFixed(2)
-  };
-}
-function createPresetPhoto(item,animate=true){
-  if(!item || !item.url)return null;
-
-  const el=document.createElement("div");
-  el.className="polaroid preset-slide";
-
-  const pos=randomPresetPosition();
-
-  el.style.left=pos.left;
-  el.style.top=pos.top;
-  el.style.setProperty("--rot",pos.rot);
-  el.style.setProperty("--scale",pos.scale);
-  el.style.setProperty(
-    "--float-x",
-    (-50+Math.random()*100)+"px"
-  );
-
-  el.innerHTML=
-    '<img src="'+esc(item.url)+'" alt="">'+
-    '<span class="heart">♡</span>';
-
-  applyPhotoOrientation(el,el.querySelector("img"));
-
-  polaroidLayer.appendChild(el);
-
-  if(!animate){
-    el.style.animation="none";
-    el.style.opacity="1";
-    el.style.transform=
-      "scale("+pos.scale+") rotate("+pos.rot+")";
-  }
-
-  /*
-   * 圖片如果要消失，統一「往上飄＋淡出」。
-   */
-  el.addEventListener("animationend",(ev)=>{
-    if(ev.animationName==="polaroidOutUp"){
-      if(el.isConnected)el.remove();
-    }
-  });
-
-  return el;
-}
-
-function getNextPresetItem(){
-  const items=presetShowcase.items.filter(x=>x && x.url);
-  if(!items.length)return null;
-
-  // 先排除目前正在畫面上的照片，避免同一張同時出現
-  const activeItems=new Set(
-    presetShowcase.active
-      .filter(entry=>entry && entry.el && entry.el.isConnected)
-      .map(entry=>entry.item)
-  );
-
-  let candidates=items.filter(item=>!activeItems.has(item));
-
-  // 再排除最近已經顯示過的照片，盡量避免短時間重複
-  const history=presetShowcase.shownHistory || [];
-  const fresh=candidates.filter(item=>!history.includes(item));
-
-  if(fresh.length){
-    candidates=fresh;
-  }else if(!candidates.length){
-    // 所有照片都在畫面上時，允許從全部照片重新挑選
-    candidates=items.filter(item=>!history.includes(item));
-
-    if(!candidates.length){
-      // 整輪都播完了，重新開始一輪，但仍避開目前畫面上的照片
-      presetShowcase.shownHistory=[];
-      candidates=items.filter(item=>!activeItems.has(item));
-    }
-  }
-
-  if(!candidates.length)return null;
-
-  const item=candidates[Math.floor(Math.random()*candidates.length)];
-
-  presetShowcase.shownHistory.push(item);
-
-  // 保留最近一段播放紀錄，避免照片很快再次出現
-  const limit=Math.max(1,presetShowcase.historyLimit || items.length);
-  if(presetShowcase.shownHistory.length>limit){
-    presetShowcase.shownHistory.splice(
-      0,
-      presetShowcase.shownHistory.length-limit
-    );
-  }
-
-  return item;
-}
 
 function setupPresetSlideshow(presets){
   presetShowcase.items=Array.isArray(presets)
@@ -905,65 +726,98 @@ function setupPresetSlideshow(presets){
 
   if(!presetShowcase.items.length)return;
 
-  presetShowcase.active=[];
+  presetShowcase.slots=[];
 
-  /*
-   * 初始不是固定六張：
-   * 隨機 3～6 張。
-   */
-  const max=Math.min(
-    CONFIG.maxPolaroids,
+  const wantedCount=
+    CONFIG.minPresetPolaroids +
+    Math.floor(Math.random() * (CONFIG.maxPresetPolaroids-CONFIG.minPresetPolaroids+1));
+
+  const count=Math.min(
+    wantedCount,
     presetShowcase.items.length
   );
 
-  const min=Math.min(
-    CONFIG.minPresetPhotos,
-    max
-  );
+  for(let i=0;i<count;i++){
+    const slot={
+      index:i,
+      itemIndex:i%presetShowcase.items.length,
+      el:null
+    };
 
-  const initialCount=
-    min + Math.floor(Math.random()*(max-min+1));
+    const el=document.createElement("div");
+    el.className="polaroid preset-slide";
 
-  presetShowcase.shownHistory=[];
-  presetShowcase.historyLimit=Math.max(
-    presetShowcase.items.length,
-    CONFIG.maxPolaroids*2
-  );
+    const pos=presetPositions[
+      i%presetPositions.length
+    ];
 
-  for(let i=0;i<initialCount;i++){
-    const item=getNextPresetItem();
-    if(!item)break;
+    Object.entries(pos).forEach(([k,v])=>{
+      el.style.setProperty(k,v);
+    });
+    el.style.setProperty("--rot",pos.rot);
 
-    const el=createPresetPhoto(item,false);
+    polaroidLayer.appendChild(el);
 
-    if(el){
-      presetShowcase.active.push({
-        item,
-        el
-      });
-    }
+    slot.el=el;
+    presetShowcase.slots.push(slot);
+
+    renderPresetSlot(slot,false);
   }
 
-  /*
-   * 每 5 秒做一次「隨機變化」。
-   * 有新資料時，優先補進空位；
-   * 沒有新資料時，隨機讓一張淡出，
-   * 但永遠維持至少 3 張。
-   */
   if(presetShowcase.timer){
     clearInterval(presetShowcase.timer);
   }
 
   presetShowcase.timer=setInterval(
-    refreshPresetPhotos,
+    rotateOnePreset,
     CONFIG.presetSlideInterval
   );
 }
 
-function removePresetEntry(entry){
-  if(!entry || !entry.el)return;
+function renderPresetSlot(slot,animate){
+  const item=
+    presetShowcase.items[
+      slot.itemIndex%presetShowcase.items.length
+    ];
 
-  const el=entry.el;
+  const el=slot.el;
+  if(!el||!item)return;
+
+  const pos=presetPositions[
+    slot.index%presetPositions.length
+  ];
+
+  el.style.setProperty("--rot",pos.rot);
+
+  el.innerHTML=
+    '<img src="'+esc(item.url)+'" alt="">'+
+    '<span class="heart">♡</span>';
+
+  el.dataset.itemId=keyOf(item);
+  el.classList.remove("leaving");
+
+  if(!animate)return;
+
+  el.style.animation="none";
+  void el.offsetWidth;
+  el.style.animation="polaroidIn .8s ease both";
+}
+
+function rotateOnePreset(){
+  if(!presetShowcase.items.length)return;
+
+  // 每次只換一張，畫面會一直有照片，不會全部同時消失
+  const slot=
+    presetShowcase.slots[
+      rotateOnePreset.counter%
+      presetShowcase.slots.length
+    ];
+
+  rotateOnePreset.counter++;
+
+  if(!slot||!slot.el)return;
+
+  const el=slot.el;
 
   el.classList.remove("leaving");
   el.style.animation="none";
@@ -971,98 +825,15 @@ function removePresetEntry(entry){
   el.classList.add("leaving");
 
   setTimeout(()=>{
-    if(el.isConnected)el.remove();
+    slot.itemIndex=
+      (slot.itemIndex+1)%
+      presetShowcase.items.length;
 
-    const idx=presetShowcase.active.indexOf(entry);
-    if(idx>=0){
-      presetShowcase.active.splice(idx,1);
-    }
+    renderPresetSlot(slot,true);
   },CONFIG.presetFadeDuration);
 }
 
-function addPresetPhoto(item){
-  const el=createPresetPhoto(item,true);
-
-  if(el){
-    presetShowcase.active.push({
-      item,
-      el
-    });
-  }
-}
-
-function refreshPresetPhotos(){
-  const items=presetShowcase.items;
-
-  if(!items.length)return;
-
-  // 只計算目前真正還在畫面上的婚紗照
-  const candidates=
-    presetShowcase.active.filter(x=>x.el && x.el.isConnected);
-
-  const activeCount=candidates.length;
-
-  /*
-   * 婚紗照數量採「一步一張」的隨機變化：
-   *
-   * 3 張：大多數情況增加，偶爾維持
-   * 4~5 張：可能增加、維持或減少
-   * 6 張：只會維持或減少
-   *
-   * 因此不會再出現「只要少於 6 張就立刻補滿」的問題。
-   * 整體數量會自然在 3~6 張之間流動。
-   */
-  let action;
-
-  if(activeCount<=CONFIG.minPresetPhotos){
-    // 3 張時：70% 增加、30% 維持
-    action=Math.random()<0.70 ? "add" : "keep";
-  }else if(activeCount>=CONFIG.maxPolaroids){
-    // 6 張時：45% 移除、55% 維持
-    action=Math.random()<0.45 ? "remove" : "keep";
-  }else{
-    // 4~5 張：增加 / 維持 / 減少
-    const r=Math.random();
-
-    if(r<0.30){
-      action="add";
-    }else if(r<0.65){
-      action="keep";
-    }else{
-      action="remove";
-    }
-  }
-
-  // 維持目前數量
-  if(action==="keep"){
-    return;
-  }
-
-  // 增加一張新的婚紗照
-  if(action==="add"){
-    const item=getNextPresetItem();
-
-    if(item){
-      addPresetPhoto(item);
-    }
-
-    return;
-  }
-
-  // 移除一張，但永遠不低於 3 張
-  if(action==="remove"){
-    if(activeCount<=CONFIG.minPresetPhotos){
-      return;
-    }
-
-    const old=
-      candidates[Math.floor(Math.random()*candidates.length)];
-
-    removePresetEntry(old);
-
-    return;
-  }
-}
+rotateOnePreset.counter=0;
 
 function rememberKey(id){
   if(state.known.has(id))return false;
@@ -1080,96 +851,56 @@ function rememberKey(id){
 }
 
 function queueNewItem(item){
-  state.displayQueue.push(item);
+  if(!item)return;
+
+  // 有照片：進照片優先佇列
+  if(item.url){
+    state.photoQueue.push(item);
+
+    // 照片＋文字：文字直接跟著顯示，不再另外排隊
+    if(textOf(item)) addBubble(item);
+    return;
+  }
+
+  // 純文字：直接在旁邊顯示，不阻塞照片
+  if(textOf(item)) addBubble(item);
 }
 
 function showNextQueued(){
-  if(!state.displayQueue.length)return;
+  if(!state.photoQueue.length)return;
 
-  const item=state.displayQueue.shift();
+  const item=state.photoQueue.shift();
 
+  // 照片立即進場；不等純文字播放完
   addCard(item);
-
-  if(item.url){
-    addPolaroid(item);
-  }
-
-  if(item.text){
-    addBubble(item);
-  }
+  addPolaroid(item);
 }
 
 function process(items){
   if(!Array.isArray(items))return;
 
-  const normalized=items.map(normalize);
   const fresh=[];
 
-  /*
-   * 非常重要：
-   * initial 回傳的是「歷史資料快照」，只拿來建立初始畫面。
-   * 記住當下資料中最新的時間，之後 polling 只接受
-   * time 嚴格大於這個時間的資料。
-   *
-   * 這樣即使：
-   * - known Set 因長時間播放而淘汰舊 ID
-   * - 網路斷線後重新抓回最近 30 筆
-   * - 分頁切回前景又重新 poll
-   *
-   * 舊祝福都不會再次進入播放佇列。
-   */
-  if(state.initial){
-    let maxInitialTime=0;
+  items.map(normalize).forEach(item=>{
+    const id=keyOf(item);
 
-    normalized.forEach(item=>{
-      const t=Number(item.time)||0;
-      if(t>maxInitialTime)maxInitialTime=t;
+    if(!rememberKey(id))return;
 
-      const id=keyOf(item);
-      if(!rememberKey(id))return;
+    state.items.push(item);
+    fresh.push(item);
+  });
 
-      state.items.push(item);
-      fresh.push(item);
-    });
-
-    state.watermarkTime=maxInitialTime;
-  }else{
-    normalized.forEach(item=>{
-      const id=keyOf(item);
-      const t=Number(item.time)||0;
-
-      /*
-       * 只接受 initial 快照之後真正新增的資料。
-       * preset 是靜態婚紗照，不應該在 polling 時重新播放。
-       */
-      if(item.kind==="preset")return;
-      if(t<=state.watermarkTime)return;
-      if(!rememberKey(id))return;
-
-      state.items.push(item);
-      fresh.push(item);
-
-      if(t>state.watermarkTime){
-        state.watermarkTime=t;
-      }
-    });
-
-    // 後續真正的新資料才進播放佇列
-    fresh.forEach(queueNewItem);
-  }
-
-  /*
-   * 初次載入：
-   * - 婚紗照交給「輪播器」
-   * - 歷史祝福只建立資料，不進播放佇列
-   */
   if(state.initial){
     setupPresetSlideshow(
       fresh.filter(x=>x.kind==="preset")
     );
+  }else{
+    // 後續資料：照片優先、純文字獨立顯示
+    fresh
+      .filter(x=>x.kind!=="preset")
+      .forEach(queueNewItem);
   }
 
-  // 限制前端資料量，避免婚禮長時間播放後記憶體持續增加
   if(state.items.length>180){
     state.items=state.items.slice(-180);
   }
@@ -1184,7 +915,7 @@ function jsonpRequest(url,callbackName){
 
     const timeout=setTimeout(()=>{
       finish(new Error("JSONP timeout"));
-    },CONFIG.jsonpTimeout);
+    },CONFIG.maxPollInterval);
 
     function cleanup(){
       clearTimeout(timeout);
@@ -1419,10 +1150,10 @@ updateConnectionDot();
 initialSync();
 
 /*
- * 每 2.2 秒播放一筆新資料。
- * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
+ * 照片優先：正常狀態快速消化；大量照片時維持高流量模式。
+ * 純文字完全不佔用這個佇列。
  */
-setInterval(showNextQueued,CONFIG.queueInterval);
+setInterval(showNextQueued,450);
 
 /*
  * Poll 使用 setTimeout + adaptive backoff。
