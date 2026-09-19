@@ -923,7 +923,7 @@ const CONFIG={
   maxConsecutiveFailures:2,
   failurePause:60000,
   // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
-  jsonpTimeout:10000,
+  jsonpTimeout:60000,
 
   // 婚紗照輪播
   presetSlideInterval:5000,
@@ -1954,7 +1954,85 @@ function jsonpRequest(url,callbackName){
   });
 }
 
-async function initialSync(){
+async function loadPresetConfig(){
+  /*
+   * 固定婚紗照完全獨立於 initial。
+   *
+   * 不讀 Sheet
+   * 不讀 Drive
+   * 不參與 watermarkTime
+   *
+   * Apps Script 只從已建立的婚紗照快取回傳
+   * 40 張設定，因此不會再因 initial 卡住。
+   */
+  const cb =
+    "weddingPresetConfig_" +
+    Date.now() +
+    "_" +
+    Math.floor(Math.random() * 10000);
+
+  try{
+    const url =
+      CONFIG.endpoint +
+      "?mode=presetConfig" +
+      "&callback=" +
+      encodeURIComponent(cb) +
+      "&t=" +
+      Date.now();
+
+    const data =
+      await jsonpRequest(
+        url,
+        cb
+      );
+
+    if(
+      data &&
+      data.ok &&
+      Array.isArray(data.items)
+    ){
+      const presets =
+        data.items.filter(
+          item =>
+            item &&
+            item.url
+        );
+
+      if(presets.length){
+        setupPresetSlideshow(
+          presets
+        );
+
+        console.log(
+          "婚紗照設定載入完成：" +
+          presets.length +
+          " 張"
+        );
+      }else{
+        console.warn(
+          "婚紗照設定為空，請在 Apps Script 執行 refreshPresetPhotoConfig()"
+        );
+      }
+    }else{
+      console.warn(
+        "婚紗照設定回傳格式錯誤",
+        data
+      );
+    }
+
+  }catch(err){
+    /*
+     * 婚紗照失敗不影響賓客留言/照片。
+     */
+    console.warn(
+      "婚紗照設定載入失敗",
+      err
+    );
+  }
+}
+
+
+async function initialSyncLegacy(){
   if(state.syncing)return;
   if(!navigator.onLine){
     state.online=false;
@@ -1994,18 +2072,15 @@ async function initialSync(){
   }catch(err){
     state.online=navigator.onLine!==false;
     state.consecutiveFailures++;
-
-    // initial 最多只等 10 秒；失敗後交給 polling，不再卡住近 1 分鐘。
-    console.warn("初始資料載入失敗，改由 polling 繼續嘗試。",err);
-
-    state.pollDelay=CONFIG.minPollInterval;
-    state.pausedUntil=0;
+    if(state.consecutiveFailures>=CONFIG.maxConsecutiveFailures){
+      state.pausedUntil=Date.now()+CONFIG.failurePause;
+      console.warn("網路權限或 Apps Script 暫時無法存取，暫停自動重試 60 秒。",err);
+    }else{
+      console.warn("初始資料載入失敗",err);
+    }
   }finally{
     state.syncing=false;
     updateConnectionDot();
-
-    // initial 結束後一定安排 polling。
-    schedulePoll();
   }
 }
 
@@ -2190,18 +2265,29 @@ createPetals();
 updateConnectionDot();
 
 /*
- * 先啟動 polling 排程，再執行 initial。
- * initial 最多只等待 10 秒；如果 Apps Script initial 很慢，
- * 網頁不會再繞圈圈近 1 分鐘才報錯。
+ * 婚紗照：獨立從 presetConfig 快取載入。
+ * 不再走 mode=initial。
+ */
+loadPresetConfig();
+
+/*
+ * 賓客留言 / 賓客照片：
+ * 只透過 poll 即時取得。
  */
 schedulePoll();
-initialSync();
 
 /*
  * 每 2.2 秒播放一筆新資料。
  * 如果沒有人上傳，佇列就是空的，不會產生任何額外畫面。
  */
 setInterval(showNextQueued,CONFIG.queueInterval);
+
+/*
+ * Poll 使用 setTimeout + adaptive backoff。
+ * 正常狀態正常約 3 秒一次；斷線 / Apps Script 暫時失敗會自動放慢。
+ * 若連續失敗，會暫停一段時間，避免瀏覽器反覆觸發網路權限提示。
+ */
+schedulePoll();
 
 /*
  * 時間文字直接從卡片自己的 data-item-id 找資料，
