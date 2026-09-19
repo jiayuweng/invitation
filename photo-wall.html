@@ -2254,4 +2254,304 @@ setInterval(()=>{
   transform:rotate(-.7deg);
   box-shadow:none;
 }
+
+/* =========================================================
+   V5 — Japanese hand-drawn paper UI refinement
+   - No jagged/saw-tooth message edges
+   - Taller central message cards
+   - Soft irregular hand-drawn double-line effect
+   - Keeps the existing JavaScript untouched
+   ========================================================= */
+
+.live-feed{
+  width:min(680px,48vw);
+  max-height:32vh;
+  gap:10px;
+}
+
+/* Central message: soft paper card, not a flat/thin strip */
+.live-card{
+  min-height:84px;
+  padding:13px 54px 13px 15px;
+  gap:13px;
+  color:#5d432d;
+
+  background:
+    radial-gradient(ellipse at 12% 18%,rgba(255,255,255,.48),transparent 34%),
+    radial-gradient(ellipse at 88% 78%,rgba(226,197,151,.18),transparent 42%),
+    linear-gradient(180deg,rgba(255,250,235,.94),rgba(245,226,192,.91));
+
+  border:1px solid rgba(112,78,43,.52);
+  border-radius:15px 12px 16px 13px;
+
+  /* soft hand-drawn double-line feeling, without jagged edges */
+  box-shadow:
+    0 8px 20px rgba(48,31,18,.14),
+    inset 0 0 0 1px rgba(255,255,255,.52),
+    inset 0 0 18px rgba(157,119,76,.07);
+
+  clip-path:none;
+  overflow:visible;
+}
+
+/* Slightly imperfect second pencil line */
+.live-card::before{
+  content:"";
+  position:absolute;
+  inset:-4px -3px -3px -4px;
+  z-index:-1;
+  border:1px solid rgba(103,75,47,.28);
+  border-radius:17px 14px 18px 15px;
+  transform:rotate(-.35deg);
+  filter:blur(.15px);
+  pointer-events:none;
+}
+
+/* Small botanical/heart detail — no triangular tail */
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:15px;
+  bottom:12px;
+  color:#c9857e;
+  font-size:23px;
+  line-height:1;
+  text-shadow:0 1px 0 rgba(255,255,255,.7);
+}
+
+/* Make the central content breathe vertically */
+.live-card .live-copy{
+  min-width:0;
+  padding-top:1px;
+}
+
+.live-card .live-name{
+  color:#76573b;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.25;
+}
+
+.live-card .live-text{
+  color:#5c402b;
+  font-size:clamp(15px,1.05vw,18px);
+  line-height:1.45;
+  font-weight:600;
+}
+
+.live-card .live-time{
+  color:#876c50;
+  font-size:12px;
+}
+
+.live-card .live-thumb{
+  width:50px;
+  height:50px;
+  border-radius:10px;
+  border:1px solid rgba(126,91,55,.36);
+  box-shadow:0 2px 8px rgba(66,42,21,.12);
+}
+
+/* Avatar becomes part of the paper illustration */
+.live-card .avatar{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:linear-gradient(145deg,#e7b9aa,#cf9685);
+  border:2px solid rgba(255,249,230,.96);
+  box-shadow:
+    0 2px 7px rgba(70,40,20,.12),
+    0 0 0 1px rgba(126,91,55,.18);
+}
+
+/* Floating blessing/message cards:
+   same paper language, but rounded — no saw-tooth sides */
+.float-msg{
+  max-width:270px;
+  min-width:170px;
+  padding:13px 17px 14px;
+
+  color:#60442c;
+  background:
+    radial-gradient(ellipse at 16% 20%,rgba(255,255,255,.46),transparent 34%),
+    linear-gradient(180deg,rgba(255,248,228,.94),rgba(244,224,188,.91));
+
+  border:1px solid rgba(116,81,47,.48);
+  border-radius:13px 11px 14px 12px;
+
+  box-shadow:
+    0 8px 18px rgba(47,28,14,.13),
+    inset 0 0 0 1px rgba(255,255,255,.48);
+
+  clip-path:none;
+  overflow:visible;
+}
+
+/* Soft offset sketch line instead of a jagged outline */
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:-4px -3px -3px -4px;
+  z-index:-1;
+  border:1px solid rgba(107,77,48,.28);
+  border-radius:15px 13px 16px 14px;
+  transform:rotate(.45deg);
+  filter:blur(.15px);
+  pointer-events:none;
+}
+
+/* Tiny botanical accent */
+.float-msg::after{
+  content:"❧";
+  position:absolute;
+  right:9px;
+  bottom:-7px;
+  color:#87925c;
+  font-size:19px;
+  line-height:1;
+  transform:rotate(-8deg);
+  text-shadow:0 1px 2px rgba(50,30,14,.12);
+}
+
+.float-msg .who{
+  color:#76583d;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.float-msg .words{
+  color:#60432c;
+  font-size:clamp(14px,1vw,17px);
+  line-height:1.42;
+  font-weight:600;
+}
+
+/* Keep the QR and photo-frame line language softer */
+.qr{
+  border-radius:10px 12px 9px 11px;
+  box-shadow:
+    0 8px 20px rgba(43,25,12,.17),
+    inset 0 0 0 1px rgba(255,255,255,.48);
+}
+
+@media (max-width:900px){
+  .live-feed{
+    width:min(680px,72vw);
+    max-height:34vh;
+  }
+  .live-card{
+    min-height:76px;
+    padding:11px 46px 11px 12px;
+  }
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:44px;
+    height:44px;
+  }
+  .live-card .live-text{
+    font-size:14px;
+  }
+}
+
+@media (max-width:560px){
+  .live-feed{
+    width:88vw;
+    max-height:35vh;
+    gap:7px;
+  }
+  .live-card{
+    min-height:68px;
+    padding:9px 39px 9px 10px;
+    gap:9px;
+    border-radius:12px;
+  }
+  .live-card::before{
+    inset:-3px -2px -2px -3px;
+    border-radius:14px;
+  }
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:38px;
+    height:38px;
+  }
+  .live-card .live-name{
+    font-size:11px;
+  }
+  .live-card .live-text{
+    font-size:12px;
+    line-height:1.35;
+  }
+  .live-card .live-time{
+    font-size:10px;
+  }
+  .live-card::after{
+    right:9px;
+    bottom:7px;
+    font-size:18px;
+  }
+  .float-msg{
+    max-width:205px;
+    min-width:135px;
+    padding:10px 13px 11px;
+    border-radius:11px 10px 12px 10px;
+  }
+}
+
+
+/* =========================================================
+   V6 — remove unintended outer/container frame
+   The photo wall should visually fill the whole viewport.
+   ========================================================= */
+
+html,
+body{
+  margin:0 !important;
+  padding:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+
+/* Never draw a page-level rectangular frame */
+.wall,
+.wall::before,
+.wall::after,
+.page,
+.container,
+.scene,
+.app,
+.stage,
+.viewport,
+#app,
+#root,
+main{
+  outline:none !important;
+}
+
+/* The actual artwork remains edge-to-edge */
+.wall{
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+}
+
+/* Do not let focus/selection outlines create a large rectangle */
+*:focus,
+*:focus-visible{
+  outline:none !important;
+}
+
+/* Keep the hand-drawn lines only on the intended UI components */
+.live-card,
+.float-msg,
+.qr,
+.polaroid{
+  outline:none !important;
+}
+
 </style>
