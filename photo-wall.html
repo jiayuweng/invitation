@@ -314,7 +314,7 @@ const CONFIG={
   maxKnown:500,
 
   // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
-  minPollInterval:3000,
+  minPollInterval:1000,
   maxPollInterval:30000,
   maxConsecutiveFailures:2,
   failurePause:60000,
@@ -356,7 +356,12 @@ const state={
   pollTimer:null,
   pollDelay:CONFIG.minPollInterval,
   consecutiveFailures:0,
-  pausedUntil:0
+  pausedUntil:0,
+
+  // 照片大量進入時的暫時擴容狀態
+  recentPhotoTimes:[],
+  photoBurst:false,
+  photoBurstTimer:null
 };
 
 function textOf(item){
