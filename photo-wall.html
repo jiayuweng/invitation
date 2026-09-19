@@ -378,15 +378,33 @@ function keyOf(item){
     ((item.time||"")+"-"+(item.name||"")+"-"+textOf(item)));
 }
 function normalize(item,i){
-  return Object.assign({},item,{
+  const name=String(item.name||"親友");
+  const text=textOf(item);
+  let url=photoUrl(item);
+
+  // ==============================
+  // 測試模式：
+  // TEST 開頭/內容的測試資料若沒有圖片，
+  // 統一補同一張圖片，方便測試：
+  // 「中央圖片訊息 + 旁邊圖片 + 旁邊文字」
+  // 正式非 TEST 資料完全不受影響。
+  // ==============================
+  const isTestItem=/TEST/i.test(name+" "+text);
+  if(isTestItem && !url){
+    url="assets/hero-forest.jpg";
+  }
+
+  const normalized=Object.assign({},item,{
     id:keyOf(item)||("event-"+i),
     sourceId:keyOf(item)||("event-"+i),
-    kind:item.kind||item.type||(photoUrl(item)?"upload":"blessing"),
-    name:String(item.name||"親友"),
-    text:textOf(item),
-    url:photoUrl(item),
+    kind:item.kind||item.type||(url?"upload":"blessing"),
+    name:name,
+    text:text,
+    url:url,
     time:Number(item.time||Date.now())
   });
+
+  return normalized;
 }
 function esc(v){
   return String(v)
