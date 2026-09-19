@@ -451,6 +451,151 @@ html,body{
 }
 .connection-dot.online{background:#cde8c8;opacity:.55}
 .connection-dot.offline{background:#e7b2a8;opacity:.8}
+
+
+/* =========================================================
+   日系手繪線條版 UI
+   只調整視覺 CSS，不改任何 HTML 結構與 JavaScript。
+   ========================================================= */
+
+/* QR：從「厚紙卡」改成淡米色手繪線框 */
+.qr{
+  background:rgba(250,241,216,.78);
+  border:1px solid rgba(91,69,50,.42);
+  border-radius:3px 6px 4px 5px;
+  box-shadow:0 8px 18px rgba(55,35,17,.16), inset 0 0 0 1px rgba(255,255,255,.38);
+}
+.qr::before{
+  inset:-6px -5px -7px -6px;
+  border:1px solid rgba(247,226,187,.9);
+  border-right-color:rgba(91,69,50,.28);
+  border-bottom-color:rgba(91,69,50,.28);
+  box-shadow:none;
+  transform:rotate(-1.3deg);
+}
+.qr::after{
+  width:27px;height:27px;
+  right:-12px;bottom:-11px;
+  font-size:15px;
+  opacity:.92;
+}
+.qr img{
+  background:rgba(255,253,247,.88);
+  border:1px solid rgba(91,69,50,.24);
+}
+
+/* 中央訊息：半透明米色紙 + 雙層手繪線 */
+.live-card{
+  color:#59432f;
+  background:
+    linear-gradient(180deg,rgba(255,248,226,.84),rgba(244,226,192,.68));
+  border:1px solid rgba(91,69,50,.22);
+  border-radius:4px 8px 5px 7px;
+  clip-path:none;
+  box-shadow:0 7px 17px rgba(55,35,17,.13), inset 0 0 0 1px rgba(255,255,255,.32);
+  overflow:visible;
+}
+.live-card::before{
+  left:-5px;bottom:13px;
+  width:17px;height:17px;
+  background:rgba(244,226,192,.82);
+  border-left:1px solid rgba(91,69,50,.24);
+  border-bottom:1px solid rgba(91,69,50,.24);
+}
+.live-card::after{
+  right:14px;bottom:7px;
+  color:#cf8b82;
+  font-size:19px;
+}
+/* 第二條手繪線，故意略微偏移 */
+.live-card > .live-thumb,
+.live-card > .avatar{
+  position:relative;
+}
+.live-card > .live-thumb::after{content:none}
+
+.live-card .live-thumb{
+  border:1px solid rgba(255,249,229,.95);
+  box-shadow:0 2px 5px rgba(66,42,21,.12);
+}
+.avatar{
+  background:rgba(217,151,139,.82);
+  color:#fff8eb;
+  border:1px solid rgba(255,247,226,.9);
+  box-shadow:0 2px 5px rgba(66,42,21,.12);
+}
+.live-name{color:#66503b;text-shadow:0 1px 0 rgba(255,255,255,.55)}
+.live-text{color:#4f3c2c;text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.live-time{color:#806b55}
+
+/* 照片框：拿掉厚重紙卡，改成「手繪雙線相框」 */
+.polaroid{
+  background:rgba(255,249,231,.38);
+  border:1px solid rgba(92,70,49,.42);
+  border-radius:2px 5px 3px 4px;
+  clip-path:none;
+  box-shadow:0 8px 18px rgba(46,27,13,.15);
+}
+.polaroid::before{
+  inset:-6px;
+  border:1px solid rgba(248,224,179,.82);
+  border-right-color:rgba(92,70,49,.38);
+  border-bottom-color:rgba(92,70,49,.30);
+  border-radius:5px 3px 6px 4px;
+  box-shadow:none;
+  transform:rotate(-.75deg);
+}
+.polaroid::after{
+  right:-12px;bottom:-12px;
+  width:29px;height:29px;
+  font-size:15px;
+  opacity:.9;
+  box-shadow:0 1px 4px rgba(50,28,12,.14);
+}
+.polaroid img{
+  background:rgba(234,216,184,.32);
+  border:1px solid rgba(92,70,49,.20);
+}
+.polaroid .heart{
+  color:#f4dfb7;
+  text-shadow:0 1px 0 #765538,0 1px 3px rgba(45,25,10,.18);
+}
+
+/* 旁邊祝福訊息也統一成同一套手繪線框 */
+.float-msg{
+  color:#5c4632;
+  background:rgba(250,239,210,.76);
+  border:1px solid rgba(91,69,50,.34);
+  border-radius:4px 8px 5px 7px;
+  box-shadow:0 7px 15px rgba(47,28,14,.13),inset 0 0 0 1px rgba(255,255,255,.28);
+  clip-path:none;
+}
+.float-msg::before{
+  border-color:rgba(91,69,50,.30);
+  transform:rotate(-.8deg);
+}
+.float-msg::after{
+  border-color:rgba(247,226,187,.82);
+  transform:rotate(.7deg);
+}
+
+/* 小手繪裝飾線：利用 outline 讓各框看起來像手工描過一次 */
+.qr,
+.live-card,
+.polaroid,
+.float-msg{
+  outline:1px solid rgba(255,247,224,.30);
+  outline-offset:2px;
+}
+
+@media(max-width:900px){
+  .live-card{
+    background:rgba(250,239,210,.78);
+    box-shadow:0 6px 14px rgba(55,35,17,.12),inset 0 0 0 1px rgba(255,255,255,.28);
+  }
+  .polaroid{box-shadow:0 6px 14px rgba(46,27,13,.13)}
+}
+
 </style>
 </head>
 <body>
