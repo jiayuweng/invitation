@@ -36,14 +36,81 @@ html,body{
 
 /* ---------- QR ---------- */
 .qr{
-  position:absolute;z-index:30;right:2.2vw;top:3.2vh;
-  width:112px;padding:9px 8px 10px;border-radius:15px;
-  background:rgba(255,255,255,.96);color:#4a382e;
-  text-align:center;text-decoration:none;
-  box-shadow:0 12px 30px rgba(0,0,0,.32);
+  position:absolute;
+  z-index:30;
+  right:2.2vw;
+  top:3.2vh;
+  width:118px;
+  padding:13px 10px 12px;
+  color:#5d432d;
+  text-align:center;
+  text-decoration:none;
+  background:
+    linear-gradient(180deg,rgba(255,249,228,.98),rgba(244,222,181,.96));
+  border:1px solid rgba(120,82,43,.48);
+  border-radius:4px 7px 5px 6px;
+  box-shadow:
+    0 10px 24px rgba(43,25,12,.24),
+    inset 0 0 0 1px rgba(255,255,255,.45);
+  transform:rotate(1deg);
 }
-.qr img{display:block;width:92px;height:92px;margin:auto}
-.qr span{display:block;margin-top:5px;font-size:12px;font-weight:700;line-height:1.3}
+
+/* 不規則手繪雙線外框 */
+.qr::before{
+  content:"";
+  position:absolute;
+  inset:-6px -5px -7px -6px;
+  z-index:-1;
+  border:1.5px solid rgba(250,228,187,.95);
+  border-radius:5px 8px 4px 7px;
+  transform:rotate(-1.2deg);
+  box-shadow:
+    0 0 0 1px rgba(106,72,39,.16),
+    inset 0 0 0 1px rgba(255,255,255,.22);
+  pointer-events:none;
+}
+
+/* 小花角飾 */
+.qr::after{
+  content:"✿";
+  position:absolute;
+  right:-13px;
+  bottom:-12px;
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  color:#fff5d8;
+  font-size:17px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%,#e4a69a 0 15%,transparent 17%),
+    radial-gradient(circle at 50% 18%,#fff5d8 0 25%,transparent 27%),
+    radial-gradient(circle at 82% 50%,#fff5d8 0 25%,transparent 27%),
+    radial-gradient(circle at 50% 82%,#fff5d8 0 25%,transparent 27%),
+    radial-gradient(circle at 18% 50%,#fff5d8 0 25%,transparent 27%);
+  box-shadow:0 2px 5px rgba(54,31,14,.2);
+  pointer-events:none;
+}
+
+.qr img{
+  display:block;
+  width:92px;
+  height:92px;
+  margin:auto;
+  padding:4px;
+  background:#fffdf5;
+  border:1px solid rgba(126,88,48,.28);
+  border-radius:2px;
+}
+.qr span{
+  display:block;
+  margin-top:7px;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.3;
+  letter-spacing:.02em;
+}
 
 /* ---------- center live feed ---------- */
 .live-feed{
@@ -62,54 +129,72 @@ html,body{
   mask-image:linear-gradient(to bottom,transparent 0,black 8%,black 92%,transparent 100%);
 }
 
-.live-card{
+ .live-card{
   position:relative;
   display:flex;
   align-items:center;
   gap:12px;
   min-height:66px;
-  padding:9px 18px 9px 13px;
-  color:#60462f;
+  padding:9px 18px 9px 12px;
+  color:#fff8ed;
   background:
-    linear-gradient(180deg,rgba(255,248,225,.96),rgba(246,224,183,.94));
-  border:1px solid rgba(126,87,46,.42);
-  border-radius:8px 12px 7px 10px;
+    linear-gradient(
+      135deg,
+      rgba(255,248,232,.30),
+      rgba(118,72,51,.30) 52%,
+      rgba(67,48,39,.34)
+    );
+  border:1px solid rgba(255,246,225,.48);
+  border-radius:28px;
   box-shadow:
-    0 7px 16px rgba(48,28,13,.18),
-    inset 0 0 0 1px rgba(255,255,255,.35);
+    0 10px 28px rgba(38,20,12,.20),
+    0 2px 8px rgba(255,244,220,.08),
+    inset 0 1px 0 rgba(255,255,255,.24),
+    inset 0 -1px 0 rgba(35,18,10,.14);
+  backdrop-filter:blur(8px) saturate(115%);
+  -webkit-backdrop-filter:blur(8px) saturate(115%);
   animation:cardIn .7s cubic-bezier(.2,.75,.25,1) both;
+  overflow:visible;
 }
 
-/* 第二層手繪紙張外框 */
+/* 手機聊天泡泡的小尾巴 */
 .live-card::before{
   content:"";
   position:absolute;
-  inset:-4px -3px -3px -4px;
+  left:-6px;
+  bottom:14px;
+  width:14px;
+  height:14px;
+  background:rgba(154,105,79,.31);
+  border-left:1px solid rgba(255,246,225,.40);
+  border-bottom:1px solid rgba(255,246,225,.40);
+  transform:rotate(45deg);
+  border-bottom-left-radius:4px;
   z-index:-1;
-  border:1px solid rgba(255,235,194,.72);
-  border-radius:6px 10px 8px 7px;
-  transform:rotate(-.55deg);
-  pointer-events:none;
 }
 
-/* 右下植物裝飾 */
+/* 右下淡淡的愛心 */
 .live-card::after{
-  content:"❧";
+  content:"♡";
   position:absolute;
-  right:10px;
-  bottom:-5px;
-  color:#7f8d52;
-  font-size:25px;
+  right:12px;
+  bottom:7px;
+  color:rgba(255,231,207,.78);
+  font-size:19px;
   line-height:1;
-  transform:rotate(-8deg);
-  text-shadow:0 1px 2px rgba(54,35,17,.18);
+  text-shadow:0 2px 5px rgba(44,22,12,.24);
   pointer-events:none;
 }
 
-.live-card.fade{opacity:.55}
-.live-card.leaving{
-  animation:cardOutUp .95s ease forwards;
-  pointer-events:none;
+/* 圖片訊息的小縮圖 */
+.live-card .live-thumb{
+  width:48px;
+  height:48px;
+  object-fit:cover;
+  border-radius:14px;
+  flex:none;
+  border:1px solid rgba(255,248,232,.58);
+  box-shadow:0 3px 10px rgba(42,23,13,.18);
 }
 
 .avatar{
@@ -165,58 +250,58 @@ html,body{
 .floating-layer{
   position:absolute;z-index:10;inset:0;pointer-events:none;
 }
- .polaroid{
+  .polaroid{
   position:absolute;
   width:150px;
-  padding:9px;
-  background:rgba(255,247,223,.78);
-  border:1px solid rgba(127,88,47,.52);
-  border-radius:3px;
+  padding:10px;
+  background:rgba(255,248,228,.84);
+  border:1px solid rgba(126,88,47,.52);
+  border-radius:4px;
   box-shadow:
-    0 9px 20px rgba(46,27,13,.20),
-    inset 0 0 0 1px rgba(255,255,255,.38);
+    0 10px 22px rgba(46,27,13,.22),
+    inset 0 0 0 1px rgba(255,255,255,.40);
   transform:rotate(var(--rot));
   animation:polaroidIn .8s ease both;
   isolation:isolate;
 }
 
-/* 外層手繪金線 */
+/* 參考圖風格：不規則雙層金色手繪框 */
 .polaroid::before{
   content:"";
   position:absolute;
-  inset:-7px;
+  inset:-8px;
   z-index:2;
   pointer-events:none;
-  border:1.5px solid rgba(247,224,180,.92);
-  border-radius:5px 8px 4px 7px;
+  border:1.5px solid rgba(248,224,179,.94);
+  border-radius:5px 9px 4px 8px;
   box-shadow:
-    0 0 0 1px rgba(105,73,39,.16),
-    inset 0 0 0 1px rgba(255,255,255,.20);
+    0 0 0 1px rgba(105,73,39,.18),
+    inset 0 0 0 1px rgba(255,255,255,.24);
+  transform:rotate(-.8deg);
 }
 
-/* 花朵＋葉片角飾，使用純 CSS，不增加圖片資源 */
+/* CSS 花朵角飾 */
 .polaroid::after{
   content:"✿";
   position:absolute;
-  right:-14px;
+  right:-15px;
   bottom:-14px;
   z-index:5;
-  width:31px;
-  height:31px;
+  width:34px;
+  height:34px;
   display:grid;
   place-items:center;
-  color:#fff2cf;
-  background:
-    radial-gradient(circle at 50% 50%,#e6a9a0 0 16%,transparent 17%),
-    radial-gradient(circle at 50% 18%,#fff5d8 0 25%,transparent 27%),
-    radial-gradient(circle at 82% 50%,#fff5d8 0 25%,transparent 27%),
-    radial-gradient(circle at 50% 82%,#fff5d8 0 25%,transparent 27%),
-    radial-gradient(circle at 18% 50%,#fff5d8 0 25%,transparent 27%);
+  color:#fff3d1;
+  font-size:18px;
   border-radius:50%;
-  font-size:11px;
-  text-shadow:0 1px 2px rgba(80,45,20,.3);
-  filter:drop-shadow(0 2px 3px rgba(50,28,12,.18));
-  transform:rotate(-9deg);
+  background:
+    radial-gradient(circle at 50% 50%,#e3a39a 0 15%,transparent 17%),
+    radial-gradient(circle at 50% 17%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 83% 50%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 50% 83%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 17% 50%,#fff4d4 0 25%,transparent 27%);
+  box-shadow:0 2px 5px rgba(50,28,12,.2);
+  transform:rotate(-8deg);
 }
 
 .polaroid img{
@@ -230,63 +315,71 @@ html,body{
   border:1px solid rgba(132,96,58,.25);
 }
 
-/* 小蝴蝶結／愛心感的角標 */
+/* 左上角小愛心／手繪裝飾 */
 .polaroid .heart{
   position:absolute;
-  left:-9px;
-  top:-14px;
+  left:-10px;
+  top:-15px;
   z-index:5;
-  color:#f5dcae;
-  font-size:21px;
+  color:#f7ddb0;
+  font-size:22px;
   line-height:1;
   text-shadow:
     0 1px 0 #765538,
     0 2px 4px rgba(45,25,10,.25);
-  transform:rotate(-13deg);
+  transform:rotate(-12deg);
 }
 
-/* 橫式照片自動使用橫向相框 */
 .polaroid.landscape{width:210px}
 .polaroid.landscape img{aspect-ratio:3/2}
 .polaroid.square{width:165px}
 
 /* ---------- floating blessing bubbles ---------- */
- .float-msg{
+  .float-msg{
   position:absolute;
   max-width:235px;
   min-width:130px;
-  padding:10px 17px 11px;
+  padding:11px 18px 12px;
   color:#60442c;
-  background:linear-gradient(180deg,rgba(255,247,222,.95),rgba(246,225,185,.93));
+  background:
+    linear-gradient(180deg,rgba(255,248,226,.96),rgba(246,225,185,.94));
   border:1px solid rgba(126,87,46,.43);
-  border-radius:7px 11px 6px 10px;
+  border-radius:6px 11px 5px 9px;
   box-shadow:
-    0 7px 15px rgba(47,28,14,.16),
-    inset 0 0 0 1px rgba(255,255,255,.34);
+    0 8px 17px rgba(47,28,14,.17),
+    inset 0 0 0 1px rgba(255,255,255,.36);
+  clip-path:polygon(
+    1% 8%, 12% 3%, 25% 5%, 38% 2%, 52% 5%, 66% 2%, 81% 5%, 98% 8%,
+    96% 23%, 99% 40%, 96% 57%, 99% 75%, 96% 94%,
+    82% 92%, 67% 97%, 53% 94%, 39% 98%, 24% 94%, 8% 97%, 2% 90%,
+    4% 72%, 2% 55%, 5% 38%, 2% 20%
+  );
   animation:bubbleIn .65s ease both;
   isolation:isolate;
 }
 
-/* 紙卡外框 */
 .float-msg::before{
   content:"";
   position:absolute;
-  inset:-4px -3px -3px -4px;
+  inset:-4px;
   z-index:-1;
-  border:1px solid rgba(255,235,196,.70);
-  border-radius:5px 8px 6px 7px;
-  transform:rotate(-.8deg);
+  border:1px solid rgba(255,235,196,.75);
+  clip-path:polygon(
+    1% 8%, 14% 3%, 28% 6%, 42% 2%, 57% 5%, 72% 2%, 98% 8%,
+    96% 25%, 99% 43%, 96% 61%, 98% 91%, 82% 95%, 65% 92%,
+    50% 97%, 35% 94%, 19% 97%, 3% 91%, 5% 72%, 2% 54%, 5% 34%, 2% 18%
+  );
+  transform:rotate(-.7deg);
   pointer-events:none;
 }
 
-/* 小葉片 */
 .float-msg::after{
   content:"❧";
   position:absolute;
   right:8px;
-  bottom:-7px;
+  bottom:-8px;
   color:#7d8c52;
-  font-size:21px;
+  font-size:22px;
   line-height:1;
   transform:rotate(-8deg);
   text-shadow:0 1px 2px rgba(50,30,14,.20);
@@ -301,7 +394,6 @@ html,body{
   font-weight:700;
   opacity:.92;
   margin-bottom:2px;
-  letter-spacing:.02em;
 }
 .float-msg .words{
   position:relative;
@@ -311,7 +403,6 @@ html,body{
   line-height:1.36;
   font-weight:700;
   word-break:break-word;
-  text-shadow:0 1px 0 rgba(255,255,255,.35);
 }
 .float-msg.leaving{
   animation:bubbleOutUp .95s ease forwards;
@@ -392,7 +483,7 @@ html,body{
 
 @media(max-width:900px){
   .live-feed{top:53%;width:88vw;max-height:38vh}
-  .live-card{min-height:60px;padding:7px 10px;border-radius:10px}
+  .live-card{min-height:60px;padding:7px 12px 7px 9px;border-radius:24px}
   .avatar{width:39px;height:39px}
   .live-thumb{width:49px;height:49px}
   .live-text{font-size:14px}
@@ -402,13 +493,13 @@ html,body{
   .polaroid.square{width:112px}
   .float-msg{max-width:150px;padding:8px 11px}
   .float-msg .words{font-size:12px}
-  .bottom-copy,  .qr{width:77px;right:9px;top:9px;padding:5px}
-  .qr img{width:64px;height:64px}
+  .bottom-copy,  .qr{width:77px;right:9px;top:9px;padding:6px 5px 7px}
+  .qr img{width:64px;height:64px;padding:3px}
   .qr span{font-size:9px}
 }
 @media(max-width:520px){
   .live-feed{top:42%;max-height:48vh}
-  .live-card{min-height:57px}
+  .live-card{min-height:57px;border-radius:22px}
   .live-name{font-size:11px}
   .live-text{font-size:13px}
   .live-thumb{width:43px;height:43px}
