@@ -2611,4 +2611,158 @@ main{
   outline:none !important;
 }
 
+
+/* ===== FINAL CENTRAL MESSAGE STYLE — match reference ===== */
+.live-feed{
+  width:min(640px,42vw);
+  max-height:31vh;
+  gap:10px;
+  top:66%;
+  left:50%;
+  transform:translateX(-50%);
+  mask-image:linear-gradient(to bottom,transparent 0,black 7%,black 93%,transparent 100%);
+}
+
+.live-card{
+  position:relative;
+  min-height:76px;
+  padding:9px 52px 9px 12px;
+  gap:13px;
+  display:flex;
+  align-items:center;
+  color:#fff8ec;
+  background:
+    linear-gradient(180deg,rgba(106,73,50,.72),rgba(72,45,31,.66));
+  border:1.5px solid rgba(255,239,208,.72);
+  border-radius:42px;
+  box-shadow:
+    0 7px 20px rgba(39,22,12,.22),
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(39,22,12,.20);
+  backdrop-filter:blur(7px) saturate(110%);
+  -webkit-backdrop-filter:blur(7px) saturate(110%);
+  clip-path:none;
+  overflow:visible;
+  isolation:isolate;
+}
+
+/* 外圍第二道手繪線，不再做成尖角／紙卡 */
+.live-card::before{
+  content:"";
+  position:absolute;
+  inset:-3px -4px -3px -4px;
+  z-index:-1;
+  background:transparent;
+  border:1px solid rgba(255,231,191,.56);
+  border-radius:44px 41px 43px 45px;
+  transform:rotate(-.25deg);
+  box-shadow:0 0 0 1px rgba(103,67,43,.20);
+  pointer-events:none;
+}
+
+/* 右下愛心 */
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:17px;
+  bottom:8px;
+  color:rgba(255,239,220,.92);
+  font-size:24px;
+  line-height:1;
+  text-shadow:0 1px 2px rgba(44,23,13,.28);
+  pointer-events:none;
+}
+
+.live-card .avatar{
+  width:48px;
+  height:48px;
+  flex:0 0 48px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(224,157,128,.94);
+  border:2px solid rgba(255,245,224,.92);
+  color:#fffdf5;
+  font-size:20px;
+  box-shadow:0 2px 7px rgba(35,18,10,.20),inset 0 1px 0 rgba(255,255,255,.25);
+}
+
+.live-card:nth-child(2) .avatar{background:rgba(119,145,75,.94)}
+.live-card:nth-child(3) .avatar{background:rgba(198,157,76,.94)}
+.live-card:nth-child(4) .avatar{background:rgba(192,121,103,.94)}
+.live-card:nth-child(5) .avatar{background:rgba(111,139,91,.94)}
+
+.live-card .live-copy{
+  min-width:0;
+  flex:1;
+  text-align:left;
+  padding-top:1px;
+}
+
+.live-card .live-name{
+  color:rgba(255,246,226,.96);
+  font-size:13px;
+  line-height:1.25;
+  font-weight:700;
+  text-shadow:0 1px 2px rgba(45,24,13,.35);
+}
+
+.live-card .live-name::before{
+  content:none;
+}
+
+.live-card .live-text{
+  margin-top:4px;
+  color:#fffaf0;
+  font-size:clamp(15px,1.05vw,18px);
+  line-height:1.35;
+  font-weight:500;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-shadow:0 1px 3px rgba(44,22,12,.34);
+}
+
+.live-card .live-time{
+  align-self:flex-start;
+  padding-top:5px;
+  margin-left:auto;
+  white-space:nowrap;
+  color:rgba(255,239,214,.86);
+  font-size:11px;
+  text-shadow:0 1px 2px rgba(44,22,12,.32);
+}
+
+.live-card .live-thumb{
+  width:46px;
+  height:46px;
+  flex:0 0 46px;
+  object-fit:cover;
+  border-radius:11px;
+  border:1px solid rgba(255,243,220,.58);
+  box-shadow:0 2px 7px rgba(35,18,10,.20);
+  background:rgba(246,227,194,.28);
+}
+
+@media(max-width:900px){
+  .live-feed{width:min(88vw,640px);top:53%;max-height:36vh;gap:8px}
+  .live-card{min-height:64px;padding:8px 43px 8px 10px;border-radius:34px}
+  .live-card::before{inset:-2px -3px -2px -3px;border-radius:36px 34px 35px 37px}
+  .live-card .avatar{width:42px;height:42px;flex-basis:42px}
+  .live-card .live-thumb{width:40px;height:40px;flex-basis:40px}
+  .live-card .live-text{font-size:14px}
+  .live-card .live-time{display:block;font-size:10px}
+}
+
+@media(max-width:560px){
+  .live-feed{width:90vw;top:42%;max-height:43vh;gap:7px}
+  .live-card{min-height:58px;padding:7px 36px 7px 8px;gap:8px;border-radius:30px}
+  .live-card::before{border-radius:32px}
+  .live-card .avatar{width:36px;height:36px;flex-basis:36px;font-size:16px}
+  .live-card .live-thumb{width:36px;height:36px;flex-basis:36px;border-radius:9px}
+  .live-card .live-name{font-size:10px}
+  .live-card .live-text{font-size:12px;margin-top:2px}
+  .live-card .live-time{font-size:9px}
+  .live-card::after{right:10px;bottom:6px;font-size:19px}
+}
 </style>
