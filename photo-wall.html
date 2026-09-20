@@ -1483,6 +1483,8 @@ function trimCentralMessages(){
 }
 
 function addCard(item){
+  notifyWeddingReminderActivity();
+
   const message=textOf(item);
   if(!message && !item.url)return;
 
@@ -1664,6 +1666,8 @@ function addPolaroid(item){
   },CONFIG.guestPhotoDisplayTime);
 }
 function addBubble(item){
+  notifyWeddingReminderActivity();
+
   const message=textOf(item);
   if(!message||message.length<2)return;
 
@@ -2424,6 +2428,190 @@ async function loadPresetConfig(){
   }
 }
 
+
+/* =========================================================
+   🍽️ 婚宴小提醒
+   平常沒有新訊息時，偶爾在中央訊息區顯示。
+   只要收到真正的新訊息，就會重新計時。
+   ========================================================= */
+const WEDDING_REMINDER = {
+  idleMs: 90000,       // 90 秒沒有新訊息後，開始考慮提醒
+  showMs: 8500,        // 每次提醒顯示約 8.5 秒
+  cooldownMs: 180000,  // 同一輪提醒至少間隔 3 分鐘
+  enabled: true,
+
+  messages: [
+    {
+      title: "🍽️ 午宴小提醒",
+      text: "請大家盡情享用美食哦！吃飽飽才有力氣一起開心～♡"
+    },
+    {
+      title: "🍴 今天多吃一點",
+      text: "今天不要客氣，多吃一點！一起享受這頓幸福的午宴～♡"
+    },
+    {
+      title: "🥰 新人小提醒",
+      text: "不要客氣嘿～今天就是要吃得開心、玩得盡興！♡"
+    },
+    {
+      title: "🍻 開心喝酒",
+      text: "今天開心喝、開心聊！飲酒適量，玩得開心最重要～♡"
+    },
+    {
+      title: "🍺 飲酒小提醒",
+      text: "酒可以慢慢喝、開心喝，記得飲酒適量哦～♡"
+    },
+    {
+      title: "🍻 開心相聚",
+      text: "一起吃、一起喝、一起聊天，飲酒適量，開心玩到最後～♡"
+    },
+    {
+      title: "🚗 溫馨提醒",
+      text: "有喝酒就不要開車哦～請搭車或找代駕，安全回家♡"
+    },
+    {
+      title: "🫶 平安回家",
+      text: "今天盡情享受美好時光，喝酒適量，平安回家最重要♡"
+    },
+    {
+      title: "🌿 環境小提醒",
+      text: "請大家一起維護環境清潔，不要亂吐檳榔汁嘿～♡"
+    },
+    {
+      title: "📸 拍照小提醒",
+      text: "攝影師正在捕捉幸福瞬間，請不要擋住鏡頭嘿～♡"
+    },
+    {
+      title: "🎉 玩得開心",
+      text: "今天是開心的一天！吃多一點、喝適量、玩得開心～♡"
+    },
+    {
+      title: "💗 幸福小提醒",
+      text: "看到喜歡的菜就多吃一點，看到朋友就多聊幾句～♡"
+    }
+  ]
+};
+
+let weddingReminderLastActivity = Date.now();
+let weddingReminderLastShown = 0;
+let weddingReminderTimer = null;
+let weddingReminderShowing = false;
+
+function resetWeddingReminderTimer(){
+  weddingReminderLastActivity = Date.now();
+
+  if(weddingReminderShowing){
+    hideWeddingReminder();
+  }
+
+  if(weddingReminderTimer){
+    clearTimeout(weddingReminderTimer);
+  }
+
+  weddingReminderTimer = setTimeout(checkWeddingReminder, WEDDING_REMINDER.idleMs);
+}
+
+function checkWeddingReminder(){
+  if(!WEDDING_REMINDER.enabled) return;
+
+  const now = Date.now();
+
+  if(
+    now - weddingReminderLastActivity >= WEDDING_REMINDER.idleMs &&
+    now - weddingReminderLastShown >= WEDDING_REMINDER.cooldownMs &&
+    !weddingReminderShowing
+  ){
+    showWeddingReminder();
+  }else{
+    const wait = Math.max(
+      5000,
+      WEDDING_REMINDER.idleMs -
+      (now - weddingReminderLastActivity)
+    );
+
+    weddingReminderTimer = setTimeout(
+      checkWeddingReminder,
+      wait
+    );
+  }
+}
+
+function showWeddingReminder(){
+  if(!WEDDING_REMINDER.enabled) return;
+
+  const feed =
+    document.querySelector(".live-feed");
+
+  if(!feed) return;
+
+  const item =
+    WEDDING_REMINDER.messages[
+      Math.floor(
+        Math.random() *
+        WEDDING_REMINDER.messages.length
+      )
+    ];
+
+  const card = document.createElement("div");
+  card.className =
+    "live-card wedding-reminder-card";
+
+  card.innerHTML =
+    '<div class="avatar reminder-avatar">♡</div>' +
+    '<div class="live-copy">' +
+      '<div class="live-name">'+
+        esc(item.title)+
+      '</div>' +
+      '<div class="live-text">'+
+        esc(item.text)+
+      '</div>' +
+    '</div>' +
+    '<div class="live-time">提醒</div>';
+
+  feed.appendChild(card);
+
+  weddingReminderShowing = true;
+  weddingReminderLastShown = Date.now();
+
+  setTimeout(function(){
+    if(card && card.parentNode){
+      card.remove();
+    }
+
+    weddingReminderShowing = false;
+
+    weddingReminderLastActivity = Date.now();
+
+    weddingReminderTimer =
+      setTimeout(
+        checkWeddingReminder,
+        WEDDING_REMINDER.idleMs
+      );
+  }, WEDDING_REMINDER.showMs);
+}
+
+/* 收到真正的賓客訊息／照片時呼叫 */
+function notifyWeddingReminderActivity(){
+  resetWeddingReminderTimer();
+}
+
+function hideWeddingReminder(){
+  document
+    .querySelectorAll(".wedding-reminder-card")
+    .forEach(function(el){
+      el.remove();
+    });
+
+  weddingReminderShowing = false;
+}
+
+/* 啟動提醒計時 */
+setTimeout(
+  checkWeddingReminder,
+  WEDDING_REMINDER.idleMs
+);
+
+
 async function poll(){
   if(state.syncing){
     schedulePoll();
@@ -3127,4 +3315,26 @@ main{
 }
 .qr::before{border-color:var(--qr-line) !important;}
 .qr span{color:var(--qr-text) !important;}
+</style>
+
+
+<style>
+/* ===== 婚宴提醒：沿用中央訊息框風格，但稍微暖一點 ===== */
+.live-card.wedding-reminder-card{
+  background:
+    radial-gradient(circle at 10% 20%,rgba(255,255,255,.52),transparent 28%),
+    linear-gradient(180deg,rgba(255,249,226,.96),rgba(246,224,183,.94)) !important;
+  border-color:rgba(128,91,48,.30) !important;
+  box-shadow:
+    0 7px 18px rgba(85,55,25,.10),
+    inset 0 0 0 1px rgba(255,255,255,.42) !important;
+}
+.live-card.wedding-reminder-card .reminder-avatar{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:25px !important;
+  color:#d78d88 !important;
+  background:#fff0d8 !important;
+}
 </style>
