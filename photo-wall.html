@@ -2978,3 +2978,84 @@ main{
 }
 
 </style>
+
+<!-- =========================================================
+ 🎨 自訂顏色快速調整區
+ 只要修改下面的色碼即可；不要動 JavaScript。
+ 【中央】central-bg-top / central-bg-bottom / central-border / central-line / central-text / central-name / central-time / central-heart
+ 【旁邊】float-bg-top / float-bg-bottom / float-border / float-line / float-text / float-name / float-decor
+ 【照片框】photo-frame / photo-border / photo-line / photo-shadow
+ 【QR】qr-bg / qr-border / qr-line / qr-text
+ ========================================================= -->
+<style>
+:root{
+  /* ===== 中央對話框 ===== */
+  --central-bg-top:rgba(246, 238, 213, 0.882);
+  --central-bg-bottom:rgba(231, 211, 176, 0.837);
+  --central-border:rgba(237, 176, 115, 0.52);
+  --central-line:rgba(252, 199, 146, 0.741);
+  --central-text:#5c402b;
+  --central-name:#76573b;
+  --central-time:#876c50;
+  --central-heart:#c9857e;
+
+  /* ===== 旁邊祝福框 ===== */
+  --float-bg-top:rgba(255, 248, 228, 0.773);
+  --float-bg-bottom:rgba(244,224,188,.91);
+  --float-border:rgba(164, 118, 72, 0.48);
+  --float-line:rgba(243, 198, 156, 0.648);
+  --float-text:#533a25;
+  --float-name:#76583d;
+  --float-decor:#87925c;
+
+  /* ===== 婚紗照片框 ===== */
+  --photo-frame:rgba(255, 251, 240, 0.755);
+  --photo-border:rgba(126,91,55,.14);
+  --photo-line:rgba(216, 155, 94, 0.4);
+  --photo-shadow:rgba(52,32,16,.18);
+
+  /* ===== QR Code ===== */
+  --qr-bg:rgba(255,249,233,.90);
+  --qr-border:rgba(112,78,46,.22);
+  --qr-line:rgba(119,83,49,.42);
+  --qr-text:#6b5038;
+}
+
+/* ===== 中央對話框 ===== */
+.live-card{
+  background:linear-gradient(180deg,var(--central-bg-top),var(--central-bg-bottom)) !important;
+  border-color:var(--central-border) !important;
+}
+.live-card::before{border-color:var(--central-line) !important;}
+.live-card .live-name{color:var(--central-name) !important;}
+.live-card .live-text{color:var(--central-text) !important;}
+.live-card .live-time{color:var(--central-time) !important;}
+.live-card::after{color:var(--central-heart) !important;}
+
+/* ===== 旁邊祝福框 ===== */
+.float-msg{
+  background:linear-gradient(180deg,var(--float-bg-top),var(--float-bg-bottom)) !important;
+  border-color:var(--float-border) !important;
+}
+.float-msg::before{border-color:var(--float-line) !important;}
+.float-msg .who{color:var(--float-name) !important;}
+.float-msg .words{color:var(--float-text) !important;}
+.float-msg::after{color:var(--float-decor) !important;}
+
+/* ===== 婚紗照片框 ===== */
+.polaroid{
+  background:var(--photo-frame) !important;
+  border-color:var(--photo-border) !important;
+  box-shadow:0 10px 23px var(--photo-shadow),inset 0 0 0 1px rgba(255,255,255,.72) !important;
+}
+.polaroid::before{border-color:var(--photo-line) !important;}
+.polaroid img{border-color:var(--photo-line) !important;}
+
+/* ===== QR Code ===== */
+.qr{
+  background:var(--qr-bg) !important;
+  border-color:var(--qr-border) !important;
+}
+.qr::before{border-color:var(--qr-line) !important;}
+.qr span{color:var(--qr-text) !important;}
+</style>
