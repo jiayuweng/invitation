@@ -1815,34 +1815,23 @@ function rectOverlapsCentral(r){
 
 function randomPresetPosition(){
   /*
-   * 不再只靠「隨機」：
-   * 每次會產生多個候選位置，檢查是否與畫面上其他照片太接近。
-   * 找到不重疊的位置才使用。
+   * 照片位置改為「全畫面隨機」：
+   * 不再限制在固定 8 個 zones。
    *
-   * 座標使用百分比，所以手機 / 平板 / 大螢幕都會跟著縮放。
-   */
-  const zones=[
-    {left:3,  top:8,  width:19, height:22},
-    {left:22, top:5,  width:17, height:23},
-    {left:3,  top:34, width:19, height:24},
-    {left:22, top:67, width:17, height:22},
-
-    {left:77, top:7,  width:19, height:22},
-    {left:72, top:33, width:19, height:24},
-    {left:79, top:62, width:18, height:23},
-    {left:60, top:68, width:17, height:21}
-  ];
-
-  /*
-   * Polaroid 大約佔畫面 14~18% 寬、20~25% 高。
-   * margin 讓照片之間不要貼太近。
+   * 規則：
+   * 1. 可以出現在左右、上方、下方的大片區域。
+   * 2. 中央訊息區完全禁止。
+   * 3. 已存在的照片會加入避讓計算。
+   * 4. 越靠近其他照片，分數越高，越不容易被選中。
+   * 5. 每次產生大量候選點，所以連續進來很多張時也會盡量分散。
    */
   const photoW=15;
   const photoH=22;
-  const gap=2.5;
+  const gap=3.5;
 
   const occupied=[];
 
+  // 已存在的婚紗照 / 預設照片
   presetShowcase.active.forEach(entry=>{
     if(!entry.el || !entry.el.isConnected)return;
 
@@ -1851,147 +1840,128 @@ function randomPresetPosition(){
 
     if(!isNaN(left) && !isNaN(top)){
       occupied.push({
-        left,
-        top,
+        left, top,
         right:left+photoW,
         bottom:top+photoH
       });
     }
   });
 
-  /*
-   * 賓客剛上傳的照片也算進避讓範圍，
-   * 避免婚紗照跟賓客照片完全疊在一起。
-   */
+  // 已存在的賓客照片
   polaroidLayer.querySelectorAll(".guest-photo").forEach(el=>{
     const left=parseFloat(el.style.left);
     const top=parseFloat(el.style.top);
 
     if(!isNaN(left) && !isNaN(top)){
       occupied.push({
-        left,
-        top,
+        left, top,
         right:left+photoW,
         bottom:top+photoH
       });
     }
   });
 
-  function overlaps(a,b){
-    return !(
-      a.right+gap < b.left ||
-      a.left-gap > b.right ||
-      a.bottom+gap < b.top ||
-      a.top-gap > b.bottom
+  function overlapArea(a,b){
+    const w=Math.max(
+      0,
+      Math.min(a.right,b.right)-Math.max(a.left,b.left)
     );
+    const h=Math.max(
+      0,
+      Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)
+    );
+    return w*h;
   }
 
-  /*
-   * 最多嘗試 80 次。
-   * 找不到完全不重疊的位置，就選「重疊面積最小」的候選。
-   */
+  function distanceScore(a,b){
+    const ax=(a.left+a.right)/2;
+    const ay=(a.top+a.bottom)/2;
+    const bx=(b.left+b.right)/2;
+    const by=(b.top+b.bottom)/2;
+
+    const dx=Math.abs(ax-bx);
+    const dy=Math.abs(ay-by);
+
+    // 距離越近，扣分越多
+    const nx=Math.max(0,(photoW+gap)-dx);
+    const ny=Math.max(0,(photoH+gap)-dy);
+
+    return nx*ny;
+  }
+
   let best=null;
   let bestScore=Infinity;
 
-  for(let i=0;i<80;i++){
-    const zone=
-      zones[Math.floor(Math.random()*zones.length)];
-
-    const left=
-      zone.left+
-      Math.random()*Math.max(0,zone.width-photoW);
-
-    const top=
-      zone.top+
-      Math.random()*Math.max(0,zone.height-photoH);
-
+  // 大量隨機候選，讓每張照片真正散開。
+  for(let i=0;i<240;i++){
     const candidate={
-      left,
-      top,
-      right:left+photoW,
-      bottom:top+photoH
+      left:2+Math.random()*(96-photoW),
+      top:3+Math.random()*(91-photoH)
     };
 
-    let score=0;
-    let collision=false;
+    candidate.right=candidate.left+photoW;
+    candidate.bottom=candidate.top+photoH;
 
-    // 中央訊息區完全保留，不讓照片進入。
-    if(rectOverlapsCentral(candidate)){
-      collision=true;
-      score+=100000;
-    }
+    // 中央訊息保護區
+    if(rectOverlapsCentral(candidate))continue;
+
+    let score=0;
+    let hardCollision=false;
 
     occupied.forEach(other=>{
-      const xOverlap=
-        Math.max(
-          0,
-          Math.min(candidate.right,other.right)-
-          Math.max(candidate.left,other.left)
-        );
-
-      const yOverlap=
-        Math.max(
-          0,
-          Math.min(candidate.bottom,other.bottom)-
-          Math.max(candidate.top,other.top)
-        );
-
-      const area=xOverlap*yOverlap;
+      const area=overlapArea(candidate,other);
 
       if(area>0){
-        collision=true;
-        score+=area;
+        hardCollision=true;
+        score+=area*100;
       }
 
-      /*
-       * 即使沒有真正重疊，也把太近的位置視為扣分。
-       */
-      const cx=(candidate.left+candidate.right)/2;
-      const cy=(candidate.top+candidate.bottom)/2;
-      const ox=(other.left+other.right)/2;
-      const oy=(other.top+other.bottom)/2;
-
-      const dx=Math.abs(cx-ox);
-      const dy=Math.abs(cy-oy);
-
-      if(dx<photoW+gap && dy<photoH+gap){
-        score+=(photoW+gap-dx)*0.35;
-        score+=(photoH+gap-dy)*0.35;
-      }
+      score+=distanceScore(candidate,other);
     });
 
-    if(!collision && score<bestScore){
+    /*
+     * 額外避免照片太貼近畫面邊界。
+     * 仍然允許靠近邊緣，但不會全部卡在同一條線。
+     */
+    if(candidate.left<3)score+=4;
+    if(candidate.top<3)score+=4;
+    if(candidate.right>97)score+=4;
+    if(candidate.bottom>97)score+=4;
+
+    if(!hardCollision && score<bestScore){
       bestScore=score;
       best=candidate;
     }
 
-    if(!collision && score<1){
+    // 找到非常乾淨的位置就直接採用
+    if(!hardCollision && score<=0.5){
       best=candidate;
       break;
     }
   }
 
   /*
-   * 萬一畫面已經很多照片，仍然保證有位置可用。
+   * 如果畫面已經很多照片，至少找一個不進中央區的位置。
    */
   if(!best){
-    // 優先從四周重新找一個不進中央區的位置。
-    for(let i=0;i<80;i++){
-      const zone=zones[Math.floor(Math.random()*zones.length)];
+    for(let i=0;i<200;i++){
       const candidate={
-        left:zone.left+Math.random()*Math.max(0,zone.width-photoW),
-        top:zone.top+Math.random()*Math.max(0,zone.height-photoH)
+        left:2+Math.random()*(96-photoW),
+        top:3+Math.random()*(91-photoH)
       };
+
       candidate.right=candidate.left+photoW;
       candidate.bottom=candidate.top+photoH;
+
       if(!rectOverlapsCentral(candidate)){
         best=candidate;
         break;
       }
     }
   }
+
   if(!best){
-    best={left:3,top:8};
+    best={left:3,top:5};
   }
 
   return {
