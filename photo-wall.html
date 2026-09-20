@@ -2117,8 +2117,22 @@ const presetShowcase={
  * 婚紗照、賓客照片、浮動祝福都不能落進這一區。
  */
 function getCentralSafeZone(){
-  // 中央抽獎區：四周照片、浮動祝福都避開這塊區域。
   const narrow=window.innerWidth<=700;
+
+  /*
+   * 平常沒有抽獎：
+   * 只避開「中央訊息框」本身，不要把整個畫面中央都封鎖。
+   * 所以照片／文字可以自然散到中間、左中、右中、上中、下中。
+   *
+   * 抽獎進行中：
+   * 中央整塊留給抽獎照片與特效，才使用較大的安全區。
+   */
+  if(!lotteryState || !lotteryState.running){
+    return narrow
+      ? {left:18,right:82,top:40,bottom:78}
+      : {left:31,right:69,top:58,bottom:83};
+  }
+
   return narrow
     ? {left:12,right:88,top:28,bottom:74}
     : {left:23,right:77,top:25,bottom:75};
@@ -4828,6 +4842,26 @@ main{
   .polaroid.square{
     width:115px !important;
   }
+}
+</style>
+
+
+
+<style id="center-flow-v14">
+/* =========================================================
+   V14：平常照片／文字恢復「全畫面流動」
+   - 不抽獎時：只避開中央訊息框的位置
+   - 抽獎時：中央整區留給抽獎
+========================================================= */
+
+/* 平常不要把浮動層限制成左右兩側 */
+.floating-layer{
+  pointer-events:none;
+}
+
+/* 抽獎進行時，中央才保持乾淨 */
+.lottery-zone.lottery-active ~ .floating-layer{
+  /* JS 的位置計算負責避開中央，這裡不強制縮小活動範圍 */
 }
 </style>
 
