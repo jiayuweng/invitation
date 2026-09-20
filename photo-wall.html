@@ -1871,10 +1871,92 @@ function trimCentralMessages(){
 }
 
 function addCard(item){
-  // 抽獎模式：中央位置保留給抽獎。
-  // 一般賓客照片不再進中央訊息框；照片本身仍會在四周播放。
+  /*
+   * 賓客「上傳照片」時：
+   * 1. 中央顯示訊息框
+   * 2. 旁邊另外顯示照片（由 addPolaroid 負責）
+   * 3. 純文字祝福不進中央，只走 addBubble()
+   * 4. 抽獎進行中不顯示中央訊息，中央完全留給抽獎
+   */
   notifyWeddingReminderActivity();
-  return;
+
+  if(!item || !item.url)return;
+  if(lotteryState && lotteryState.running)return;
+
+  const feed=document.getElementById("liveFeed");
+  if(!feed)return;
+
+  const card=document.createElement("article");
+  card.className="live-card";
+  card.dataset.sourceId=String(item.sourceId||item.id||Date.now());
+
+  // 20 種 Q 版婚禮動物；若 assets 不存在就自動使用 emoji。
+  const animals=[
+    "🐰","🐱","🐶","🐻","🦊",
+    "🐼","🐹","🐥","🐸","🦦",
+    "🐨","🐯","🐷","🐮","🐵",
+    "🐧","🦔","🐿️","🦌","🐑"
+  ];
+  const animal=animals[Math.floor(Math.random()*animals.length)];
+
+  const avatar=document.createElement("div");
+  avatar.className="animal-avatar";
+  avatar.setAttribute("aria-hidden","true");
+  avatar.textContent=animal;
+
+  const copy=document.createElement("div");
+  copy.className="live-copy";
+
+  const name=document.createElement("div");
+  name.className="live-name";
+  name.textContent=item.name||"賓客";
+
+  const text=document.createElement("div");
+  text.className="live-text";
+  text.textContent=(item.text||"").trim()
+    ? ((item.name||"賓客")+" 傳了圖片："+(item.text||"").trim())
+    : ((item.name||"賓客")+" 傳了圖片 ♡");
+
+  const time=document.createElement("div");
+  time.className="live-time";
+  time.textContent=new Date(Number(item.time)||Date.now())
+    .toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"});
+
+  copy.appendChild(name);
+  copy.appendChild(text);
+
+  const thumb=document.createElement("img");
+  thumb.className="live-thumb";
+  thumb.src=item.url;
+  thumb.alt="";
+  thumb.loading="eager";
+  thumb.onerror=()=>thumb.style.display="none";
+
+  const heart=document.createElement("div");
+  heart.className="live-heart";
+  heart.textContent="♥";
+
+  card.appendChild(avatar);
+  card.appendChild(copy);
+  card.appendChild(thumb);
+  card.appendChild(time);
+  card.appendChild(heart);
+
+  feed.appendChild(card);
+  trimCentralMessages();
+
+  // 新訊息進場動畫。
+  requestAnimationFrame(()=>{
+    card.classList.add("show");
+  });
+
+  // 最多保留約 8 秒，新的會把最舊的往前淘汰。
+  setTimeout(()=>{
+    if(card.isConnected){
+      card.classList.add("removing");
+      setTimeout(()=>card.remove(),450);
+    }
+  },8000);
 }
 
 function applyPhotoOrientation(el,img){
@@ -4862,6 +4944,76 @@ main{
 /* 抽獎進行時，中央才保持乾淨 */
 .lottery-zone.lottery-active ~ .floating-layer{
   /* JS 的位置計算負責避開中央，這裡不強制縮小活動範圍 */
+}
+</style>
+
+
+
+<style id="upload-central-message-fix-v15">
+/* =========================================================
+   V15：賓客上傳圖片 → 中央訊息框恢復
+   純文字仍然只在周圍飄，不佔中央。
+========================================================= */
+
+/* 之前抽獎版把 live-feed 整個隱藏，這是造成中央訊息完全不出現的主因。 */
+.live-feed{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  pointer-events:none !important;
+  z-index:30 !important;
+}
+
+/* 只有非抽獎狀態顯示中央訊息 */
+.lottery-zone.lottery-active ~ .live-feed{
+  visibility:hidden !important;
+  opacity:0 !important;
+}
+
+/* 中央訊息卡進場 */
+.live-card{
+  opacity:0;
+  transform:translateY(16px) scale(.96);
+  transition:
+    opacity .38s ease,
+    transform .38s cubic-bezier(.2,.8,.2,1);
+}
+
+.live-card.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+.live-card.removing{
+  opacity:0 !important;
+  transform:translateY(-10px) scale(.97) !important;
+}
+
+/* 動物頭像用 Q 版 emoji，不影響原本訊息框設計 */
+.live-card .animal-avatar{
+  font-size:28px;
+  line-height:1;
+  text-align:center;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 50px !important;
+}
+
+@media(max-width:900px){
+  .live-card .animal-avatar{
+    flex-basis:44px !important;
+    width:44px !important;
+    height:44px !important;
+    font-size:24px;
+  }
+}
+@media(max-width:560px){
+  .live-card .animal-avatar{
+    flex-basis:38px !important;
+    width:38px !important;
+    height:38px !important;
+    font-size:21px;
+  }
 }
 </style>
 
