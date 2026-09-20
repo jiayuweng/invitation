@@ -1,0 +1,1 @@
+20款 Q版婚禮動物，依指定參考圖風格製作。放入 assets/animals/。animal-fallback.svg 為載入失敗時的備用圖。
