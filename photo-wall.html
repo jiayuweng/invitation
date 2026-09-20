@@ -104,6 +104,7 @@ html,body{
   letter-spacing:.02em;
 }
 /* ---------- 中央訊息：手繪婚禮紙卡 ---------- */
+/* 中央訊息固定區：其他照片／浮動祝福由 JS 自動避讓 */
 .live-feed{
   position:absolute;
   z-index:14;
@@ -130,7 +131,7 @@ html,body{
   background:rgba(55,40,31,.34);
   border:1px solid rgba(255,248,232,.24);
   border-radius:18px;
-  box-shadow:0 6px 18px rgba(20,12,8,.16);
+  box-shadow:0 5px 16px rgba(154,111,62,.10);
   backdrop-filter:blur(5px) saturate(110%);
   -webkit-backdrop-filter:blur(5px) saturate(110%);
   animation:cardIn .7s cubic-bezier(.2,.75,.25,1) both;
@@ -138,15 +139,16 @@ html,body{
 .live-card::before{
   content:"";
   position:absolute;
-  left:-5px;
+  left:-4px;
   top:17px;
-  width:9px;
-  height:9px;
-  background:rgba(55,40,31,.34);
-  border-left:1px solid rgba(255,248,232,.20);
-  border-bottom:1px solid rgba(255,248,232,.20);
+  width:8px;
+  height:8px;
+  background:rgba(244,226,193,.90);
+  border-left:1px solid rgba(255,248,232,.55);
+  border-bottom:1px solid rgba(255,248,232,.55);
   transform:rotate(45deg);
   border-radius:2px 0 0 0;
+  box-shadow:none;
 }
 .live-card::after{
   content:"♡";
@@ -1672,8 +1674,17 @@ function addBubble(item){
     const e=document.createElement("div");
     e.className="emoji";
 
-    e.style.left=(10+Math.random()*78)+"%";
-    e.style.bottom=(-5+Math.random()*18)+"%";
+    let emojiLeft=10+Math.random()*78;
+    let emojiBottom=-5+Math.random()*18;
+    for(let i=0;i<30;i++){
+      const t=100-emojiBottom-8;
+      const candidate={left:emojiLeft,top:t,right:emojiLeft+8,bottom:t+8};
+      if(!rectOverlapsCentral(candidate)) break;
+      emojiLeft=10+Math.random()*78;
+      emojiBottom=-5+Math.random()*18;
+    }
+    e.style.left=emojiLeft+"%";
+    e.style.bottom=emojiBottom+"%";
 
     e.style.setProperty(
       "--float-x",
@@ -1700,8 +1711,31 @@ function addBubble(item){
    * 不再限制只能左下 / 右下。
    * 避免太靠邊，讓手機、大螢幕都比較容易看見。
    */
-  const left=4+Math.random()*88;
-  const bottom=5+Math.random()*78;
+  /*
+   * 浮動訊息也避開中央 live-feed。
+   * 氣泡約 22% 寬、10% 高，以百分比矩形做保守避讓。
+   */
+  const bubbleW=22;
+  const bubbleH=10;
+  let left=4+Math.random()*74;
+  let bottom=5+Math.random()*78;
+
+  for(let i=0;i<60;i++){
+    const candidate={
+      left:4+Math.random()*74,
+      top:100-(5+Math.random()*78)-bubbleH,
+      right:0,
+      bottom:0
+    };
+    candidate.right=candidate.left+bubbleW;
+    candidate.bottom=candidate.top+bubbleH;
+
+    if(!rectOverlapsCentral(candidate)){
+      left=candidate.left;
+      bottom=100-candidate.top-bubbleH;
+      break;
+    }
+  }
 
   el.style.left=left+"%";
   el.style.bottom=bottom+"%";
@@ -1758,6 +1792,27 @@ const presetShowcase={
  * 每次出現都重新隨機，不固定六個格子。
  * 中央保留給新人主視覺，照片主要分布在四周。
  */
+/*
+ * ===== 中央訊息保護區 =====
+ * live-feed 會固定在畫面中央偏下的位置。
+ * 婚紗照、賓客照片、浮動祝福都不能落進這一區。
+ */
+function getCentralSafeZone(){
+  const narrow=window.innerWidth<=700;
+  return narrow
+    ? {left:10,right:90,top:63,bottom:100}
+    : {left:27,right:73,top:64,bottom:100};
+}
+function rectOverlapsCentral(r){
+  const z=getCentralSafeZone();
+  return !(
+    r.right < z.left ||
+    r.left > z.right ||
+    r.bottom < z.top ||
+    r.top > z.bottom
+  );
+}
+
 function randomPresetPosition(){
   /*
    * 不再只靠「隨機」：
@@ -1860,6 +1915,12 @@ function randomPresetPosition(){
     let score=0;
     let collision=false;
 
+    // 中央訊息區完全保留，不讓照片進入。
+    if(rectOverlapsCentral(candidate)){
+      collision=true;
+      score+=100000;
+    }
+
     occupied.forEach(other=>{
       const xOverlap=
         Math.max(
@@ -1914,16 +1975,23 @@ function randomPresetPosition(){
    * 萬一畫面已經很多照片，仍然保證有位置可用。
    */
   if(!best){
-    const zone=zones[
-      Math.floor(Math.random()*zones.length)
-    ];
-
-    best={
-      left:zone.left+
-        Math.random()*Math.max(0,zone.width-photoW),
-      top:zone.top+
-        Math.random()*Math.max(0,zone.height-photoH)
-    };
+    // 優先從四周重新找一個不進中央區的位置。
+    for(let i=0;i<80;i++){
+      const zone=zones[Math.floor(Math.random()*zones.length)];
+      const candidate={
+        left:zone.left+Math.random()*Math.max(0,zone.width-photoW),
+        top:zone.top+Math.random()*Math.max(0,zone.height-photoH)
+      };
+      candidate.right=candidate.left+photoW;
+      candidate.bottom=candidate.top+photoH;
+      if(!rectOverlapsCentral(candidate)){
+        best=candidate;
+        break;
+      }
+    }
+  }
+  if(!best){
+    best={left:3,top:8};
   }
 
   return {
