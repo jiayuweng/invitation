@@ -1490,11 +1490,19 @@ function addCard(item){
 
   const avatar=item.avatar||item.avatarUrl||"";
 
+  // 🐾 沒有真人頭像時，從 assets/animals 隨機讀取 20 隻 Q版婚禮動物。
+  const animalNames=[
+    "rabbit","cat","dog","bear","fox","panda","hamster","chick","frog","otter",
+    "penguin","koala","pig","cow","monkey","lion","elephant","tiger","mouse","alpaca"
+  ];
+  const animal=animalNames[Math.floor(Math.random()*animalNames.length)];
+  const animalFile={rabbit:"01-rabbit.svg",cat:"02-cat.svg",dog:"03-dog.svg",bear:"04-bear.svg",fox:"05-fox.svg",panda:"06-panda.svg",hamster:"07-hamster.svg",chick:"08-chick.svg",frog:"09-frog.svg",otter:"10-otter.svg",penguin:"11-penguin.svg",koala:"12-koala.svg",pig:"13-pig.svg",cow:"14-cow.svg",monkey:"15-monkey.svg",lion:"16-lion.svg",elephant:"17-elephant.svg",tiger:"18-tiger.svg",mouse:"19-mouse.svg",alpaca:"20-alpaca.svg"}[animal];
+
   el.innerHTML=
-    '<div class="avatar">'+
+    '<div class="'+(avatar?'avatar':'avatar animal-avatar')+'">'+
     (avatar
       ? '<img src="'+esc(avatar)+'" alt="">'
-      : '<span>'+esc(item.name.slice(0,1))+'</span>')+
+      : '<img src="assets/animals/'+animalFile+'" alt="'+animal+'" onerror="this.onerror=null;this.src=\'assets/animals/animal-fallback.svg\';">')+
     '</div>'+
     '<div class="live-copy">'+
       '<div class="live-name">'+esc(item.name)+'</div>'+
@@ -2977,6 +2985,29 @@ main{
   outline:none !important;
 }
 
+</style>
+
+
+<style>
+/* =========================================================
+   🐾 20種 Q版水彩婚禮動物
+   圖檔位置：assets/animals/*.svg
+   如果動物圖檔讀不到，HTML 會自動切換 animal-fallback.svg
+   ========================================================= */
+.live-card .animal-avatar{
+  width:50px!important;height:50px!important;flex:0 0 50px!important;
+  border-radius:50%!important;display:grid!important;place-items:center!important;
+  overflow:hidden!important;
+  border:2px solid rgba(255,249,230,.96)!important;
+  background:#f6e6d6!important;
+  box-shadow:0 2px 7px rgba(70,40,20,.12),0 0 0 1px rgba(126,91,55,.18)!important;
+}
+.live-card .animal-avatar img{
+  width:100%!important;height:100%!important;display:block!important;
+  object-fit:cover!important;
+}
+@media(max-width:900px){.live-card .animal-avatar{width:44px!important;height:44px!important;flex-basis:44px!important}}
+@media(max-width:560px){.live-card .animal-avatar{width:38px!important;height:38px!important;flex-basis:38px!important}}
 </style>
 
 <!-- =========================================================
