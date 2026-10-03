@@ -1884,6 +1884,8 @@ const CONFIG={
   // 婚紗照輪播
   presetSlideInterval:5000,
   presetFadeDuration:900,
+  // 新出現的婚紗照至少保留三輪，不會剛出現就被換掉。
+  presetMinDisplayMs:15000,
 
   // 新訊息 / 新照片顯示時間
   messageDisplayTime:6000,
@@ -2883,7 +2885,8 @@ function setupPresetSlideshow(presets){
     if(el){
       presetShowcase.active.push({
         item,
-        el
+        el,
+        shownAt:Date.now()
       });
     }
   }
@@ -2930,7 +2933,8 @@ function addPresetPhoto(item){
   if(el){
     presetShowcase.active.push({
       item,
-      el
+      el,
+      shownAt:Date.now()
     });
   }
 }
@@ -2993,14 +2997,20 @@ function refreshPresetPhotos(){
     return;
   }
 
-  // 移除一張，但永遠不低於 3 張
+  // 移除最早出現、且已停留足夠久的一張；新照片不會立刻被淘汰。
   if(action==="remove"){
     if(activeCount<=CONFIG.minPresetPhotos){
       return;
     }
 
-    const old=
-      candidates[Math.floor(Math.random()*candidates.length)];
+    const now=Date.now();
+    const eligible=candidates.filter(entry=>
+      now-(entry.shownAt||0)>=CONFIG.presetMinDisplayMs
+    );
+    if(!eligible.length)return;
+    const old=eligible.reduce((earliest,entry)=>
+      (entry.shownAt||0)<(earliest.shownAt||0) ? entry : earliest
+    );
 
 
     removePresetEntry(old);
@@ -5980,4 +5990,3 @@ main{
   .lottery-count{font-size:16px}
 }
 </style>
-
