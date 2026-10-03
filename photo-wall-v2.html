@@ -1,0 +1,5983 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>婚禮現場照片牆｜劉育名 & 翁佳瑜</title>
+<style>
+:root{
+  --cream:#fff3df;
+  --cream2:#f8dfbf;
+  --paper:#f8edd5;
+  --paper2:#efe0bd;
+  --ink:#5b4532;
+  --olive:#7b8758;
+  --rose:#d9978b;
+  --gold:#b8945b;
+  --shadow:0 14px 30px rgba(56,37,21,.24);
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;width:100%;height:100%;overflow:hidden;
+  background:#17110d;color:#fff;
+  font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;
+}
+.wall{
+  position:relative;width:100vw;height:100vh;overflow:hidden;
+  /* 網頁被單獨下載開啟時也能載入的網路備援背景。 */
+  background:#211710 url("https://jiayuweng.github.io/invitation/assets/hero-forest.jpg") center/cover no-repeat;
+}
+.photo-source-status{
+  position:absolute;left:18px;bottom:16px;z-index:60;
+  max-width:min(62vw,430px);padding:8px 12px;
+  color:#fffaf0;background:rgba(43,30,21,.72);
+  border:1px solid rgba(255,245,223,.34);border-radius:999px;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);font-size:14px;
+  backdrop-filter:blur(8px);
+}
+.photo-source-picker{
+  position:absolute;inset:0;z-index:100;display:grid;place-items:center;
+  padding:24px;background:rgba(25,16,11,.64);backdrop-filter:blur(8px);
+}
+.photo-source-picker[hidden]{display:none}
+.photo-source-card{
+  width:min(440px,92vw);padding:30px 28px;text-align:center;
+  color:#513c29;background:linear-gradient(145deg,#fffaf0,#f5e4c6);
+  border:1px solid rgba(117,83,45,.36);border-radius:22px;
+  box-shadow:0 24px 70px rgba(0,0,0,.34);
+}
+.photo-source-card h1{margin:0 0 10px;font-size:24px}
+.photo-source-card p{margin:0;line-height:1.7;font-size:16px}
+.photo-source-actions{display:grid;gap:10px;margin-top:22px}
+.photo-source-actions button{
+  min-height:48px;padding:10px 16px;border:0;border-radius:12px;
+  font:inherit;font-weight:700;cursor:pointer;
+}
+#chooseLocalPhotos{color:#fffaf0;background:#98705a}
+#useNetworkPhotos{color:#6f523c;background:transparent;border:1px solid rgba(111,82,60,.45)!important}
+.photo-source-message{min-height:1.6em;margin-top:12px!important;color:#76583e;font-size:14px!important}
+.wall:before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:
+    linear-gradient(90deg,rgba(11,7,4,.20),rgba(11,7,4,.035) 50%,rgba(11,7,4,.18)),
+    linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.27));
+}
+.wall:after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(circle at 50% 46%,transparent 100%,rgba(0,0,0,.18) 100%);
+}
+
+/* ---------- QR：日系手繪紙卡 ---------- */
+.qr{
+  position:absolute;
+  z-index:30;
+  right:2.2vw;
+  top:3.2vh;
+  width:118px;
+  padding:13px 10px 12px;
+  color:#5b4532;
+  text-align:center;
+  text-decoration:none;
+  background:
+    radial-gradient(circle at 15% 12%,rgba(255,255,255,.65),transparent 22%),
+    linear-gradient(180deg,rgba(255,249,231,.98),rgba(242,221,184,.97));
+  border:1px solid rgba(126,92,52,.48);
+  border-radius:3px 7px 5px 4px;
+  clip-path:polygon(1% 3%,97% 0,100% 18%,98% 38%,100% 58%,97% 80%,99% 98%,78% 96%,58% 99%,38% 97%,18% 100%,2% 96%,3% 76%,0 56%,3% 37%,1% 18%);
+  box-shadow:0 12px 24px rgba(55,35,17,.22),inset 0 0 0 1px rgba(255,255,255,.5);
+  transform:rotate(1.2deg);
+}
+.qr::before{
+  content:"";
+  position:absolute;
+  inset:-7px -6px -8px -7px;
+  z-index:-1;
+  border:1.5px solid rgba(247,226,187,.95);
+  border-radius:7px 5px 8px 5px;
+  transform:rotate(-1.5deg);
+  box-shadow:0 0 0 1px rgba(105,73,39,.15);
+  pointer-events:none;
+}
+.qr::after{
+  content:"✿";
+  position:absolute;
+  right:-13px;
+  bottom:-12px;
+  width:31px;height:31px;
+  display:grid;place-items:center;
+  color:#fff3d3;font-size:17px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%,#df9c91 0 15%,transparent 17%),
+    radial-gradient(circle at 50% 18%,#fff3d3 0 25%,transparent 27%),
+    radial-gradient(circle at 82% 50%,#fff3d3 0 25%,transparent 27%),
+    radial-gradient(circle at 50% 82%,#fff3d3 0 25%,transparent 27%),
+    radial-gradient(circle at 18% 50%,#fff3d3 0 25%,transparent 27%);
+  box-shadow:0 2px 5px rgba(54,31,14,.2);
+  pointer-events:none;
+}
+.qr img{
+  display:block;
+  width:92px;height:92px;
+  margin:auto;
+  padding:4px;
+  background:#fffdf7;
+  border:1px solid rgba(126,88,48,.28);
+  border-radius:2px;
+}
+.qr span{
+  display:block;
+  margin-top:7px;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.3;
+  letter-spacing:.02em;
+}
+/* ---------- 中央訊息：手繪婚禮紙卡 ---------- */
+/* 中央訊息固定區：其他照片／浮動祝福由 JS 自動避讓 */
+.live-feed{
+  position:absolute;
+  z-index:14;
+  left:50%;
+  top:68%;
+  transform:translateX(-50%);
+  width:min(520px,38vw);
+  max-height:24vh;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  overflow:hidden;
+  pointer-events:none;
+  mask-image:linear-gradient(to bottom,transparent 0,black 10%,black 90%,transparent 100%);
+}
+.live-card{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:48px;
+  padding:7px 14px 7px 9px;
+  color:#fffaf2;
+  background:rgba(55,40,31,.34);
+  border:1px solid rgba(255,248,232,.24);
+  border-radius:18px;
+  box-shadow:0 5px 16px rgba(154,111,62,.10);
+  backdrop-filter:blur(5px) saturate(110%);
+  -webkit-backdrop-filter:blur(5px) saturate(110%);
+  animation:cardIn .7s cubic-bezier(.2,.75,.25,1) both;
+}
+.live-card::before{
+  content:"";
+  position:absolute;
+  left:-4px;
+  top:17px;
+  width:8px;
+  height:8px;
+  background:rgba(244,226,193,.90);
+  border-left:1px solid rgba(255,248,232,.55);
+  border-bottom:1px solid rgba(255,248,232,.55);
+  transform:rotate(45deg);
+  border-radius:2px 0 0 0;
+  box-shadow:none;
+}
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:9px;
+  bottom:5px;
+  font-size:13px;
+  color:rgba(255,235,220,.62);
+  font-weight:400;
+}
+.live-card .live-thumb{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid rgba(255,248,232,.36);
+  box-shadow:0 3px 10px rgba(20,10,5,.16);
+}
+.live-card .avatar{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(232,176,145,.72);
+  border:1px solid rgba(255,248,236,.62);
+  color:#fffaf4;
+  font-size:16px;
+  box-shadow:0 3px 10px rgba(30,15,8,.14);
+}
+.live-card .live-name{
+  color:rgba(255,248,236,.92);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.2px;
+}
+.live-card .live-text{
+  color:rgba(255,250,242,.96);
+  font-size:15px;
+  line-height:1.45;
+  text-shadow:0 1px 3px rgba(0,0,0,.24);
+}
+.live-card .live-time{
+  color:rgba(255,244,229,.62);
+  font-size:10px;
+  margin-left:auto;
+  white-space:nowrap;
+}
+.live-card::before{
+  content:"";
+  position:absolute;
+  left:-4px;
+  bottom:13px;
+  width:18px;height:18px;
+  background:#f1debc;
+  border-left:1px solid rgba(130,94,51,.42);
+  border-bottom:1px solid rgba(130,94,51,.42);
+  transform:rotate(45deg);
+  z-index:-1;
+}
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:15px;
+  bottom:8px;
+  color:#d78982;
+  font-size:20px;
+  line-height:1;
+  text-shadow:0 1px 0 rgba(255,255,255,.7);
+}
+.live-card .live-thumb{
+  width:48px;height:48px;
+  object-fit:cover;
+  border-radius:4px;
+  flex:none;
+  border:2px solid rgba(255,252,238,.9);
+  box-shadow:0 3px 8px rgba(66,42,21,.16);
+}
+.avatar{
+  width:45px;height:45px;
+  border-radius:50%;
+  flex:none;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#e9b7a8,#c98f7d);
+  border:2px solid #fff6df;
+  overflow:hidden;
+  box-shadow:0 2px 5px rgba(70,40,20,.15);
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar span{font-size:20px;font-weight:700;color:#fffdf2}
+.live-copy{min-width:0;flex:1;text-align:left}
+.live-name{
+  color:#7a5b3b;
+  font-size:clamp(12px,1vw,16px);
+  font-weight:700;
+  text-shadow:0 1px 0 rgba(255,255,255,.65);
+}
+.live-text{
+  margin-top:2px;
+  color:#5a4330;
+  font-size:clamp(13px,1.1vw,18px);
+  line-height:1.32;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-weight:700;
+  text-shadow:0 1px 0 rgba(255,255,255,.6);
+}
+.live-time{
+  align-self:flex-start;
+  padding-top:3px;
+  white-space:nowrap;
+  font-size:11px;
+  color:#8a6b48;
+  text-shadow:0 1px 0 rgba(255,255,255,.65);
+}
+.live-thumb{
+  width:58px;height:58px;
+  object-fit:cover;
+  border-radius:4px;
+  flex:none;
+  border:2px solid #fff8e5;
+  box-shadow:0 2px 6px rgba(57,34,16,.15);
+}
+
+/* ---------- floating layer ---------- */
+.floating-layer{
+  position:absolute;z-index:10;inset:0;pointer-events:none;
+}
+  .polaroid{
+  position:absolute;
+  width:150px;
+  padding:10px 10px 14px;
+  background:
+    linear-gradient(180deg,rgba(255,251,235,.97),rgba(244,226,193,.95));
+  border:1px solid rgba(126,88,47,.46);
+  border-radius:4px 7px 5px 6px;
+  clip-path:polygon(1% 2%,97% 0,100% 16%,98% 34%,100% 54%,98% 76%,100% 98%,80% 96%,60% 99%,40% 97%,19% 100%,2% 96%,3% 77%,0 57%,2% 37%,1% 18%);
+  box-shadow:0 12px 24px rgba(46,27,13,.22),inset 0 0 0 1px rgba(255,255,255,.5);
+  transform:rotate(var(--rot));
+  animation:polaroidIn .8s ease both;
+  isolation:isolate;
+}
+.polaroid::before{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  z-index:2;
+  pointer-events:none;
+  border:1.5px solid rgba(248,224,179,.94);
+  border-radius:7px 4px 8px 5px;
+  box-shadow:0 0 0 1px rgba(105,73,39,.16);
+  transform:rotate(-.8deg);
+}
+.polaroid::after{
+  content:"✿";
+  position:absolute;
+  right:-15px;
+  bottom:-14px;
+  z-index:5;
+  width:34px;height:34px;
+  display:grid;place-items:center;
+  color:#fff3d1;font-size:18px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%,#e3a39a 0 15%,transparent 17%),
+    radial-gradient(circle at 50% 17%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 83% 50%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 50% 83%,#fff4d4 0 25%,transparent 27%),
+    radial-gradient(circle at 17% 50%,#fff4d4 0 25%,transparent 27%);
+  box-shadow:0 2px 5px rgba(50,28,12,.2);
+  transform:rotate(-8deg);
+}
+.polaroid img{
+  position:relative;
+  z-index:1;
+  display:block;
+  width:100%;
+  aspect-ratio:1/1.08;
+  object-fit:cover;
+  background:#ead8b8;
+  border:1px solid rgba(132,96,58,.25);
+}
+.polaroid .heart{
+  position:absolute;
+  left:-10px;
+  top:-15px;
+  z-index:5;
+  color:#f7ddb0;
+  font-size:22px;
+  line-height:1;
+  text-shadow:0 1px 0 #765538,0 2px 4px rgba(45,25,10,.25);
+  transform:rotate(-12deg);
+}
+.polaroid.landscape{width:210px}
+.polaroid.landscape img{aspect-ratio:3/2}
+.polaroid.square{width:165px}
+
+/* ---------- floating blessing bubbles ---------- */
+  .float-msg{
+  position:absolute;
+  max-width:235px;
+  min-width:130px;
+  padding:11px 18px 12px;
+  color:#60442c;
+  background:
+    radial-gradient(circle at 15% 20%,rgba(255,255,255,.7),transparent 25%),
+    linear-gradient(180deg,rgba(255,248,226,.97),rgba(246,225,185,.95));
+  border:1px solid rgba(126,87,46,.43);
+  border-radius:5px 10px 6px 8px;
+  box-shadow:0 9px 18px rgba(47,28,14,.18),inset 0 0 0 1px rgba(255,255,255,.42);
+  clip-path:polygon(
+    1% 8%,12% 3%,25% 5%,38% 2%,52% 5%,66% 2%,81% 5%,98% 8%,
+    96% 23%,99% 40%,96% 57%,99% 75%,96% 94%,
+    82% 92%,67% 97%,53% 94%,39% 98%,24% 94%,8% 97%,2% 90%,
+    4% 72%,2% 55%,5% 38%,2% 20%
+  );
+  animation:bubbleIn .65s ease both;
+  isolation:isolate;
+}
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  z-index:-1;
+  border:1px solid rgba(255,235,196,.75);
+  clip-path:polygon(1% 8%,14% 3%,28% 6%,42% 2%,57% 5%,72% 2%,98% 8%,96% 25%,99% 43%,96% 61%,98% 91%,82% 95%,65% 92%,50% 97%,35% 94%,19% 97%,3% 91%,5% 72%,2% 54%,5% 34%,2% 18%);
+  transform:rotate(-.7deg);
+}
+.float-msg::after{
+  content:"❧";
+  position:absolute;
+  right:8px;bottom:-8px;
+  color:#7d8c52;font-size:22px;line-height:1;
+  transform:rotate(-8deg);
+  text-shadow:0 1px 2px rgba(50,30,14,.20);
+}
+.float-msg .who{
+  color:#795a3c;font-size:11px;font-weight:700;opacity:.92;margin-bottom:2px;
+}
+.float-msg .words{
+  color:#60432c;font-size:clamp(13px,1vw,17px);
+  line-height:1.36;font-weight:700;word-break:break-word;
+}
+.float-msg.leaving{animation:bubbleOutUp .95s ease forwards;pointer-events:none;}
+
+/* ---------- decorative emojis / petals ---------- */
+.emoji{
+  position:absolute;z-index:13;
+  font-size:clamp(25px,3vw,50px);
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.25));
+  animation:emojiFloat 5s ease both;
+}
+.petal{
+  position:absolute;width:22px;height:11px;
+  border-radius:100% 0 100% 0;
+  background:rgba(255,207,194,.75);
+  transform:rotate(var(--rot));
+  animation:petalFall var(--dur) linear infinite;
+}
+
+/* ---------- animations ---------- */
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(28px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+@keyframes cardOutUp{
+  from{opacity:1;transform:translateY(0) scale(1)}
+  to{opacity:0;transform:translateY(-55px) scale(.98)}
+}
+@keyframes polaroidIn{
+  from{
+    opacity:0;
+    transform:translate3d(0,25px,0) scale(.82) rotate(var(--rot))
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0) scale(var(--scale,1)) rotate(var(--rot))
+  }
+}
+@keyframes polaroidOutUp{
+  0%{
+    opacity:1;
+    transform:translate3d(0,0,0) scale(var(--scale,1)) rotate(var(--rot))
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(var(--float-x,0px),-28vh,0) scale(.90) rotate(var(--rot))
+  }
+}
+@keyframes guestPhotoIn{
+  from{opacity:0;transform:translate3d(0,35px,0) scale(.82) rotate(var(--rot))}
+  to{opacity:1;transform:translate3d(0,0,0) scale(var(--scale,1)) rotate(var(--rot))}
+}
+@keyframes bubbleIn{
+  from{opacity:0;transform:translateY(35px) scale(.88)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes bubbleOutUp{
+  0%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+  100%{opacity:0;transform:translate3d(var(--float-x,0px),-30vh,0) scale(.94)}
+}
+@keyframes emojiFloat{
+  0%{opacity:0;transform:translate3d(0,18px,0) scale(.75)}
+  15%{opacity:1}
+  100%{opacity:0;transform:translate3d(var(--float-x,0px),-30vh,0) scale(1.08)}
+}
+@keyframes petalFall{
+  0%{transform:translate3d(0,-8vh,0) rotate(var(--rot));opacity:0}
+  12%{opacity:.8}
+  100%{transform:translate3d(var(--dx),110vh,0) rotate(calc(var(--rot) + 240deg));opacity:0}
+}
+@keyframes remind{
+  from{opacity:0;transform:translate(-50%,15px)}
+  20%,78%{opacity:1;transform:translate(-50%,0)}
+  to{opacity:0;transform:translate(-50%,-10px)}
+}
+
+@media(max-width:900px){
+  .live-feed{top:53%;width:88vw;max-height:38vh}
+  .live-card{min-height:60px;padding:7px 12px 7px 9px;border-radius:24px}
+  .avatar{width:39px;height:39px}
+  .live-thumb{width:49px;height:49px}
+  .live-text{font-size:14px}
+  .live-time{display:none}
+  .polaroid{width:100px;padding:7px 7px 20px}
+  .polaroid.landscape{width:135px}
+  .polaroid.square{width:112px}
+  .float-msg{max-width:150px;padding:8px 11px}
+  .float-msg .words{font-size:12px}
+  .bottom-copy,  .qr{width:77px;right:9px;top:9px;padding:6px 5px 7px}
+  .qr img{width:64px;height:64px;padding:3px}
+  .qr span{font-size:9px}
+}
+@media(max-width:520px){
+  .live-feed{top:42%;max-height:48vh}
+  .live-card{min-height:57px;border-radius:22px}
+  .live-name{font-size:11px}
+  .live-text{font-size:13px}
+  .live-thumb{width:43px;height:43px}
+  .polaroid:nth-child(n+3){display:none}
+  }
+
+/* ---------- live stability ---------- */
+.live-card.queued{
+  opacity:0;
+  transform:translateY(20px) scale(.97);
+}
+.connection-dot{
+  position:absolute;z-index:40;left:14px;top:14px;
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.25);
+  box-shadow:0 0 0 3px rgba(255,255,255,.08);
+  opacity:.45;transition:opacity .3s,background .3s;
+}
+.connection-dot.online{background:#cde8c8;opacity:.55}
+.connection-dot.offline{background:#e7b2a8;opacity:.8}
+
+
+/* =========================================================
+   日系手繪線條版 UI
+   只調整視覺 CSS，不改任何 HTML 結構與 JavaScript。
+   ========================================================= */
+
+/* QR：從「厚紙卡」改成淡米色手繪線框 */
+.qr{
+  background:rgba(250,241,216,.78);
+  border:1px solid rgba(91,69,50,.42);
+  border-radius:3px 6px 4px 5px;
+  box-shadow:0 8px 18px rgba(55,35,17,.16), inset 0 0 0 1px rgba(255,255,255,.38);
+}
+.qr::before{
+  inset:-6px -5px -7px -6px;
+  border:1px solid rgba(247,226,187,.9);
+  border-right-color:rgba(91,69,50,.28);
+  border-bottom-color:rgba(91,69,50,.28);
+  box-shadow:none;
+  transform:rotate(-1.3deg);
+}
+.qr::after{
+  width:27px;height:27px;
+  right:-12px;bottom:-11px;
+  font-size:15px;
+  opacity:.92;
+}
+.qr img{
+  background:rgba(255,253,247,.88);
+  border:1px solid rgba(91,69,50,.24);
+}
+
+/* 中央訊息：半透明米色紙 + 雙層手繪線 */
+.live-card{
+  color:#59432f;
+  background:
+    linear-gradient(180deg,rgba(255,248,226,.84),rgba(244,226,192,.68));
+  border:1px solid rgba(91,69,50,.22);
+  border-radius:4px 8px 5px 7px;
+  clip-path:none;
+  box-shadow:0 7px 17px rgba(55,35,17,.13), inset 0 0 0 1px rgba(255,255,255,.32);
+  overflow:visible;
+}
+.live-card::before{
+  left:-5px;bottom:13px;
+  width:17px;height:17px;
+  background:rgba(244,226,192,.82);
+  border-left:1px solid rgba(91,69,50,.24);
+  border-bottom:1px solid rgba(91,69,50,.24);
+}
+.live-card::after{
+  right:14px;bottom:7px;
+  color:#cf8b82;
+  font-size:19px;
+}
+/* 第二條手繪線，故意略微偏移 */
+.live-card > .live-thumb,
+
+.live-card > .avatar{
+  position:relative;
+}
+.live-card > .live-thumb::after{content:none}
+
+.live-card .live-thumb{
+  border:1px solid rgba(255,249,229,.95);
+  box-shadow:0 2px 5px rgba(66,42,21,.12);
+}
+.avatar{
+  background:rgba(217,151,139,.82);
+  color:#fff8eb;
+  border:1px solid rgba(255,247,226,.9);
+  box-shadow:0 2px 5px rgba(66,42,21,.12);
+}
+.live-name{color:#66503b;text-shadow:0 1px 0 rgba(255,255,255,.55)}
+.live-text{color:#4f3c2c;text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.live-time{color:#806b55}
+
+/* 照片框：拿掉厚重紙卡，改成「手繪雙線相框」 */
+.polaroid{
+  background:rgba(255,249,231,.38);
+  border:1px solid rgba(92,70,49,.42);
+  border-radius:2px 5px 3px 4px;
+  clip-path:none;
+  box-shadow:0 8px 18px rgba(46,27,13,.15);
+}
+.polaroid::before{
+  inset:-6px;
+  border:1px solid rgba(248,224,179,.82);
+  border-right-color:rgba(92,70,49,.38);
+  border-bottom-color:rgba(92,70,49,.30);
+  border-radius:5px 3px 6px 4px;
+  box-shadow:none;
+  transform:rotate(-.75deg);
+}
+.polaroid::after{
+  right:-12px;bottom:-12px;
+  width:29px;height:29px;
+  font-size:15px;
+  opacity:.9;
+  box-shadow:0 1px 4px rgba(50,28,12,.14);
+}
+.polaroid img{
+  background:rgba(234,216,184,.32);
+  border:1px solid rgba(92,70,49,.20);
+}
+.polaroid .heart{
+  color:#f4dfb7;
+  text-shadow:0 1px 0 #765538,0 1px 3px rgba(45,25,10,.18);
+}
+
+/* 旁邊祝福訊息也統一成同一套手繪線框 */
+.float-msg{
+  color:#5c4632;
+  background:rgba(250,239,210,.76);
+  border:1px solid rgba(91,69,50,.34);
+  border-radius:4px 8px 5px 7px;
+  box-shadow:0 7px 15px rgba(47,28,14,.13),inset 0 0 0 1px rgba(255,255,255,.28);
+  clip-path:none;
+}
+.float-msg::before{
+  border-color:rgba(91,69,50,.30);
+  transform:rotate(-.8deg);
+}
+.float-msg::after{
+  border-color:rgba(247,226,187,.82);
+  transform:rotate(.7deg);
+}
+
+/* 小手繪裝飾線：利用 outline 讓各框看起來像手工描過一次 */
+.qr,
+.live-card,
+.polaroid,
+.float-msg{
+  outline:1px solid rgba(255,247,224,.30);
+  outline-offset:2px;
+}
+
+@media(max-width:900px){
+  .live-card{
+    background:rgba(250,239,210,.78);
+    box-shadow:0 6px 14px rgba(55,35,17,.12),inset 0 0 0 1px rgba(255,255,255,.28);
+  }
+  .polaroid{box-shadow:0 6px 14px rgba(46,27,13,.13)}
+}
+
+
+/* ===== V2：日系手繪線稿 UI ===== */
+.live-feed{width:min(700px,48vw);gap:8px;top:66%;max-height:31vh;}
+.live-card{
+  min-height:68px;padding:9px 48px 9px 14px;gap:12px;
+  background:linear-gradient(180deg,rgba(255,248,228,.91),rgba(248,232,202,.86));
+  border:0;border-radius:18px;
+  clip-path:none;
+  box-shadow:0 7px 16px rgba(68,45,26,.12), inset 0 0 0 1px rgba(255,255,255,.45);
+  isolation:isolate;
+}
+.live-card::before{
+  content:"";position:absolute;inset:3px;z-index:-1;
+  border:1.25px solid rgba(91,69,50,.66);
+  border-radius:16px 20px 15px 18px;
+  transform:rotate(-.22deg);
+  box-shadow:0 0 0 1px rgba(255,255,255,.38);
+}
+.live-card::after{
+  content:"❧  ♡";right:13px;bottom:8px;
+  color:#8b8060;font-size:17px;letter-spacing:2px;
+  text-shadow:none;
+}
+.live-card .live-thumb{border:1px solid rgba(91,69,50,.45);box-shadow:none;border-radius:7px;background:#f7ead0;}
+.avatar{width:44px;height:44px;background:#dfb49f;border:1.5px solid #fff8e8;box-shadow:0 1px 4px rgba(68,45,26,.10)}
+.live-name{color:#6b5139;text-shadow:none;font-weight:700}
+.live-text{color:#5a4330;text-shadow:none;font-weight:600}
+.live-time{color:#80684d;text-shadow:none}
+
+/* 線稿花草角飾 */
+.live-card .live-copy::before{
+  content:"✿";position:absolute;left:-8px;top:7px;color:#8b9a69;font-size:11px;opacity:.75;transform:rotate(-18deg)
+}
+
+.polaroid{
+  background:rgba(250,241,218,.82);
+  border:0;border-radius:7px;
+  clip-path:none;
+  box-shadow:0 8px 18px rgba(55,37,22,.14), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+.polaroid::before{
+  inset:2px;z-index:2;
+  border:1.25px solid rgba(91,69,50,.68);
+  border-radius:6px 9px 7px 8px;
+  box-shadow:none;
+  transform:rotate(-.5deg);
+}
+.polaroid::after{
+  content:"✿";right:-12px;bottom:-12px;width:28px;height:28px;font-size:14px;
+  background:radial-gradient(circle at 50% 50%,#d99b91 0 13%,transparent 15%),
+             radial-gradient(circle at 50% 18%,#fff4d6 0 23%,transparent 25%),
+             radial-gradient(circle at 82% 50%,#fff4d6 0 23%,transparent 25%),
+             radial-gradient(circle at 50% 82%,#fff4d6 0 23%,transparent 25%),
+             radial-gradient(circle at 18% 50%,#fff4d6 0 23%,transparent 25%);
+  box-shadow:none;transform:rotate(-7deg);
+}
+.polaroid img{border:1px solid rgba(91,69,50,.22);background:#eee0c4;}
+.polaroid .heart{color:#e7d7b0;text-shadow:0 1px 0 #72573d;font-size:19px}
+
+.float-msg{
+  background:rgba(250,239,211,.80);
+  border:0;border-radius:13px;
+  clip-path:none;
+  box-shadow:0 7px 15px rgba(58,39,22,.12);
+  padding:10px 17px 11px;
+  isolation:isolate;
+}
+.float-msg::before{
+  inset:2px;z-index:-1;
+  border:1.2px solid rgba(91,69,50,.62);
+  border-radius:12px 16px 13px 15px;
+  clip-path:none;transform:rotate(.35deg);
+}
+.float-msg::after{content:"❧";right:9px;bottom:-7px;color:#81905f;font-size:20px;text-shadow:none}
+.float-msg .who{color:#745a40}.float-msg .words{color:#60452f;text-shadow:none;font-weight:600}
+
+.qr{
+  background:rgba(251,242,220,.90);
+  border:0;border-radius:10px;
+  clip-path:none;
+  box-shadow:0 8px 18px rgba(57,38,20,.13);
+}
+.qr::before{inset:2px;border:1.25px solid rgba(91,69,50,.68);border-radius:8px 11px 9px 10px;transform:rotate(-.7deg);box-shadow:none}
+.qr::after{content:"✿";right:-11px;bottom:-11px;width:27px;height:27px;font-size:14px;box-shadow:none}
+.qr img{border:1px solid rgba(91,69,50,.28);background:#fffdf7}
+.qr span{color:#654b34}
+
+@media(max-width:900px){
+ .live-feed{width:88vw;top:53%;gap:7px}
+ .live-card{min-height:58px;padding:7px 38px 7px 10px;border-radius:15px}
+ .live-card::before{border-radius:13px 17px 13px 15px}
+}
+
+
+/* ===== Japanese hand-drawn line UI V3 ===== */
+:root{
+  --lineInk:rgba(91,64,40,.78);
+  --lineSoft:rgba(122,91,61,.48);
+  --paper:rgba(255,247,226,.78);
+  --paper2:rgba(250,235,204,.64);
+  --pink:#d9948a;
+}
+
+/* PHOTO FRAME: light paper + imperfect ink outline */
+.polaroid{
+  padding:9px 9px 13px;
+  background:linear-gradient(145deg,rgba(255,251,237,.84),rgba(245,226,193,.68));
+  border:1px solid rgba(100,70,45,.28);
+  box-shadow:0 8px 20px rgba(43,28,16,.16), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+.polaroid::before{
+  inset:-5px;
+  border:1px solid var(--lineInk);
+  border-radius:7px 4px 9px 5px;
+  box-shadow:2px 1px 0 rgba(111,77,48,.25),-1px 2px 0 rgba(111,77,48,.14);
+  transform:rotate(-.7deg);
+}
+.polaroid::after{
+  right:-12px; bottom:-12px;
+  width:29px;height:29px;
+  font-size:15px;
+  background:radial-gradient(circle at 50% 50%,#d99b91 0 13%,transparent 15%),radial-gradient(circle at 50% 16%,#fff4d7 0 24%,transparent 26%),radial-gradient(circle at 84% 50%,#fff4d7 0 24%,transparent 26%),radial-gradient(circle at 50% 84%,#fff4d7 0 24%,transparent 26%),radial-gradient(circle at 16% 50%,#fff4d7 0 24%,transparent 26%);
+  color:transparent;
+}
+
+/* QR: same thin ink language as photos */
+.qr{
+  width:116px;
+  padding:12px 10px 11px;
+  background:linear-gradient(180deg,rgba(255,249,231,.86),rgba(242,221,184,.78));
+  border:1px solid rgba(102,73,46,.25);
+  box-shadow:0 8px 18px rgba(55,35,17,.14),inset 0 0 0 1px rgba(255,255,255,.42);
+}
+.qr::before{
+  inset:-5px -5px -6px -6px;
+  border:1px solid var(--lineInk);
+  box-shadow:2px 1px 0 rgba(111,77,48,.2),-1px 2px 0 rgba(111,77,48,.12);
+  transform:rotate(-1deg);
+}
+.qr::after{
+  right:-10px;bottom:-10px;width:27px;height:27px;font-size:14px;
+}
+.qr img{background:#fffdf5;border:1px solid rgba(92,66,43,.18);}
+
+/* CENTRAL MESSAGE: translucent hand-painted stationery */
+.live-feed{
+  width:min(640px,46vw);
+  gap:7px;
+  max-height:30vh;
+}
+.live-card{
+  min-height:62px;
+  padding:8px 17px 8px 12px;
+  gap:11px;
+  color:#5a402b;
+  background:
+    radial-gradient(circle at 8% 25%,rgba(255,255,255,.38),transparent 24%),
+    linear-gradient(180deg,rgba(255,249,232,.82),rgba(245,226,193,.72));
+  border:1px solid rgba(100,70,45,.22);
+  border-radius:6px 9px 5px 8px;
+  box-shadow:0 7px 18px rgba(53,34,19,.13),inset 0 0 0 1px rgba(255,255,255,.34);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+/* two imperfect ink strokes */
+.live-card::before{
+  left:4px;right:4px;bottom:auto;top:4px;
+  width:auto;height:auto;
+  background:none;
+  border:1px solid rgba(94,66,43,.72);
+  border-radius:7px 5px 8px 6px;
+  transform:rotate(-.18deg);
+  box-shadow:2px 2px 0 rgba(117,84,53,.18),-1px -1px 0 rgba(117,84,53,.11);
+  z-index:0;
+  pointer-events:none;
+}
+.live-card::after{
+  right:12px;bottom:8px;
+  color:#d98983;
+  font-size:19px;
+  text-shadow:none;
+}
+.live-card .live-thumb{
+  width:44px;height:44px;
+  border-radius:50%;
+  border:1px solid rgba(100,70,45,.32);
+  box-shadow:0 1px 0 rgba(255,255,255,.55), inset 0 0 0 2px rgba(255,249,232,.45);
+}
+.live-card .live-name{color:#60452f;text-shadow:0 1px 0 rgba(255,255,255,.45);}
+.live-card .live-text{color:#5a402b;text-shadow:0 1px 0 rgba(255,255,255,.5);}
+.live-card .live-time{color:#80644a;}
+
+/* little botanical corners, drawn with CSS text instead of image assets */
+.live-card .live-name::before{
+  content:'❧';
+  color:rgba(101,127,74,.72);
+  font-size:13px;
+  margin-right:5px;
+}
+
+/* side blessing / paper notes */
+.bubble{
+  background:linear-gradient(180deg,rgba(255,248,225,.82),rgba(244,222,184,.70)) !important;
+  color:#5d432e !important;
+  border:1px solid rgba(94,66,43,.42) !important;
+  box-shadow:0 7px 18px rgba(47,29,16,.13),inset 0 0 0 1px rgba(255,255,255,.35) !important;
+  clip-path:polygon(1% 7%,8% 4%,18% 6%,29% 3%,41% 6%,53% 3%,65% 5%,77% 3%,89% 6%,99% 4%,97% 22%,100% 42%,97% 62%,99% 82%,95% 96%,81% 93%,68% 97%,55% 94%,42% 98%,29% 94%,16% 97%,3% 93%,5% 76%,2% 58%,5% 38%,2% 20%);
+}
+
+/* subtle sketchy heart accents */
+.wall::after{display:none!important;content:none!important;}
+
+@media(max-width:900px){
+  .live-feed{width:min(88vw,640px);}
+  .live-card{min-height:56px;padding:7px 12px 7px 9px;}
+  .live-card .live-thumb{width:38px;height:38px;}
+}
+
+/* =========================================================
+   FINAL — 中央訊息框恢復成「半透明暖棕金 Chat」樣式
+   只改中央訊息，不動婚紗照 / QR / 浮動祝福
+   ========================================================= */
+
+.live-feed{
+  width:min(640px,42vw) !important;
+  max-height:31vh !important;
+  gap:10px !important;
+  top:66% !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  mask-image:linear-gradient(
+    to bottom,
+    transparent 0,
+    black 7%,
+    black 93%,
+    transparent 100%
+  ) !important;
+}
+
+.live-card{
+  position:relative !important;
+  min-height:76px !important;
+  padding:9px 52px 9px 12px !important;
+  gap:13px !important;
+  display:flex !important;
+  align-items:center !important;
+  color:#fff8ec !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(106,73,50,.72),
+      rgba(72,45,31,.66)
+    ) !important;
+
+  border:1.5px solid rgba(255,239,208,.72) !important;
+  border-radius:42px !important;
+  box-shadow:
+    0 7px 20px rgba(39,22,12,.22),
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(39,22,12,.20) !important;
+
+  backdrop-filter:blur(7px) saturate(110%) !important;
+  -webkit-backdrop-filter:blur(7px) saturate(110%) !important;
+  clip-path:none !important;
+  overflow:visible !important;
+  isolation:isolate !important;
+}
+
+/* 外圍第二道手繪線 */
+.live-card::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:-3px -4px -3px -4px !important;
+  z-index:-1 !important;
+  width:auto !important;
+  height:auto !important;
+  left:auto !important;
+  right:auto !important;
+  top:auto !important;
+  bottom:auto !important;
+
+  background:transparent !important;
+  border:1px solid rgba(255,231,191,.56) !important;
+  border-radius:44px 41px 43px 45px !important;
+  transform:rotate(-.25deg) !important;
+  box-shadow:0 0 0 1px rgba(103,67,43,.20) !important;
+  pointer-events:none !important;
+}
+
+/* 右下愛心 */
+.live-card::after{
+  content:"♡" !important;
+  position:absolute !important;
+  right:17px !important;
+  bottom:8px !important;
+  left:auto !important;
+  top:auto !important;
+  width:auto !important;
+  height:auto !important;
+
+  color:rgba(255,239,220,.92) !important;
+  font-size:24px !important;
+  line-height:1 !important;
+  letter-spacing:0 !important;
+  text-shadow:0 1px 2px rgba(44,23,13,.28) !important;
+  pointer-events:none !important;
+}
+
+.live-card .avatar{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  border-radius:50% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:linear-gradient(
+    135deg,
+    rgba(232,176,145,.92),
+    rgba(201,143,125,.88)
+  ) !important;
+  border:1px solid rgba(255,248,236,.75) !important;
+  color:#fffaf4 !important;
+  font-size:17px !important;
+  box-shadow:0 3px 10px rgba(30,15,8,.18) !important;
+  overflow:hidden !important;
+}
+
+.live-card .live-thumb{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  object-fit:cover !important;
+  border-radius:10px !important;
+  border:1px solid rgba(255,248,236,.65) !important;
+  box-shadow:0 3px 10px rgba(30,15,8,.18) !important;
+}
+
+.live-card .live-copy{
+  min-width:0 !important;
+  flex:1 !important;
+  text-align:left !important;
+}
+
+.live-card .live-name{
+  color:rgba(255,248,236,.94) !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  letter-spacing:.2px !important;
+  text-shadow:0 1px 3px rgba(44,23,13,.22) !important;
+}
+
+.live-card .live-name::before{
+  content:none !important;
+}
+
+.live-card .live-text{
+  margin-top:2px !important;
+  color:rgba(255,250,242,.98) !important;
+  font-size:15px !important;
+  line-height:1.45 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  font-weight:600 !important;
+  text-shadow:0 1px 3px rgba(0,0,0,.28) !important;
+}
+
+.live-card .live-time{
+  align-self:flex-start !important;
+  padding-top:3px !important;
+  margin-left:auto !important;
+  color:rgba(255,244,229,.72) !important;
+  font-size:10px !important;
+  white-space:nowrap !important;
+  text-shadow:0 1px 2px rgba(44,23,13,.20) !important;
+}
+
+@media(max-width:900px){
+  .live-feed{
+    width:min(680px,72vw) !important;
+    max-height:34vh !important;
+    top:53% !important;
+  }
+
+  .live-card{
+    min-height:76px !important;
+    padding:11px 46px 11px 12px !important;
+    border-radius:38px !important;
+  }
+
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:44px !important;
+    height:44px !important;
+    flex-basis:44px !important;
+  }
+
+  .live-card .live-text{
+    font-size:14px !important;
+  }
+}
+
+@media(max-width:560px){
+  .live-feed{
+    width:88vw !important;
+    max-height:35vh !important;
+    gap:7px !important;
+  }
+
+  .live-card{
+    min-height:68px !important;
+    padding:9px 39px 9px 10px !important;
+    gap:9px !important;
+    border-radius:34px !important;
+  }
+
+  .live-card::before{
+    inset:-3px -2px -2px -3px !important;
+    border-radius:36px !important;
+  }
+
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:38px !important;
+    height:38px !important;
+    flex-basis:38px !important;
+  }
+
+  .live-card .live-name{
+    font-size:11px !important;
+  }
+
+  .live-card .live-text{
+    font-size:12px !important;
+    line-height:1.35 !important;
+  }
+
+  .live-card .live-time{
+    font-size:10px !important;
+  }
+
+  .live-card::after{
+    right:9px !important;
+    bottom:7px !important;
+    font-size:18px !important;
+  }
+}
+
+</style>
+
+<style>
+
+/* =========================================================
+   WEDDING DESIGN — 統一成參考圖的溫柔手繪婚禮風
+   只調整照片框／浮動訊息／中央訊息／QR，不改 JavaScript。
+   ========================================================= */
+
+/* QR：像右上角的小型手繪婚禮相框 */
+.qr{
+  width:126px !important;
+  padding:11px 10px 13px !important;
+  background:rgba(255,249,233,.90) !important;
+  border:1px solid rgba(112,78,46,.22) !important;
+  border-radius:7px 10px 8px 9px !important;
+  box-shadow:0 9px 22px rgba(54,34,18,.18),inset 0 0 0 1px rgba(255,255,255,.58) !important;
+  transform:rotate(1deg) !important;
+}
+.qr::before{
+  content:"" !important;
+  inset:-5px -5px -6px -5px !important;
+  border:1.4px solid rgba(255,241,209,.95) !important;
+  border-right-color:rgba(119,83,49,.42) !important;
+  border-bottom-color:rgba(119,83,49,.30) !important;
+  border-radius:8px 6px 9px 7px !important;
+  transform:rotate(-1deg) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.35) !important;
+}
+.qr img{
+  width:96px !important;
+  height:96px !important;
+  padding:4px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(103,72,43,.18) !important;
+  border-radius:3px !important;
+}
+.qr span{
+  margin-top:8px !important;
+  color:#6b5038 !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  letter-spacing:.08em !important;
+}
+.qr::after{
+  content:"✿" !important;
+  right:-12px !important;
+  bottom:-12px !important;
+  width:28px !important;
+  height:28px !important;
+  font-size:14px !important;
+}
+
+/* 婚紗照：白色拍立得＋淡金手繪外框＋小花 */
+.polaroid{
+  width:166px;
+  padding:9px 9px 16px !important;
+  background:rgba(255,251,240,.94) !important;
+  border:1px solid rgba(126,91,55,.14) !important;
+  border-radius:5px 8px 6px 7px !important;
+  box-shadow:0 10px 23px rgba(52,32,16,.18),inset 0 0 0 1px rgba(255,255,255,.72) !important;
+}
+.polaroid.landscape{width:220px !important}
+
+.polaroid.square{width:174px !important}
+.polaroid::before{
+  inset:-5px !important;
+  border:1.35px solid rgba(255,239,205,.96) !important;
+  border-right-color:rgba(118,84,50,.40) !important;
+  border-bottom-color:rgba(118,84,50,.28) !important;
+  border-radius:7px 5px 8px 6px !important;
+  transform:rotate(-.65deg) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.28) !important;
+}
+.polaroid img{
+  background:#eee1c8 !important;
+  border:1px solid rgba(118,84,50,.18) !important;
+}
+.polaroid::after{
+  content:"✿" !important;
+  right:-13px !important;
+  bottom:-13px !important;
+  width:30px !important;
+  height:30px !important;
+  font-size:15px !important;
+}
+.polaroid .heart{
+  color:#f3e0b7 !important;
+  text-shadow:0 1px 0 #77573a,0 2px 4px rgba(45,25,10,.18) !important;
+}
+
+/* 左右祝福訊息：參考圖的柔和米白圓角紙卡 */
+.float-msg{
+  min-width:165px !important;
+  max-width:270px !important;
+  padding:11px 17px 12px !important;
+  background:
+    radial-gradient(circle at 16% 20%,rgba(255,255,255,.62),transparent 27%),
+    linear-gradient(180deg,rgba(255,250,236,.91),rgba(248,231,199,.83)) !important;
+  border:0 !important;
+  border-radius:26px 30px 27px 31px !important;
+  box-shadow:0 9px 20px rgba(54,34,18,.16),inset 0 0 0 1px rgba(255,255,255,.55) !important;
+  clip-path:none !important;
+}
+.float-msg::before{
+  content:"" !important;
+  inset:-3px -4px -3px -4px !important;
+  border:1.2px solid rgba(255,244,218,.92) !important;
+  border-radius:29px 32px 28px 33px !important;
+  transform:rotate(-.45deg) !important;
+  box-shadow:0 0 0 1px rgba(129,92,55,.13) !important;
+}
+.float-msg::after{
+  content:"✿" !important;
+  right:-6px !important;
+  bottom:-8px !important;
+  color:#d99489 !important;
+  font-size:17px !important;
+  text-shadow:0 1px 0 rgba(255,249,230,.9) !important;
+}
+.float-msg .who{
+  color:#806247 !important;
+  font-size:11px !important;
+  margin-bottom:3px !important;
+}
+.float-msg .words{
+  color:#604731 !important;
+  font-size:clamp(13px,1vw,17px) !important;
+  line-height:1.38 !important;
+  font-weight:600 !important;
+}
+
+/* 中央訊息：參考圖的半透明暖棕金 Chat 氣泡
+   稍微縮窄、提高高度，避免扁扁一條。 */
+.live-feed{
+  width:min(570px,38vw) !important;
+  max-height:31vh !important;
+  gap:8px !important;
+  top:66% !important;
+}
+.live-card{
+  min-height:84px !important;
+  padding:11px 48px 11px 12px !important;
+  gap:12px !important;
+  color:#fff9ed !important;
+  background:
+    linear-gradient(180deg,rgba(111,78,54,.70),rgba(74,48,34,.62)) !important;
+  border:1.5px solid rgba(255,241,214,.80) !important;
+  border-radius:44px !important;
+  box-shadow:
+    0 8px 20px rgba(42,24,13,.22),
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 0 rgba(45,25,14,.15) !important;
+  backdrop-filter:blur(6px) saturate(112%) !important;
+  -webkit-backdrop-filter:blur(6px) saturate(112%) !important;
+  clip-path:none !important;
+  overflow:visible !important;
+}
+.live-card::before{
+  content:"" !important;
+  inset:-3px -4px -3px -4px !important;
+  z-index:-1 !important;
+  background:transparent !important;
+  border:1px solid rgba(255,233,195,.66) !important;
+  border-radius:46px 43px 45px 47px !important;
+  transform:rotate(-.25deg) !important;
+  box-shadow:0 0 0 1px rgba(117,78,48,.16) !important;
+}
+.live-card::after{
+  content:"♡" !important;
+  right:16px !important;
+  bottom:9px !important;
+  color:rgba(255,241,224,.95) !important;
+  font-size:23px !important;
+  text-shadow:0 1px 2px rgba(48,26,14,.25) !important;
+}
+.live-card .avatar{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  border-radius:50% !important;
+  background:linear-gradient(135deg,#e6b6a6,#cb927f) !important;
+  border:1.5px solid rgba(255,249,236,.84) !important;
+  color:#fffaf4 !important;
+  box-shadow:0 3px 9px rgba(31,16,8,.16) !important;
+}
+.live-card .live-thumb{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  border-radius:50% !important;
+  border:1.5px solid rgba(255,249,236,.82) !important;
+  box-shadow:0 3px 9px rgba(31,16,8,.15) !important;
+}
+.live-card .live-name{
+  color:rgba(255,247,231,.96) !important;
+  font-size:13px !important;
+  line-height:1.25 !important;
+  text-shadow:0 1px 2px rgba(49,26,13,.22) !important;
+}
+.live-card .live-text{
+  color:#fffaf0 !important;
+  font-size:clamp(14px,1vw,17px) !important;
+  line-height:1.42 !important;
+  font-weight:500 !important;
+  text-shadow:0 1px 2px rgba(49,26,13,.28) !important;
+}
+.live-card .live-time{
+  color:rgba(255,244,225,.72) !important;
+  font-size:11px !important;
+}
+
+/* 手機版維持比例，不讓卡片變成細長條 */
+@media(max-width:900px){
+  .live-feed{width:min(88vw,570px) !important;top:53% !important;gap:7px !important}
+  .live-card{min-height:76px !important;padding:10px 40px 10px 10px !important;border-radius:38px !important}
+  .live-card .avatar,.live-card .live-thumb{width:43px !important;height:43px !important;flex-basis:43px !important}
+  .qr{width:82px !important;padding:7px 6px 8px !important}
+  .qr img{width:68px !important;height:68px !important}
+  .qr span{font-size:10px !important;margin-top:5px !important}
+}
+
+</style>
+
+<style>
+/* =========================================================
+   🎁 婚禮抽獎模式
+   - 中間只保留抽獎，不再顯示一般訊息卡
+   - 點中間 3 下：愛心逐次變大 → 爆開 → 隨機快速換圖 → 抽出結果
+   - 周圍照片 / 祝福照常播放，但 JS 會避開中央抽獎區
+========================================================= */
+.live-feed{
+  display:none !important;
+}
+
+.lottery-zone{
+  position:absolute;
+  z-index:25;
+  left:50%;
+  top:48%;
+  width:min(34vw,460px);
+  height:min(34vw,460px);
+  min-width:210px;
+  min-height:210px;
+  transform:translate(-50%,-50%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:auto;
+  cursor:pointer;
+  outline:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.lottery-open-button{
+  position:relative;z-index:4;display:grid;place-items:center;gap:2px;
+  width:142px;height:142px;border:0;border-radius:50%;cursor:pointer;
+  color:#75465a;background:radial-gradient(circle at 35% 26%,#fffdf8,#ffd4df 57%,#e98baa);
+  box-shadow:0 12px 34px rgba(55,17,31,.3),inset 0 0 0 3px rgba(255,255,255,.7);
+  font:inherit;transition:transform .2s ease,filter .2s ease;
+}
+.lottery-open-button[hidden]{display:none}
+.lottery-open-button:hover,.lottery-open-button:focus-visible{transform:scale(1.06);filter:brightness(1.05)}
+.lottery-open-button span{font-size:64px;line-height:.7;text-shadow:0 2px 0 rgba(255,255,255,.7)}
+.lottery-open-button small{font-size:14px;font-weight:800;letter-spacing:.08em}
+.lottery-lobby{
+  position:fixed;inset:0;z-index:120;display:grid;place-items:center;
+  padding:28px;text-align:center;background:rgba(38,22,14,.38);backdrop-filter:blur(3px);
+}
+.lottery-lobby[hidden]{display:none}
+.lottery-lobby::before{
+  content:"";position:absolute;inset:50% auto auto 50%;width:min(720px,100vw);height:min(720px,100vw);
+  transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,245,220,.34),rgba(255,210,163,.12) 42%,transparent 71%);pointer-events:none;
+}
+.lottery-lobby-card{
+  position:relative;z-index:1;width:min(500px,90vw);padding:42px 42px 27px;overflow:hidden;
+  color:#684634;background:
+    radial-gradient(circle at 16% 12%,rgba(255,255,255,.95),transparent 20%),
+    linear-gradient(145deg,rgba(255,251,239,.98),rgba(248,227,193,.96));
+  border:1px solid rgba(155,111,72,.43);border-radius:30px 25px 34px 28px;
+  box-shadow:0 26px 65px rgba(37,18,10,.33),inset 0 0 0 7px rgba(255,255,255,.34);
+}
+.lottery-lobby-card::before,.lottery-lobby-card::after{
+  content:"✦";position:absolute;color:rgba(212,155,91,.56);font-size:32px;line-height:1;
+}
+.lottery-lobby-card::before{top:16px;left:20px;transform:rotate(-18deg)}
+.lottery-lobby-card::after{right:19px;bottom:17px;transform:rotate(18deg)}
+.lottery-kicker{margin:0 0 12px;color:#a46b56;font:700 11px/1 sans-serif;letter-spacing:.22em}
+.lottery-lobby h2{margin:0;color:#754b3b;font-size:clamp(39px,5.4vw,61px);line-height:1.05;text-shadow:0 1px 0 #fff8e9}
+.lottery-count{display:flex;align-items:center;justify-content:center;gap:12px;margin:22px 0 10px;color:#83604b;font-size:18px;font-weight:700}
+.lottery-count strong{display:grid;place-items:center;min-width:64px;height:64px;padding:0 14px;color:#fff9ed;background:linear-gradient(145deg,#d8918b,#b96e6c);border:3px solid rgba(255,246,225,.78);border-radius:50%;box-shadow:0 7px 14px rgba(117,63,53,.2);font-size:33px;line-height:1}
+.lottery-count span{text-align:left;line-height:1.35}
+.lottery-note{min-height:1.5em;margin:0;color:#98725b;font-size:15px}
+.lottery-lobby-actions{display:flex;justify-content:center;gap:12px;margin-top:25px}
+.lottery-lobby-actions button,.lottery-close-button{
+  min-height:48px;padding:11px 20px;border-radius:999px;cursor:pointer;font:700 16px inherit;
+}
+#lotteryRefreshButton{color:#88604b;background:rgba(255,252,242,.72);border:1px solid rgba(159,112,77,.48)}
+#lotteryStartButton{color:#fff9ed;background:linear-gradient(135deg,#d58b83,#af676a);border:0;box-shadow:0 8px 18px rgba(116,60,57,.27)}
+#lotteryStartButton:disabled{opacity:.48;cursor:not-allowed}
+.lottery-close-button{color:#a17259;background:transparent;border:0;margin:15px auto 0;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.wall.lottery-fullscreen .lottery-zone{width:100vw;height:100vh;max-width:none;max-height:none;z-index:110;top:50%}
+.wall.lottery-fullscreen .lottery-open-button{display:none}
+.wall.lottery-fullscreen::before{background:rgba(12,5,4,.72)}
+.wall.lottery-fullscreen .lottery-result{
+  width:min(74vw,900px)!important;height:min(72vh,720px)!important;
+  min-width:280px!important;min-height:280px!important;
+}
+
+.lottery-zone::before{
+  content:"";
+  position:absolute;
+  inset:12%;
+  border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(255,238,190,.13) 0%,
+    rgba(255,214,143,.06) 42%,
+    transparent 72%);
+  opacity:0;
+  transform:scale(.75);
+  transition:opacity .35s ease,transform .5s ease;
+  pointer-events:none;
+}
+
+.lottery-zone:hover::before,
+.lottery-zone:focus-visible::before{
+  opacity:1;
+  transform:scale(1);
+}
+
+.lottery-heart{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:118px;
+  height:118px;
+  display:grid;
+  place-items:center;
+  transform:translate(-50%,-50%) scale(.18) rotate(-4deg);
+  transform-origin:center;
+  opacity:0;
+  pointer-events:none;
+  filter:
+    drop-shadow(0 0 7px rgba(255,255,255,.95))
+    drop-shadow(0 0 22px rgba(255,151,190,.92))
+    drop-shadow(0 10px 22px rgba(65,25,35,.28));
+  will-change:transform,opacity,filter;
+}
+
+.lottery-heart svg{
+  width:100%;
+  height:100%;
+  display:block;
+  overflow:visible;
+}
+
+.lottery-heart .heart-glow{
+  animation:heartGlow 1.15s ease-in-out infinite;
+  transform-origin:center;
+}
+
+.lottery-heart .heart-shine{
+  opacity:.92;
+  animation:heartShine 1.35s ease-in-out infinite;
+}
+
+.lottery-heart.show{
+  opacity:1;
+  animation:lotteryHeartIn .45s cubic-bezier(.2,.9,.25,1.25) both;
+}
+
+.lottery-heart.pulse{
+  animation:lotteryHeartPulse .38s cubic-bezier(.2,.85,.2,1.2) both;
+}
+
+.lottery-heart.explode{
+  opacity:1;
+  animation:lotteryHeartExplode .55s cubic-bezier(.15,.75,.2,1) forwards;
+}
+
+
+.lottery-heart.resetting{
+  animation:lotteryHeartReset .34s ease forwards !important;
+}
+@keyframes lotteryHeartReset{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(var(--heart-scale,.9))}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(.18)}
+}
+.lottery-zone.lottery-active::before{
+  opacity:1;
+  transform:scale(1.12);
+}
+
+@keyframes lotteryHeartIn{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.12) rotate(-10deg)}
+  45%{opacity:1;transform:translate(-50%,-50%) scale(1.12) rotate(4deg)}
+  72%{transform:translate(-50%,-50%) scale(.91) rotate(-2deg)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(.98) rotate(0)}
+}
+
+@keyframes lotteryHeartPulse{
+  0%{transform:translate(-50%,-50%) scale(var(--heart-scale,.9)) rotate(0)}
+  38%{transform:translate(-50%,-50%) scale(calc(var(--heart-scale,.9) * 1.16)) rotate(-4deg)}
+  65%{transform:translate(-50%,-50%) scale(calc(var(--heart-scale,.9) * .96)) rotate(2deg)}
+  100%{transform:translate(-50%,-50%) scale(var(--heart-scale,.9)) rotate(0)}
+}
+
+@keyframes lotteryHeartExplode{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(var(--heart-scale,1.5)) rotate(0)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(calc(var(--heart-scale,1.5) * 1.16)) rotate(-4deg)}
+  48%{opacity:1;transform:translate(-50%,-50%) scale(calc(var(--heart-scale,1.5) * 1.65)) rotate(7deg)}
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(3.9) rotate(-8deg);
+    filter:drop-shadow(0 0 18px rgba(255,255,255,1)) drop-shadow(0 0 48px rgba(255,141,184,.95));
+  }
+}
+
+@keyframes heartGlow{
+  0%,100%{transform:scale(.96);opacity:.72}
+  50%{transform:scale(1.06);opacity:1}
+}
+
+@keyframes heartShine{
+  0%,100%{opacity:.55;transform:translate(-2px,-2px) scale(.94)}
+  50%{opacity:1;transform:translate(3px,2px) scale(1.04)}
+}
+
+.lottery-burst{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:10px;
+  height:10px;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+
+.lottery-burst::before,
+.lottery-burst::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:2px solid rgba(255,239,193,.95);
+  transform:translate(-50%,-50%) scale(.2);
+  opacity:0;
+  pointer-events:none;
+}
+.lottery-burst::after{
+  border-color:rgba(255,166,198,.78);
+  border-width:1.5px;
+}
+.lottery-burst.active::before{
+  animation:lotteryShockwave .82s cubic-bezier(.15,.7,.2,1) both;
+}
+.lottery-burst.active::after{
+  animation:lotteryShockwave .95s .08s cubic-bezier(.15,.7,.2,1) both;
+}
+
+.lottery-particle{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--particle,#ffd98d);
+  box-shadow:0 0 10px rgba(255,225,156,.85);
+  animation:lotteryParticle .8s cubic-bezier(.15,.65,.2,1) forwards;
+}
+
+.lottery-particle.heart{
+  width:auto;
+  height:auto;
+  background:none;
+  box-shadow:none;
+  color:#fff3cf;
+  font-size:18px;
+  line-height:1;
+}
+
+@keyframes lotteryParticle{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(.15) rotate(0deg)}
+  22%{
+    opacity:1;
+    transform:translate(calc(-50% + var(--dx) * .32),calc(-50% + var(--dy) * .32))
+      scale(1.35) rotate(calc(var(--rot) * .35));
+  }
+  100%{
+    opacity:0;
+    transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy)))
+      scale(.72) rotate(var(--rot));
+  }
+}
+
+@keyframes lotteryShockwave{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}
+  12%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(8.8)}
+}
+
+.lottery-result{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(25vw,330px);
+  height:min(31vh,360px);
+  min-width:180px;
+  min-height:210px;
+  transform:translate(-50%,-50%) scale(.72);
+  opacity:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+
+.lottery-result::before{
+  content:"";
+  position:absolute;
+  inset:-9px;
+  z-index:-1;
+  border-radius:22px 18px 24px 16px;
+  background:
+    linear-gradient(180deg,rgba(255,249,229,.96),rgba(244,218,174,.94));
+  border:1.5px solid rgba(255,237,194,.95);
+  box-shadow:
+    0 16px 35px rgba(55,31,15,.28),
+    0 0 0 2px rgba(216,164,91,.18),
+    0 0 24px rgba(255,205,112,.30);
+  transform:rotate(-1deg);
+}
+
+.lottery-result.show{
+  opacity:1;
+  animation:lotteryResultIn .65s cubic-bezier(.2,.8,.2,1.15) forwards;
+}
+
+.lottery-result img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  border-radius:13px 11px 15px 10px;
+  border:3px solid rgba(255,252,241,.96);
+  box-shadow:
+    0 5px 18px rgba(58,34,17,.22),
+    inset 0 0 0 1px rgba(117,78,43,.15);
+}
+
+.lottery-result.shuffling img{
+  filter:saturate(1.04);
+  animation:lotteryShuffleFlash .18s ease both;
+}
+
+@keyframes lotteryResultIn{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-7deg)}
+  60%{opacity:1;transform:translate(-50%,-50%) scale(1.06) rotate(2deg)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+}
+
+@keyframes lotteryShuffleFlash{
+  0%{opacity:.25;transform:scale(.96)}
+  35%{opacity:1;transform:scale(1.01)}
+  100%{opacity:1;transform:scale(1)}
+}
+
+.lottery-result.hiding{
+  animation:lotteryResultOut .55s ease forwards;
+}
+
+@keyframes lotteryResultOut{
+  from{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  to{opacity:0;transform:translate(-50%,-50%) scale(.72)}
+}
+
+@media(max-width:900px){
+  .lottery-zone{
+    width:52vw;
+    height:38vh;
+    min-width:190px;
+    min-height:190px;
+  }
+
+  .lottery-heart{
+    font-size:72px;
+  }
+
+  .lottery-result{
+    width:min(47vw,330px);
+    height:min(34vh,330px);
+  }
+}
+
+@media(max-width:520px){
+  .lottery-heart{
+    width:86px;
+    height:86px;
+  }
+
+  .lottery-zone{
+    width:72vw;
+    height:42vh;
+    min-width:180px;
+    min-height:180px;
+  }
+
+  .lottery-heart{
+    font-size:64px;
+  }
+
+  .lottery-result{
+    width:58vw;
+    height:32vh;
+    min-width:165px;
+    min-height:190px;
+  }
+}
+</style>
+
+</head>
+<body>
+<main class="wall">
+  <div class="photo-source-picker" id="photoSourcePicker" role="dialog" aria-modal="true" aria-labelledby="photoSourceTitle">
+    <div class="photo-source-card">
+      <h1 id="photoSourceTitle">選擇婚紗照來源</h1>
+      <p>請選取投影電腦中的婚紗照資料夾。<br>未選取時，照片牆會使用網路備援版本。</p>
+      <div class="photo-source-actions">
+        <button type="button" id="chooseLocalPhotos">選擇本機婚紗照資料夾</button>
+        <button type="button" id="useNetworkPhotos">使用網路備援照片</button>
+      </div>
+      <p class="photo-source-message" id="photoSourceMessage" aria-live="polite"></p>
+    </div>
+  </div>
+  <input id="localPhotoFolderInput" type="file" accept="image/*" webkitdirectory multiple hidden>
+  <i class="connection-dot" id="connectionDot" aria-hidden="true"></i>
+</div>
+
+  <a class="qr" href="https://jiayuweng.github.io/invitation/upload.html" target="_blank" rel="noopener">
+    <img id="uploadQrImage" data-network-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAYAAAB65WHVAAAAAklEQVR4AewaftIAAAqBSURBVO3BUW7EWJIEQY9E3f/KMfpcoAd8QJPDzZLcLP2BJGmdQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVppkCStNEiSVppkCSt9GGZJPw1bXlCEr5JW+5Kgv6pLU9Iwl/Tli0GSdJKgyRppUGStNIgSVppkCStNEiSVhokSSsNkqSVBknSSh9+oSS8pS1vSMJdbdmkLVeScNKWkyScJOFKW06S8IS2/CZJeEtbfpNBkrTSIElaaZAkrTRIklYaJEkrDZKklQZJ0kqDJGmlD/o12nIlCSdteUJbTpJwpS0nSThpyxZteUMSTtqi3QZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJU+6NdIwpW2vCUJJ225koSTtpwk4a62nLTlJAknbTlJwpW26PsNkqSVBknSSoMkaaVBkrTSIElaaZAkrTRIklYaJEkrffiF2vIXteVKEp7QlpMknCThriSctOUkCXcl4aQtJ0k4acu3aIv+nUGStNIgSVppkCStNEiSVhokSSsNkqSVBknSSh++TBL0v9OWkySctOUkCVfacpIE/VMSTtryhCTof2OQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVrpwzJt0b+ThLuS8Ja2XEnCSVu2aMtJEr5JW/T/Z5AkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWunDMkm40paTJHyTtpy05SQJWyRhiySctOWuJJy05SQJd7XlCUn4Jm35TQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJU+LNOWK0l4S1tOknClLW9py5UkvKUtJ0m40paTJJy05a4kvKUtJ0m40pYt2nKShLck4UpbthgkSSsNkqSVBknSSoMkaaVBkrTSIElaaZAkrZT+QP9VEt7QlpMknLTlDUk4actdSXhCW06ScKUtJ0k4actJEk7aclcSntCWK0k4actJEp7Qlm8xSJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVppkCSt9EG3tOWuJDwhCVfa8oS2PCEJV9pykoQntOWutpwk4aQtdyXhmyThCW35TQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJXSHyyShCtteUISntCWK0k4acsbkvCWtnyTJNzVlickYYu2nCThDW05ScJJW77FIElaaZAkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK0UvqDXyYJJ215QhKutOUkCSdtOUnCXW15SxLe0JY3JOEJbTlJwpW2nCThDW15QhLe0JYtBknSSoMkaaVBkrTSIElaaZAkrTRIklYaJEkrDZKklT58mSRs0pYrSThpyxZJeEtbvkUSTtpykoSTJJy05VskYZO2fItBkrTSIElaaZAkrTRIklYaJEkrDZKklQZJ0krpD/6gJDyhLW9IwklbriThLW15QxJO2nJXEr5JW06S8IS2XEnCW9rymwySpJUGSdJKgyRppUGStNIgSVppkCStNEiSVhokSSt9+DJJeEJbTpJwVxJO2vKEJNzVlpMknCThrractOUkCSdtuastT0jCFm05ScIb2vKEJFxpyxaDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJK6Q8WScIWbTlJwpW2nCThCW25koQntOUkCXe15QlJ2KItT0jClbY8IQl3teUkCVu0ZYtBkrTSIElaaZAkrTRIklYaJEkrDZKklQZJ0kqDJGml9AdfJAlPaMtJEt7Qlick4UpbvkkS3tKWu5LwhLa8IQknbTlJwl1tOUnCE9ryLQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJK31YJglX2nKShJMkvKEtJ0k4actdSXhCW06ScFdbTpLwhCT8Jkn4JknQPw2SpJUGSdJKgyRppUGStNIgSVppkCStNEiSVhokSSt9WKYtV5Jw0paTJJy05a4knLTlJAknbXlDEp7Qlje05Zsk4aQtf01bnpCEK23ZYpAkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWin9wSJJ+E3acpKEk7acJOFKWzZJwl1teUISrrTlLUm4qy0nSXhCW+5KwhPacpKEK23ZYpAkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWunDl2nLW5JwVxK+SRJO2nKShDck4S9qy5UknLTlJAl3JeGkLSdJOEnCSVu+xSBJWmmQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNKHXygJJ205acsbkvCEtlxJwm/Tlick4a4kPKEtd7XlmyThCW05ScKVtmwxSJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVrpwx+VhCe05UoSTtpykoSTttzVlpMkPKEtV5LwhCTclYSTtjwhCd8kCXe15S1t+RaDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJK6Q+0XhLe0JaTJLyhLSdJOGnLSRK2aMtdSThpyxuScNKWkySctOUkCVfassUgSVppkCStNEiSVhokSSsNkqSVBknSSoMkaaVBkrTSh2WS8Ne05aQtdyXhLW05ScKVJGzRlick4SQJWyThpC1bJOGkLd9ikCStNEiSVhokSSsNkqSVBknSSoMkaaVBkrTSIEla6cOXacs3ScITknDSlm/SlitJOGnLE9pyJQlvactJEt7Qljck4QltOUnClbZsMUiSVhokSSsNkqSVBknSSoMkaaVBkrTSIEla6cMvlIS3tGWLJNyVhJO2PCEJV9ryliTc1ZYnJOGkLVeScJKEb9KWkySctOVbDJKklQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJK33Qr9GWK0n4Jkl4S1uuJOEkCU9oy0kS3tCWu5Jw0pa3JOFKW7YYJEkrDZKklQZJ0kqDJGmlQZK00iBJWmmQJK00SJJW+iD9H215S1vekIS72nKShJO2nCThpC1vSMJdbTlJwhPa8psMkqSVBknSSoMkaaVBkrTSIElaaZAkrTRIklYaJEkrffiF2vLbtOUkCVfa8oQknLTlJAlX2nKShJO2nCThSluekIRv0pa7kqB/Z5AkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWunDl0nCX5SEk7bclYSTtpwk4aQtd7XlJAknbbmShJO2vCUJd7XlCUm40pa3JOGkLd9ikCStNEiSVhokSSsNkqSVBknSSoMkaaVBkrRS+gNJ0jqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVppkCStNEiSVhokSSsNkqSVBknSSoMkaaVBkrTSIElaaZAkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNJ/AOiPCgRCwPKcAAAAAElFTkSuQmCC" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAYAAAB65WHVAAAAAklEQVR4AewaftIAAAqBSURBVO3BUW7EWJIEQY9E3f/KMfpcoAd8QJPDzZLcLP2BJGmdQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVppkCStNEiSVppkCSt9GGZJPw1bXlCEr5JW+5Kgv6pLU9Iwl/Tli0GSdJKgyRppUGStNIgSVppkCStNEiSVhokSSsNkqSVBknSSh9+oSS8pS1vSMJdbdmkLVeScNKWkyScJOFKW06S8IS2/CZJeEtbfpNBkrTSIElaaZAkrTRIklYaJEkrDZKklQZJ0kqDJGmlD/o12nIlCSdteUJbTpJwpS0nSThpyxZteUMSTtqi3QZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJU+6NdIwpW2vCUJJ225koSTtpwk4a62nLTlJAknbTlJwpW26PsNkqSVBknSSoMkaaVBkrTSIElaaZAkrTRIklYaJEkrffiF2vIXteVKEp7QlpMknCThriSctOUkCXcl4aQtJ0k4acu3aIv+nUGStNIgSVppkCStNEiSVhokSSsNkqSVBknSSh++TBL0v9OWkySctOUkCVfacpIE/VMSTtryhCTof2OQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVrpwzJt0b+ThLuS8Ja2XEnCSVu2aMtJEr5JW/T/Z5AkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWunDMkm40paTJHyTtpy05SQJWyRhiySctOWuJJy05SQJd7XlCUn4Jm35TQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJU+LNOWK0l4S1tOknClLW9py5UkvKUtJ0m40paTJJy05a4kvKUtJ0m40pYt2nKShLck4UpbthgkSSsNkqSVBknSSoMkaaVBkrTSIElaaZAkrZT+QP9VEt7QlpMknLTlDUk4actdSXhCW06ScKUtJ0k4actJEk7aclcSntCWK0k4actJEp7Qlm8xSJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVppkCSt9EG3tOWuJDwhCVfa8oS2PCEJV9pykoQntOWutpwk4aQtdyXhmyThCW35TQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJXSHyyShCtteUISntCWK0k4acsbkvCWtnyTJNzVlickYYu2nCThDW05ScJJW77FIElaaZAkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK0UvqDXyYJJ215QhKutOUkCSdtOUnCXW15SxLe0JY3JOEJbTlJwpW2nCThDW15QhLe0JYtBknSSoMkaaVBkrTSIElaaZAkrTRIklYaJEkrDZKklT58mSRs0pYrSThpyxZJeEtbvkUSTtpykoSTJJy05VskYZO2fItBkrTSIElaaZAkrTRIklYaJEkrDZKklQZJ0krpD/6gJDyhLW9IwklbriThLW15QxJO2nJXEr5JW06S8IS2XEnCW9rymwySpJUGSdJKgyRppUGStNIgSVppkCStNEiSVhokSSt9+DJJeEJbTpJwVxJO2vKEJNzVlpMknCThrractOUkCSdtuastT0jCFm05ScIb2vKEJFxpyxaDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJK6Q8WScIWbTlJwpW2nCThCW25koQntOUkCXe15QlJ2KItT0jClbY8IQl3teUkCVu0ZYtBkrTSIElaaZAkrTRIklYaJEkrDZKklQZJ0kqDJGml9AdfJAlPaMtJEt7Qlick4UpbvkkS3tKWu5LwhLa8IQknbTlJwl1tOUnCE9ryLQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJK31YJglX2nKShJMkvKEtJ0k4actdSXhCW06ScFdbTpLwhCT8Jkn4JknQPw2SpJUGSdJKgyRppUGStNIgSVppkCStNEiSVhokSSt9WKYtV5Jw0paTJLy05a4knLTlJAknbXlDEp7Qlje05Zsk4aQtf01bnpCEK23ZYpAkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWin9wSJJ+E3acpKEk7acJOFKWzZJwl1teUISrrTlLUm4qy0nSXhCW+5KwhPacpKEK23ZYpAkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWunDl2nLW5JwVxK+SRJO2nKShDck4S9qy5UknLTlJAl3JeGkLSdJOEnCSVu+xSBJWmmQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNKHXygJJ205acsbkvCEtlxJwm/Tlick4a4kPKEtd7XlmyThCW05ScKVtmwxSJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVrpwx+VhCe05UoSTtpykoSTttzVlpMkPKEtV5LwhCTclYSTtjwhCd8kCXe15S1t+RaDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJK6Q+0XhLe0JaTJLyhLSdJOGnLSRK2aMtdSThpyxuScNKWkySctOUkCVfassUgSVppkCStNEiSVhokSSsNkqSVBknSSoMkaaVBkrTSh2WS8Ne05aQtdyXhLW05ScKVJGzRlick4SQJWyThpC1bJOGkLd9ikCStNEiSVhokSSsNkqSVBknSSoMkaaVBkrTSIEla6cOXacs3ScITknDSlm/SlitJOGnLE9pyJQlvactJEt7Qljck4QltOUnClbZsMUiSVhokSSsNkqSVBknSSoMkaaVBkrTSIEla6cMvlIS3tGWLJNyVhJO2PCEJV9ryliTc1ZYnJOGkLVeScJKEb9KWkySctOVbDJKklQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJK33Qr9GWK0n4Jkl4S1uuJOEkCU9oy0kS3tCWu5Jw0pa3JOFKW7YYJEkrDZKklQZJ0kqDJGmlQZK00iBJWmmQJK00SJJW+iD9H215S1vekIS72nKShJO2nCThpC1vSMJdbTlJwhPa8psMkqSVBknSSoMkaaVBkrTSIElaaZAkrTRIklYaJEkrffiF2vLbtOUkCVfa8oQknLTlJAlX2nKShJO2nCThSluekIRv0pa7kqB/Z5AkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWunDl0nCX5SEk7bclYSTtpwk4aQtd7XlJAknbbmShJO2vCUJd7XlCUm40pa3JOGkLd9ikCStNEiSVhokSSsNkqSVBknSSoMkaaVBkrRS+gNJ0jqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNIgSVppkCStNEiSVhokSSsNkqSVBknSSoMkaaVBkrTSIElaaZAkrTRIklYaJEkrDZKklQZJ0kqDJGmlQZK00iBJWmmQJK00SJJWGiRJKw2SpJUGSdJKgyRppUGStNJ/AOiPCgRCwPKcAAAAAElFTkSuQmCC" alt="QR Code">
+    <span>留下祝福</span>
+  </a>
+  </div>
+
+  <section class="lottery-zone" id="lotteryZone" aria-label="婚禮抽獎區" role="button" tabindex="0">
+    <div class="lottery-heart" id="lotteryHeart" aria-hidden="true">
+  <svg viewBox="0 0 120 120" role="presentation">
+    <defs>
+      <linearGradient id="lotteryHeartFill" x1="24" y1="14" x2="92" y2="106" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#fffaf0"/>
+        <stop offset=".28" stop-color="#ffd8e5"/>
+        <stop offset=".62" stop-color="#ff9fbe"/>
+        <stop offset="1" stop-color="#e9799e"/>
+      </linearGradient>
+      <linearGradient id="lotteryHeartEdge" x1="20" y1="18" x2="100" y2="104" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset=".45" stop-color="#ffe9b9"/>
+        <stop offset="1" stop-color="#ffb3ca"/>
+      </linearGradient>
+      <radialGradient id="lotteryHeartGlow" cx="50%" cy="34%" r="64%">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".92"/>
+
+        <stop offset=".42" stop-color="#fff0f5" stop-opacity=".28"/>
+        <stop offset="1" stop-color="#ff8db2" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="lotteryHeartSoftGlow" x="-70%" y="-70%" width="240%" height="240%">
+        <feGaussianBlur stdDeviation="4.2"/>
+      </filter>
+    </defs>
+    <path class="heart-glow"
+      d="M60 104 C55 98 20 73 15 45 C11 24 25 11 42 14 C51 15 57 21 60 29 C63 21 69 15 78 14 C95 11 109 24 105 45 C100 73 65 98 60 104Z"
+      fill="#ff9fbe" opacity=".45" filter="url(#lotteryHeartSoftGlow)"/>
+    <path
+      d="M60 103 C54 97 21 74 16 46 C12 25 25 12 42 15 C51 16 57 22 60 31 C63 22 69 16 78 15 C95 12 108 25 104 46 C99 74 66 97 60 103Z"
+      fill="url(#lotteryHeartFill)" stroke="url(#lotteryHeartEdge)" stroke-width="2.2"/>
+    <ellipse class="heart-shine" cx="44" cy="35" rx="17" ry="10"
+      fill="url(#lotteryHeartGlow)" transform="rotate(-25 44 35)"/>
+    <path d="M29 32 C34 23 46 21 52 28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".82"/>
+    <path d="M83 27 C91 27 97 33 98 41" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".52"/>
+    <circle cx="38" cy="43" r="3.2" fill="#fff" opacity=".82"/>
+    <circle cx="86" cy="49" r="2.2" fill="#fff7fb" opacity=".72"/>
+  </svg>
+</div>
+    <div class="lottery-burst" id="lotteryBurst" aria-hidden="true"></div>
+    <div class="lottery-result" id="lotteryResult" aria-live="polite"></div>
+    <div class="lottery-stage-effects" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <button class="lottery-open-button" id="lotteryOpenButton" type="button" aria-label="開啟婚禮抽獎" hidden>
+      <span aria-hidden="true">♡</span><small>幸運抽獎</small>
+    </button>
+    <section class="lottery-lobby" id="lotteryLobby" hidden aria-live="polite">
+      <div class="lottery-lobby-card">
+        <p class="lottery-kicker">WEDDING LUCKY DRAW</p>
+        <h2>幸運抽獎</h2>
+        <div class="lottery-count"><strong id="lotteryEligibleCount">0</strong><span>張照片符合資格</span></div>
+        <p class="lottery-note" id="lotteryLobbyNote">只抽今天賓客上傳的照片</p>
+        <label class="lottery-winner-setting">本輪抽出
+          <input id="lotteryWinnerCount" type="number" min="1" max="4" value="2" inputmode="numeric">
+          位幸運得主
+        </label>
+        <div class="lottery-lobby-actions">
+          <button type="button" id="lotteryRefreshButton">重新刷新</button>
+          <button type="button" id="lotteryStartButton">開始抽獎</button>
+        </div>
+        <button class="lottery-close-button" type="button" id="lotteryCloseButton">返回照片牆</button>
+      </div>
+    </section>
+  </section>
+
+  <section class="live-feed" id="liveFeed"></section>
+  <section class="floating-layer" id="polaroidLayer"></section>
+  <section class="floating-layer" id="floatingLayer"></section>
+</main>
+
+<script>
+const CONFIG={
+  endpoint:"https://script.google.com/macros/s/AKfycbyJ5XKfxOjKgQ_8phL-8pIxrMmrYe6rwmBtrcVUbD6DCTOCd8is5x5CZI0vyxJX5y4/exec",
+  pollInterval:3000,
+  maxCards:12,
+  maxPolaroids:6,
+  guestPhotoNormalMax:6,
+  guestPhotoBurstMax:10,
+  photoBurstThreshold:3,
+  photoBurstHoldTime:5000,
+  minPresetPhotos:3,
+  maxBubbles:20,
+
+  // 純文字仍保留佇列，但快速顯示，讓大量祝福可以同時存在
+  queueInterval:700,
+
+  // 長時間播放時，只保留最近的事件記錄
+  maxKnown:500,
+
+  // JSONP 失敗時逐步放慢，恢復後立即回到 1 秒
+  minPollInterval:3000,
+  maxPollInterval:30000,
+  maxConsecutiveFailures:2,
+  failurePause:60000,
+  // Apps Script 初次啟動 / 冷啟動可能需要較久，JSONP 不要沿用 15 秒 polling 間隔
+  jsonpTimeout:45000,
+
+  // 婚紗照輪播
+  presetSlideInterval:5000,
+  presetFadeDuration:900,
+
+  // 新訊息 / 新照片顯示時間
+  messageDisplayTime:6000,
+  guestPhotoDisplayTime:12000
+};
+
+const wall=document.querySelector(".wall");
+const feed=document.getElementById("liveFeed");
+const polaroidLayer=document.getElementById("polaroidLayer");
+const floatLayer=document.getElementById("floatingLayer");
+const photoSourcePicker=document.getElementById("photoSourcePicker");
+const photoSourceMessage=document.getElementById("photoSourceMessage");
+const photoSourceStatus=document.getElementById("photoSourceStatus");
+const chooseLocalPhotosButton=document.getElementById("chooseLocalPhotos");
+const useNetworkPhotosButton=document.getElementById("useNetworkPhotos");
+const localPhotoFolderInput=document.getElementById("localPhotoFolderInput");
+const uploadQrImage=document.getElementById("uploadQrImage");
+
+// 預設 QR 內嵌在頁面內，避免預覽器或現場網路無法載入額外檔案。
+if(uploadQrImage){
+  uploadQrImage.dataset.networkSrc=uploadQrImage.getAttribute("src");
+}
+
+const state={
+  items:[],
+  known:new Set(),
+  pollInitialized:false,
+  syncing:false,
+
+  // 新資料佇列
+  displayQueue:[],
+
+  // 避免長時間運作時 Set 無限增長
+  knownOrder:[],
+
+  // 第一次 poll 只建立時間水位，不播放舊資料。
+  // 後續只接受比這個時間更新的資料。
+  watermarkTime:0,
+
+  // 網路 / polling 狀態
+  online:navigator.onLine!==false,
+  pollTimer:null,
+  pollDelay:CONFIG.minPollInterval,
+  consecutiveFailures:0,
+  pausedUntil:0,
+
+  // 照片大量進入時的暫時擴容狀態
+  recentPhotoTimes:[],
+  photoBurst:false,
+  photoBurstTimer:null
+};
+
+function textOf(item){
+  return String(item.text||item.message||"").trim();
+}
+function photoUrl(item){
+  if(item.url){
+    const raw=String(item.url);
+    // Apps Script 若回傳 Drive 的縮圖網址，要求較大的原圖縮圖；
+    // 這對投影幕與最後的大張得主照尤其重要。
+    try{
+      const parsed=new URL(raw);
+      if(parsed.hostname==="drive.google.com" && parsed.pathname==="/thumbnail"){
+        parsed.searchParams.set("sz","w2400");
+        return parsed.toString();
+      }
+    }catch(e){}
+    return raw;
+  }
+  if(item.photoId)
+    return "https://drive.google.com/thumbnail?id="+encodeURIComponent(item.photoId)+"&sz=w2400";
+  return "";
+}
+function keyOf(item){
+  return String(item.sourceId||item.id||item.photoId||
+    ((item.time||"")+"-"+(item.name||"")+"-"+textOf(item)));
+}
+function normalize(item,i){
+  const name=String(item.name||"親友");
+  const text=textOf(item);
+  let url=photoUrl(item);
+
+  // 純文字事件不補任何圖片；只有實際有 url/photoId 的資料才顯示照片。
+
+  const normalized=Object.assign({},item,{
+    id:keyOf(item)||("event-"+i),
+    sourceId:keyOf(item)||("event-"+i),
+    kind:item.kind||item.type||(url?"upload":"blessing"),
+    name:name,
+    text:text,
+    url:url,
+    time:Number(item.time||Date.now())
+  });
+
+  return normalized;
+}
+function esc(v){
+  return String(v)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+function timeText(t){
+  const sec=Math.max(0,Math.floor((Date.now()-Number(t))/1000));
+  if(sec<10)return "現在";
+  if(sec<60)return sec+" 秒前";
+  const min=Math.floor(sec/60);
+  if(min<60)return min+" 分鐘前";
+  return Math.floor(min/60)+" 小時前";
+}
+
+const CENTRAL_MESSAGE_MAX=5;
+
+function trimCentralMessages(){
+  const feed=document.getElementById('liveFeed');
+  if(!feed) return;
+  const cards=Array.from(feed.querySelectorAll('.live-card'));
+  while(cards.length>CENTRAL_MESSAGE_MAX){
+    const old=cards.shift();
+    if(old) old.remove();
+  }
+}
+
+function addCard(item){
+  /*
+   * 賓客「上傳照片」時：
+   * 1. 中央顯示訊息框
+   * 2. 旁邊另外顯示照片（由 addPolaroid 負責）
+   * 3. 純文字祝福不進中央，只走 addBubble()
+   * 4. 抽獎進行中不顯示中央訊息，中央完全留給抽獎
+   */
+  notifyWeddingReminderActivity();
+
+  if(!item || !item.url)return;
+  if(lotteryState && lotteryState.running)return;
+
+  const feed=document.getElementById("liveFeed");
+  if(!feed)return;
+
+  const card=document.createElement("article");
+  card.className="live-card";
+  card.dataset.sourceId=String(item.sourceId||item.id||Date.now());
+
+  // 20 種 Q 版婚禮動物；若 assets 不存在就自動使用 emoji。
+  const animals=[
+    "🐰","🐱","🐶","🐻","🦊",
+    "🐼","🐹","🐥","🐸","🦦",
+    "🐨","🐯","🐷","🐮","🐵",
+    "🐧","🦔","🐿️","🦌","🐑"
+  ];
+  const animal=animals[Math.floor(Math.random()*animals.length)];
+
+  const avatar=document.createElement("div");
+  avatar.className="animal-avatar";
+  avatar.setAttribute("aria-hidden","true");
+  avatar.textContent=animal;
+
+  const copy=document.createElement("div");
+  copy.className="live-copy";
+
+  const name=document.createElement("div");
+  name.className="live-name";
+  name.textContent=item.name||"賓客";
+
+  const text=document.createElement("div");
+  text.className="live-text";
+  text.textContent=(item.text||"").trim()
+    ? ((item.name||"賓客")+" 傳了圖片："+(item.text||"").trim())
+    : ((item.name||"賓客")+" 傳了圖片 ♡");
+
+  const time=document.createElement("div");
+  time.className="live-time";
+  time.textContent=new Date(Number(item.time)||Date.now())
+    .toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"});
+
+  copy.appendChild(name);
+  copy.appendChild(text);
+
+  const thumb=document.createElement("img");
+  thumb.className="live-thumb";
+  thumb.src=item.url;
+  thumb.alt="";
+  thumb.loading="eager";
+  thumb.onerror=()=>thumb.style.display="none";
+
+  const heart=document.createElement("div");
+  heart.className="live-heart";
+  heart.textContent="♥";
+
+  card.appendChild(avatar);
+  card.appendChild(copy);
+  card.appendChild(thumb);
+  card.appendChild(time);
+  card.appendChild(heart);
+
+  feed.appendChild(card);
+  trimCentralMessages();
+
+  // 新訊息進場動畫。
+  requestAnimationFrame(()=>{
+    card.classList.add("show");
+  });
+
+  // 最多保留約 8 秒，新的會把最舊的往前淘汰。
+  setTimeout(()=>{
+    if(card.isConnected){
+      card.classList.add("removing");
+      setTimeout(()=>card.remove(),450);
+    }
+  },8000);
+}
+
+function applyPhotoOrientation(el,img){
+  if(!el || !img)return;
+
+  const apply=()=>{
+    const w=img.naturalWidth || 0;
+    const h=img.naturalHeight || 0;
+    if(!w || !h)return;
+
+    el.classList.remove("landscape","square");
+
+    if(w / h > 1.15){
+      el.classList.add("landscape");
+    }else if(Math.abs(w / h - 1) < 0.15){
+      el.classList.add("square");
+    }
+  };
+
+  if(img.complete) apply();
+  else img.addEventListener("load",apply,{once:true});
+}
+
+function addPolaroid(item){
+  if(!item.url)return;
+
+  const el=document.createElement("div");
+  el.className="polaroid guest-photo";
+
+  /*
+   * 上傳照片也使用避讓演算法，避免跟婚紗照疊在一起。
+   * 暫時先加入 DOM，計算位置後再顯示。
+   */
+  polaroidLayer.appendChild(el);
+
+  const pos=randomPresetPosition();
+
+  el.style.left=pos.left;
+  el.style.top=pos.top;
+  el.style.setProperty("--rot",pos.rot);
+  el.style.setProperty("--float-x",((-35+Math.random()*70))+"px");
+  el.style.setProperty("--scale",pos.scale);
+
+  el.innerHTML=
+    '<img src="'+esc(item.url)+'" alt="">'+
+    '<span class="heart">♡</span>';
+
+  const image=el.querySelector("img");
+  applyPhotoOrientation(el,image);
+  image.addEventListener("error",()=>discardFailedPresetPhoto(item,el),{once:true});
+
+  /*
+   * 賓客照片平常最多 6 張。
+   * 短時間真的湧入多張時，暫時放寬到 10 張，
+   * 讓最新照片可以直接出現。
+   */
+  const guestMax=state.photoBurst
+    ? CONFIG.guestPhotoBurstMax
+    : CONFIG.guestPhotoNormalMax;
+
+  const guests=Array.from(
+    polaroidLayer.querySelectorAll(".guest-photo")
+  );
+
+  while(guests.length>=guestMax){
+    const old=guests.shift();
+    if(old)old.remove();
+  }
+
+  /*
+   * 如果第一個圖片網址載入失敗，再嘗試 Drive 常見圖片網址。
+   */
+  const img=el.querySelector("img");
+  if(img){
+    let tried=0;
+    const fallbacks=[];
+
+    if(item.photoId){
+      fallbacks.push(
+        "https://drive.google.com/thumbnail?id="+
+        encodeURIComponent(item.photoId)+"&sz=w2400"
+      );
+      fallbacks.push(
+        "https://drive.google.com/uc?export=view&id="+
+        encodeURIComponent(item.photoId)
+      );
+    }
+
+    img.addEventListener("error",()=>{
+      if(tried>=fallbacks.length)return;
+      img.src=fallbacks[tried++];
+    });
+  }
+
+  /*
+   * 12 秒後：往上飄 + 淡出。
+   */
+  setTimeout(()=>{
+    if(!el.isConnected)return;
+
+    el.classList.add("leaving");
+
+    setTimeout(()=>{
+      if(el.isConnected)el.remove();
+    },950);
+  },CONFIG.guestPhotoDisplayTime);
+}
+function addBubble(item){
+  notifyWeddingReminderActivity();
+
+  const message=textOf(item);
+  if(!message||message.length<2)return;
+
+  /*
+   * 純 Emoji 維持原本像氣泡一樣從下往上飄。
+   */
+  if(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u.test(message)){
+    const e=document.createElement("div");
+    e.className="emoji";
+
+    let emojiLeft=10+Math.random()*78;
+    let emojiBottom=-5+Math.random()*18;
+    for(let i=0;i<54;i++){
+      const t=100-emojiBottom-8;
+      const candidate={left:emojiLeft,top:t,right:emojiLeft+8,bottom:t+8};
+      if(!rectOverlapsCentral(candidate)) break;
+      emojiLeft=10+Math.random()*78;
+      emojiBottom=-5+Math.random()*18;
+    }
+    e.style.left=emojiLeft+"%";
+    e.style.bottom=emojiBottom+"%";
+
+    e.style.setProperty(
+      "--float-x",
+      (-60+Math.random()*120)+"px"
+    );
+
+    wall.appendChild(e);
+    e.textContent=message;
+
+    e.addEventListener(
+      "animationend",
+      ()=>e.remove(),
+      {once:true}
+    );
+
+    return;
+  }
+
+  const el=document.createElement("article");
+  el.className="float-msg";
+
+  /*
+   * 祝福文字可以出現在整個畫面的各個位置，
+   * 不再限制只能左下 / 右下。
+   * 避免太靠邊，讓手機、大螢幕都比較容易看見。
+   */
+  /*
+   * 浮動訊息也避開中央 live-feed。
+   * 氣泡約 22% 寬、10% 高，以百分比矩形做保守避讓。
+   */
+  const bubbleW=22;
+  const bubbleH=10;
+  let left=4+Math.random()*74;
+  let bottom=5+Math.random()*78;
+
+  for(let i=0;i<60;i++){
+    const candidate={
+      left:4+Math.random()*74,
+      top:100-(5+Math.random()*78)-bubbleH,
+      right:0,
+      bottom:0
+    };
+    candidate.right=candidate.left+bubbleW;
+    candidate.bottom=candidate.top+bubbleH;
+
+    if(!rectOverlapsCentral(candidate)){
+      left=candidate.left;
+      bottom=100-candidate.top-bubbleH;
+      break;
+    }
+  }
+
+  el.style.left=left+"%";
+  el.style.bottom=bottom+"%";
+
+  el.style.setProperty(
+    "--float-x",
+    (-50+Math.random()*100)+"px"
+  );
+
+  el.innerHTML=
+    '<div class="who">'+esc(item.name)+'</div>'+
+    '<div class="words">'+esc(message)+'</div>';
+
+  floatLayer.appendChild(el);
+
+  while(floatLayer.querySelectorAll(".float-msg").length>CONFIG.maxBubbles){
+    const old=floatLayer.querySelector(".float-msg");
+    if(old)old.remove();
+    else break;
+  }
+
+  /*
+   * 6 秒後從目前位置一路往上飄並淡出。
+   */
+  setTimeout(()=>{
+    if(!el.isConnected)return;
+
+    el.classList.add("leaving");
+
+    setTimeout(()=>{
+      if(el.isConnected)el.remove();
+    },950);
+  },CONFIG.messageDisplayTime);
+}
+/* =========================================================
+   婚紗照輪播
+   - 多張婚紗照固定在四周
+   - 每 5 秒淡出
+   - 往上飄出
+   - 換下一張後淡入
+========================================================= */
+
+const presetShowcase={
+  items:[],
+  active:[],
+  timer:null,
+  nextIndex:0,
+  shownHistory:[],
+  historyLimit:0
+};
+
+/*
+ * 婚紗照來源：每次開啟照片牆都由現場人員選擇一次。
+ * 不儲存本機資料夾權限，避免下次活動誤讀到舊資料夾。
+ */
+const presetSource={
+  // 開場先不選來源，避免選擇視窗下方先偷跑婚紗照輪播。
+  mode:null,
+  networkItems:[],
+  localUrls:[]
+};
+const NETWORK_BACKGROUND_URL="https://jiayuweng.github.io/invitation/assets/hero-forest.jpg";
+const NETWORK_QR_URL="https://jiayuweng.github.io/invitation/assets/upload-qr.png";
+
+function setPhotoSourceStatus(message){
+  if(photoSourceStatus)photoSourceStatus.textContent="婚紗照："+message;
+}
+
+function setPhotoSourceMessage(message){
+  if(photoSourceMessage)photoSourceMessage.textContent=message||"";
+}
+
+function localPath(file){
+  return String((file&&file.webkitRelativePath)||(file&&file.name)||"")
+    .replace(/\\/g,"/");
+}
+
+function localBaseName(file){
+  return localPath(file).split("/").pop().replace(/\.[^.]+$/,"")
+    .toLowerCase().replace(/[\s_-]+/g,"");
+}
+
+function localAssetKind(file){
+  const name=localBaseName(file);
+  if(/背景|background|wallpaper|(^|)bg($|)/.test(name))return "background";
+  if(/qrcode|qr/.test(name))return "qr";
+  return "";
+}
+
+function isImageFile(file){
+  const relativePath=localPath(file);
+  const parts=relativePath.split("/").filter(Boolean);
+  const name=String((file&&file.name)||"");
+
+  // 排除 macOS AppleDouble（._檔名.jpg）、隱藏檔與常見系統中繼資料夾。
+  if(name.startsWith(".") || parts.some(part=>
+    part.startsWith(".") || part==="__MACOSX" || part==="@eaDir"
+  ))return false;
+
+  if(file && /^image\//i.test(file.type||""))return true;
+  return /\.(avif|gif|jpe?g|png|webp)$/i.test(name);
+}
+
+async function filesFromDirectory(handle){
+  const files=[];
+  for await(const entry of handle.values()){
+    if(entry.kind==="file"){
+      const file=await entry.getFile();
+      if(isImageFile(file))files.push(file);
+    }else if(entry.kind==="directory"){
+      files.push(...await filesFromDirectory(entry));
+    }
+  }
+  return files;
+}
+
+function releaseLocalPhotoUrls(){
+  presetSource.localUrls.forEach(url=>URL.revokeObjectURL(url));
+  presetSource.localUrls=[];
+  // 本機背景是以 background shorthand 寫入；只清 backgroundImage 會殘留 inline
+  // 設定，導致預設 CSS 背景無法恢復。
+  restoreNetworkVisualAssets();
+}
+
+function restoreNetworkVisualAssets(){
+
+  // 明確寫回，避免本機 blob 被清除後仍殘留空白的 inline background。
+  wall.style.background='#211710 url("'+NETWORK_BACKGROUND_URL+'") center/cover no-repeat';
+  if(uploadQrImage && uploadQrImage.dataset.networkSrc){
+    // 先立即保留內嵌 QR，避免尚未發布的網路靜態檔造成畫面空白；
+    // 網路圖成功時再無縫換成網路來源。
+    const embeddedFallback=uploadQrImage.dataset.networkSrc;
+    uploadQrImage.onerror=null;
+    uploadQrImage.src=embeddedFallback;
+    const remoteQr=new Image();
+    remoteQr.onload=()=>{
+      if(presetSource.mode==="network")uploadQrImage.src=NETWORK_QR_URL;
+    };
+    remoteQr.src=NETWORK_QR_URL;
+  }
+}
+
+function resetPresetSlideshow(){
+  if(presetShowcase.timer){
+    clearInterval(presetShowcase.timer);
+    presetShowcase.timer=null;
+  }
+  presetShowcase.active.forEach(entry=>{
+    if(entry.el && entry.el.isConnected)entry.el.remove();
+  });
+  polaroidLayer.querySelectorAll(".preset-slide").forEach(el=>el.remove());
+  presetShowcase.items=[];
+  presetShowcase.active=[];
+  presetShowcase.shownHistory=[];
+}
+
+function applyLocalPhotoFiles(files){
+  const allImages=Array.from(files||[]).filter(isImageFile);
+  const photoFolderNames=new Set([
+    "婚紗照","婚紗","photos","photo","weddingphotos","wedding-photos"
+  ]);
+  const imagesInPhotoFolder=allImages.filter(file=>
+    localPath(file).split("/").slice(0,-1).some(part=>
+      photoFolderNames.has(part.toLowerCase())
+    )
+  );
+  const images=(imagesInPhotoFolder.length?imagesInPhotoFolder:allImages)
+    .filter(file=>!localAssetKind(file))
+    .sort((a,b)=>localPath(a).localeCompare(localPath(b),"zh-Hant",{numeric:true}));
+
+  if(!images.length){
+    setPhotoSourceMessage("這個資料夾沒有可用圖片，改用網路備援。");
+    useNetworkPhotos();
+    return false;
+  }
+
+  releaseLocalPhotoUrls();
+
+  // 總資料夾內可放背景圖與 QR Code；兩者不會加入婚紗照輪播。
+  const backgroundFile=allImages.find(file=>localAssetKind(file)==="background");
+  if(backgroundFile){
+    const backgroundUrl=URL.createObjectURL(backgroundFile);
+    presetSource.localUrls.push(backgroundUrl);
+    wall.style.background='#211710 url("'+backgroundUrl+'") center/cover no-repeat';
+  }
+  const qrFile=allImages.find(file=>localAssetKind(file)==="qr");
+  if(qrFile && uploadQrImage){
+    const qrUrl=URL.createObjectURL(qrFile);
+    presetSource.localUrls.push(qrUrl);
+    uploadQrImage.onerror=null;
+    uploadQrImage.src=qrUrl;
+  }
+
+  const items=images.map((file,index)=>{
+    const url=URL.createObjectURL(file);
+    presetSource.localUrls.push(url);
+    return {id:"local-"+index+"-"+file.name,url:url,name:file.name};
+  });
+
+  presetSource.mode="local";
+  setupPresetSlideshow(items);
+  const assets=[];
+  if(backgroundFile)assets.push("本機背景");
+  if(qrFile)assets.push("本機 QR");
+  setPhotoSourceStatus("本機資料夾已載入（"+items.length+" 張"+(assets.length?"，"+assets.join("、"):"")+"）");
+  setPhotoSourceMessage("");
+  if(photoSourcePicker)photoSourcePicker.hidden=true;
+  return true;
+}
+
+async function chooseLocalPhotoFolder(){
+  if(chooseLocalPhotosButton)chooseLocalPhotosButton.disabled=true;
+  setPhotoSourceMessage("正在讀取資料夾…");
+
+  try{
+    /*
+     * 優先使用 input[webkitdirectory]，因為它可在內嵌預覽、Chrome 與
+     * Edge 正常運作；showDirectoryPicker 在某些內嵌容器會把成功選取誤判
+     * 成 AbortError。保留它只作為非常舊環境沒有 folder input 時的備援。
+     */
+    if(localPhotoFolderInput){
+      localPhotoFolderInput.value="";
+      localPhotoFolderInput.click();
+      setPhotoSourceMessage("請在跳出的視窗中選擇資料夾。");
+    }else if("showDirectoryPicker" in window){
+      const handle=await window.showDirectoryPicker({mode:"read"});
+      applyLocalPhotoFiles(await filesFromDirectory(handle));
+    }
+  }catch(error){
+    if(error && error.name!=="AbortError"){
+      console.warn("本機婚紗照資料夾讀取失敗",error);
+      setPhotoSourceMessage("無法讀取這個資料夾，請改選其他資料夾或使用網路備援。");
+      useNetworkPhotos();
+    }else{
+      setPhotoSourceMessage("尚未選擇資料夾，可再試一次或使用網路備援。");
+    }
+  }finally{
+    if(chooseLocalPhotosButton)chooseLocalPhotosButton.disabled=false;
+  }
+}
+
+function useNetworkPhotos(){
+  presetSource.mode="network";
+  releaseLocalPhotoUrls();
+  if(presetSource.networkItems.length){
+    setupPresetSlideshow(presetSource.networkItems);
+    setPhotoSourceStatus("使用網路備援照片");
+  }else{
+    setPhotoSourceStatus("正在載入網路備援照片");
+  }
+  if(photoSourcePicker)photoSourcePicker.hidden=true;
+}
+
+/*
+ * 婚紗照位置：
+ * 每次出現都重新隨機，不固定六個格子。
+ * 中央保留給新人主視覺，照片主要分布在四周。
+ */
+/*
+ * ===== 中央訊息保護區 =====
+ * live-feed 會固定在畫面中央偏下的位置。
+ * 婚紗照、賓客照片、浮動祝福都不能落進這一區。
+ */
+function getCentralSafeZone(){
+  const narrow=window.innerWidth<=700;
+
+  /*
+   * 平常沒有抽獎：
+   * 只避開「中央訊息框」本身，不要把整個畫面中央都封鎖。
+   * 所以照片／文字可以自然散到中間、左中、右中、上中、下中。
+   *
+   * 抽獎進行中：
+   * 中央整塊留給抽獎照片與特效，才使用較大的安全區。
+   */
+  if(!lotteryState || !lotteryState.running){
+    return narrow
+      ? {left:18,right:82,top:40,bottom:78}
+      : {left:31,right:69,top:58,bottom:83};
+  }
+
+  return narrow
+    ? {left:12,right:88,top:28,bottom:74}
+    : {left:23,right:77,top:25,bottom:75};
+}
+function rectOverlapsCentral(r){
+  const z=getCentralSafeZone();
+  return !(
+    r.right < z.left ||
+    r.left > z.right ||
+    r.bottom < z.top ||
+    r.top > z.bottom
+  );
+}
+
+function randomPresetPosition(){
+  /*
+   * 照片位置改為「全畫面隨機」：
+   * 不再限制在固定 8 個 zones。
+   *
+   * 規則：
+   * 1. 可以出現在左右、上方、下方的大片區域。
+   * 2. 中央訊息區完全禁止。
+   * 3. 已存在的照片會加入避讓計算。
+   * 4. 越靠近其他照片，分數越高，越不容易被選中。
+   * 5. 每次產生大量候選點，所以連續進來很多張時也會盡量分散。
+   */
+  const photoW=15;
+  const photoH=22;
+  const gap=3.5;
+
+  const occupied=[];
+
+  // 已存在的婚紗照 / 預設照片
+  presetShowcase.active.forEach(entry=>{
+    if(!entry.el || !entry.el.isConnected)return;
+
+    const left=parseFloat(entry.el.style.left);
+    const top=parseFloat(entry.el.style.top);
+
+    if(!isNaN(left) && !isNaN(top)){
+      occupied.push({
+        left, top,
+        right:left+photoW,
+        bottom:top+photoH
+      });
+    }
+  });
+
+  // 已存在的賓客照片
+  polaroidLayer.querySelectorAll(".guest-photo").forEach(el=>{
+    const left=parseFloat(el.style.left);
+    const top=parseFloat(el.style.top);
+
+    if(!isNaN(left) && !isNaN(top)){
+      occupied.push({
+        left, top,
+        right:left+photoW,
+        bottom:top+photoH
+      });
+    }
+  });
+
+  function overlapArea(a,b){
+    const w=Math.max(
+      0,
+      Math.min(a.right,b.right)-Math.max(a.left,b.left)
+    );
+    const h=Math.max(
+      0,
+      Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)
+    );
+    return w*h;
+  }
+
+  function distanceScore(a,b){
+    const ax=(a.left+a.right)/2;
+    const ay=(a.top+a.bottom)/2;
+    const bx=(b.left+b.right)/2;
+    const by=(b.top+b.bottom)/2;
+
+    const dx=Math.abs(ax-bx);
+    const dy=Math.abs(ay-by);
+
+    // 距離越近，扣分越多
+    const nx=Math.max(0,(photoW+gap)-dx);
+    const ny=Math.max(0,(photoH+gap)-dy);
+
+    return nx*ny;
+  }
+
+  let best=null;
+  let bestScore=Infinity;
+
+  // 大量隨機候選，讓每張照片真正散開。
+  for(let i=0;i<240;i++){
+    const candidate={
+      left:2+Math.random()*(96-photoW),
+      top:3+Math.random()*(91-photoH)
+    };
+
+    candidate.right=candidate.left+photoW;
+    candidate.bottom=candidate.top+photoH;
+
+    // 中央訊息保護區
+    if(rectOverlapsCentral(candidate))continue;
+
+    let score=0;
+    let hardCollision=false;
+
+    occupied.forEach(other=>{
+      const area=overlapArea(candidate,other);
+
+      if(area>0){
+        hardCollision=true;
+        score+=area*100;
+      }
+
+      score+=distanceScore(candidate,other);
+    });
+
+    /*
+     * 額外避免照片太貼近畫面邊界。
+     * 仍然允許靠近邊緣，但不會全部卡在同一條線。
+     */
+    if(candidate.left<3)score+=4;
+    if(candidate.top<3)score+=4;
+    if(candidate.right>97)score+=4;
+    if(candidate.bottom>97)score+=4;
+
+    if(!hardCollision && score<bestScore){
+      bestScore=score;
+      best=candidate;
+    }
+
+    // 找到非常乾淨的位置就直接採用
+    if(!hardCollision && score<=0.5){
+      best=candidate;
+      break;
+    }
+  }
+
+  /*
+   * 如果畫面已經很多照片，至少找一個不進中央區的位置。
+   */
+  if(!best){
+    for(let i=0;i<200;i++){
+      const candidate={
+        left:2+Math.random()*(96-photoW),
+        top:3+Math.random()*(91-photoH)
+      };
+
+      candidate.right=candidate.left+photoW;
+      candidate.bottom=candidate.top+photoH;
+
+      if(!rectOverlapsCentral(candidate)){
+        best=candidate;
+        break;
+      }
+    }
+  }
+
+  if(!best){
+    best={left:3,top:5};
+  }
+
+  return {
+    left:best.left+"%",
+    top:best.top+"%",
+    rot:(-10+Math.random()*20)+"deg",
+    scale:(0.86+Math.random()*0.24).toFixed(2)
+  };
+}
+function createPresetPhoto(item,animate=true){
+  if(!item || !item.url)return null;
+
+  const el=document.createElement("div");
+  el.className="polaroid preset-slide";
+
+  const pos=randomPresetPosition();
+
+  el.style.left=pos.left;
+  el.style.top=pos.top;
+  el.style.setProperty("--rot",pos.rot);
+  el.style.setProperty("--scale",pos.scale);
+  el.style.setProperty(
+    "--float-x",
+    (-50+Math.random()*100)+"px"
+  );
+
+  el.innerHTML=
+    '<img src="'+esc(item.url)+'" alt="">'+
+    '<span class="heart">♡</span>';
+
+  applyPhotoOrientation(el,el.querySelector("img"));
+
+  polaroidLayer.appendChild(el);
+
+  if(!animate){
+    el.style.animation="none";
+    el.style.opacity="1";
+    el.style.transform=
+      "scale("+pos.scale+") rotate("+pos.rot+")";
+  }
+
+  /*
+   * 圖片如果要消失，統一「往上飄＋淡出」。
+   */
+  el.addEventListener("animationend",(ev)=>{
+    if(ev.animationName==="polaroidOutUp"){
+      if(el.isConnected)el.remove();
+    }
+  });
+
+  return el;
+}
+
+function discardFailedPresetPhoto(item,el){
+  if(!item || item.failed)return;
+  item.failed=true;
+
+  if(el && el.isConnected)el.remove();
+  presetShowcase.active=presetShowcase.active.filter(entry=>
+    entry.item!==item && entry.el!==el
+  );
+  presetShowcase.items=presetShowcase.items.filter(candidate=>candidate!==item);
+
+  if(!presetShowcase.items.length){
+    if(presetSource.mode==="local"){
+      setPhotoSourceStatus("本機圖片無法讀取，改用網路備援照片");
+      useNetworkPhotos();
+    }
+    return;
+  }
+
+  // 不留下破圖相框；同一個空位立即補上下一張有效照片。
+  const replacement=getNextPresetItem();
+  if(replacement)addPresetPhoto(replacement);
+}
+
+function getNextPresetItem(){
+  const items=presetShowcase.items.filter(x=>x && x.url);
+  if(!items.length)return null;
+
+  // 先排除目前正在畫面上的照片，避免同一張同時出現
+  const activeItems=new Set(
+    presetShowcase.active
+      .filter(entry=>entry && entry.el && entry.el.isConnected)
+      .map(entry=>entry.item)
+  );
+
+  let candidates=items.filter(item=>!activeItems.has(item));
+
+  // 再排除最近已經顯示過的照片，盡量避免短時間重複
+  const history=presetShowcase.shownHistory || [];
+  const fresh=candidates.filter(item=>!history.includes(item));
+
+  if(fresh.length){
+    candidates=fresh;
+  }else if(!candidates.length){
+    // 所有照片都在畫面上時，允許從全部照片重新挑選
+    candidates=items.filter(item=>!history.includes(item));
+
+    if(!candidates.length){
+      // 整輪都播完了，重新開始一輪，但仍避開目前畫面上的照片
+      presetShowcase.shownHistory=[];
+      candidates=items.filter(item=>!activeItems.has(item));
+    }
+  }
+
+  if(!candidates.length)return null;
+
+  const item=candidates[Math.floor(Math.random()*candidates.length)];
+
+  presetShowcase.shownHistory.push(item);
+
+  // 保留最近一段播放紀錄，避免照片很快再次出現
+  const limit=Math.max(1,presetShowcase.historyLimit || items.length);
+  if(presetShowcase.shownHistory.length>limit){
+    presetShowcase.shownHistory.splice(
+      0,
+      presetShowcase.shownHistory.length-limit
+    );
+  }
+
+  return item;
+}
+
+function setupPresetSlideshow(presets){
+  resetPresetSlideshow();
+  presetShowcase.items=Array.isArray(presets)
+    ? presets.filter(x=>x.url)
+    : [];
+
+  if(!presetShowcase.items.length)return;
+
+  /*
+   * 初始不是固定六張：
+   * 隨機 3～6 張。
+   */
+  const max=Math.min(
+    CONFIG.maxPolaroids,
+    presetShowcase.items.length
+  );
+
+  const min=Math.min(
+    CONFIG.minPresetPhotos,
+    max
+  );
+
+  const initialCount=
+    min + Math.floor(Math.random()*(max-min+1));
+
+  presetShowcase.shownHistory=[];
+  presetShowcase.historyLimit=Math.max(
+    presetShowcase.items.length,
+    CONFIG.maxPolaroids*2
+  );
+
+  for(let i=0;i<initialCount;i++){
+    const item=getNextPresetItem();
+    if(!item)break;
+
+    const el=createPresetPhoto(item,false);
+
+    if(el){
+      presetShowcase.active.push({
+        item,
+        el
+      });
+    }
+  }
+
+  /*
+   * 每 5 秒做一次「隨機變化」。
+   * 有新資料時，優先補進空位；
+   * 沒有新資料時，隨機讓一張淡出，
+   * 但永遠維持至少 3 張。
+   */
+  if(presetShowcase.timer){
+    clearInterval(presetShowcase.timer);
+  }
+
+  presetShowcase.timer=setInterval(
+    refreshPresetPhotos,
+    CONFIG.presetSlideInterval
+  );
+}
+
+function removePresetEntry(entry){
+  if(!entry || !entry.el)return;
+
+  const el=entry.el;
+
+  el.classList.remove("leaving");
+  el.style.animation="none";
+  void el.offsetWidth;
+  el.classList.add("leaving");
+
+  setTimeout(()=>{
+    if(el.isConnected)el.remove();
+
+    const idx=presetShowcase.active.indexOf(entry);
+    if(idx>=0){
+      presetShowcase.active.splice(idx,1);
+    }
+  },CONFIG.presetFadeDuration);
+}
+
+function addPresetPhoto(item){
+  const el=createPresetPhoto(item,true);
+
+  if(el){
+    presetShowcase.active.push({
+      item,
+      el
+    });
+  }
+}
+
+function refreshPresetPhotos(){
+  const items=presetShowcase.items;
+
+  if(!items.length)return;
+
+  // 只計算目前真正還在畫面上的婚紗照
+  const candidates=
+    presetShowcase.active.filter(x=>x.el && x.el.isConnected);
+
+  const activeCount=candidates.length;
+
+  /*
+   * 婚紗照數量採「一步一張」的隨機變化：
+   *
+   * 3 張：大多數情況增加，偶爾維持
+   * 4~5 張：可能增加、維持或減少
+   * 6 張：只會維持或減少
+   *
+   * 因此不會再出現「只要少於 6 張就立刻補滿」的問題。
+   * 整體數量會自然在 3~6 張之間流動。
+   */
+  let action;
+
+  if(activeCount<=CONFIG.minPresetPhotos){
+    // 3 張時：70% 增加、30% 維持
+    action=Math.random()<0.70 ? "add" : "keep";
+  }else if(activeCount>=CONFIG.maxPolaroids){
+    // 6 張時：45% 移除、55% 維持
+    action=Math.random()<0.45 ? "remove" : "keep";
+  }else{
+    // 4~5 張：增加 / 維持 / 減少
+    const r=Math.random();
+
+    if(r<0.30){
+      action="add";
+    }else if(r<0.65){
+      action="keep";
+    }else{
+      action="remove";
+    }
+  }
+
+  // 維持目前數量
+  if(action==="keep"){
+    return;
+  }
+
+  // 增加一張新的婚紗照
+  if(action==="add"){
+    const item=getNextPresetItem();
+
+    if(item){
+      addPresetPhoto(item);
+    }
+
+    return;
+  }
+
+  // 移除一張，但永遠不低於 3 張
+  if(action==="remove"){
+    if(activeCount<=CONFIG.minPresetPhotos){
+      return;
+    }
+
+    const old=
+      candidates[Math.floor(Math.random()*candidates.length)];
+
+
+    removePresetEntry(old);
+
+    return;
+  }
+}
+
+function rememberKey(id){
+  if(state.known.has(id))return false;
+
+  state.known.add(id);
+  state.knownOrder.push(id);
+
+  // 長時間播放：限制 known Set 大小
+  while(state.knownOrder.length>CONFIG.maxKnown){
+    const old=state.knownOrder.shift();
+    state.known.delete(old);
+  }
+
+  return true;
+}
+
+function queueNewItem(item){
+  // 純文字進中央訊息 queue。
+  // 有照片的事件會在 process() 裡立即處理中央卡片 + 照片。
+  if(item && !item.url){
+    state.displayQueue.push(item);
+  }
+}
+
+function showNextQueued(){
+  if(!state.displayQueue.length) return;
+
+  const item=state.displayQueue.shift();
+
+  // 純文字：只顯示浮動祝福，不進中央訊息區
+  if(!item.photoUrl){
+    if(item.text) addBubble(item);
+    return;
+  }
+
+  // 有照片：中央顯示「傳了圖片＋文字」，同時旁邊顯示實際照片
+  addCard(item);
+  addPolaroid(item);
+  if(item.text) addBubble(item);
+}
+
+function process(items){
+  if(!Array.isArray(items))return;
+
+  const normalized=items.map(normalize);
+  const fresh=[];
+
+  // Poll-only：第一次 poll 只建立時間水位，不重播歷史資料。
+  // 婚紗照完全由 presetConfig 管理。
+  if(!state.pollInitialized){
+    let maxTime=0;
+    normalized.forEach(item=>{
+      const t=Number(item.time)||0;
+      if(t>maxTime)maxTime=t;
+      rememberKey(keyOf(item));
+      state.items.push(item);
+    });
+    state.watermarkTime=maxTime;
+    state.pollInitialized=true;
+    state.items=state.items.slice(-180);
+    return;
+  }
+
+  normalized.forEach(item=>{
+    const id=keyOf(item);
+    const t=Number(item.time)||0;
+    if(item.kind==="preset")return;
+    if(t<=state.watermarkTime)return;
+    if(!rememberKey(id))return;
+    state.items.push(item);
+    fresh.push(item);
+    if(t>state.watermarkTime)state.watermarkTime=t;
+  });
+
+  if(!fresh.length){
+    if(state.items.length>180)state.items=state.items.slice(-180);
+    return;
+  }
+
+  const photoItems=fresh.filter(x=>x.url);
+  const textItems=fresh.filter(x=>!x.url);
+  const now=Date.now();
+  state.recentPhotoTimes=state.recentPhotoTimes.filter(t=>now-t<CONFIG.photoBurstHoldTime);
+  photoItems.forEach(()=>state.recentPhotoTimes.push(Date.now()));
+
+  if(photoItems.length>=CONFIG.photoBurstThreshold || state.recentPhotoTimes.length>=CONFIG.photoBurstThreshold){
+    state.photoBurst=true;
+    clearTimeout(state.photoBurstTimer);
+    state.photoBurstTimer=setTimeout(()=>{
+      state.photoBurst=false;
+      const guests=Array.from(polaroidLayer.querySelectorAll(".guest-photo"));
+      while(guests.length>CONFIG.guestPhotoNormalMax){
+        const old=guests.shift();
+        if(old)old.remove();
+      }
+    },CONFIG.photoBurstHoldTime);
+  }
+
+  photoItems.forEach(item=>{
+    addCard(item);
+    addPolaroid(item);
+    if(item.text)addBubble(item);
+  });
+  textItems.forEach(item=>{
+    if(item.text)addBubble(item);
+  });
+
+  if(state.items.length>180)state.items=state.items.slice(-180);
+}
+
+function jsonpRequest(url,callbackName){
+  return new Promise((resolve,reject)=>{
+    const script=document.createElement("script");
+    let finished=false;
+    let timedOut=false;
+
+    // Apps Script 偶爾會在 timeout 後才把 JSONP 回傳回來。
+    // timeout 後保留 callback 一小段時間，避免瀏覽器出現
+    // "xxx is not defined"，也避免晚到的回應變成未捕獲錯誤。
+    const lateCleanupMs=120000;
+
+    const timeout=setTimeout(()=>{
+      timedOut=true;
+      finish(new Error("JSONP timeout"));
+
+      setTimeout(()=>{
+        try{
+          delete window[callbackName];
+        }catch(e){
+          window[callbackName]=undefined;
+        }
+      },lateCleanupMs);
+    },CONFIG.jsonpTimeout);
+
+    function removeScript(){
+      script.onload=null;
+      script.onerror=null;
+      if(script.parentNode)script.parentNode.removeChild(script);
+    }
+
+    function cleanup(){
+      clearTimeout(timeout);
+      removeScript();
+
+      // 正常成功時立即移除 callback；timeout 時交給 late cleanup。
+      if(!timedOut){
+        try{
+          delete window[callbackName];
+        }catch(e){
+          window[callbackName]=undefined;
+        }
+      }
+    }
+
+    function finish(error,data){
+      if(finished)return;
+      finished=true;
+      cleanup();
+
+      if(error)reject(error);
+      else resolve(data);
+    }
+
+    window[callbackName]=(data)=>{
+      // timeout 後才到達的 Apps Script 回應只需要安靜地忽略，
+      // 不要再次 resolve/reject，也不要觸發 ReferenceError。
+      if(timedOut)return;
+      finish(null,data);
+    };
+
+    script.src=url;
+    script.async=true;
+
+    script.onerror=()=>{
+      finish(new Error("JSONP load failed"));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
+async function loadPresetConfig(){
+  const cb="weddingPreset_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  try{
+    const url=CONFIG.endpoint+"?mode=presetConfig&callback="+encodeURIComponent(cb)+"&t="+Date.now();
+    const data=await jsonpRequest(url,cb);
+    if(data&&data.ok&&Array.isArray(data.items)){
+      presetSource.networkItems=data.items.filter(item=>item&&item.url);
+      if(presetSource.mode==="network"){
+        setupPresetSlideshow(presetSource.networkItems);
+        setPhotoSourceStatus("使用網路備援照片");
+      }
+      return;
+    }
+    throw new Error(data&&data.error?data.error:"Invalid presetConfig response");
+  }catch(err){
+    console.warn("婚紗照設定載入失敗，賓客即時同步仍會繼續。",err);
+  }
+}
+
+
+/* =========================================================
+   🍽️ 婚宴小提醒
+   平常沒有新訊息時，偶爾在中央訊息區顯示。
+   只要收到真正的新訊息，就會重新計時。
+   ========================================================= */
+const WEDDING_REMINDER = {
+  idleMs: 90000,       // 90 秒沒有新訊息後，開始考慮提醒
+  showMs: 8500,        // 每次提醒顯示約 8.5 秒
+  cooldownMs: 180000,  // 同一輪提醒至少間隔 3 分鐘
+  enabled: true,
+
+  messages: [
+    {
+      title: "🍽️ 午宴小提醒",
+      text: "請大家盡情享用美食哦！吃飽飽才有力氣一起開心～♡"
+    },
+    {
+      title: "🍴 今天多吃一點",
+      text: "今天不要客氣，多吃一點！一起享受這頓幸福的午宴～♡"
+    },
+    {
+      title: "🥰 新人小提醒",
+      text: "不要客氣嘿～今天就是要吃得開心、玩得盡興！♡"
+    },
+    {
+      title: "🍻 開心喝酒",
+      text: "今天開心喝、開心聊！飲酒適量，玩得開心最重要～♡"
+    },
+    {
+      title: "🍺 飲酒小提醒",
+      text: "酒可以慢慢喝、開心喝，記得飲酒適量哦～♡"
+    },
+    {
+      title: "🍻 開心相聚",
+      text: "一起吃、一起喝、一起聊天，飲酒適量，開心玩到最後～♡"
+    },
+    {
+      title: "🚗 溫馨提醒",
+      text: "有喝酒就不要開車哦～請搭車或找代駕，安全回家♡"
+    },
+    {
+      title: "🫶 平安回家",
+      text: "今天盡情享受美好時光，喝酒適量，平安回家最重要♡"
+    },
+    {
+      title: "🌿 環境小提醒",
+      text: "請大家一起維護環境清潔，不要亂吐檳榔汁嘿～♡"
+    },
+    {
+      title: "📸 拍照小提醒",
+      text: "攝影師正在捕捉幸福瞬間，請不要擋住鏡頭嘿～♡"
+    },
+    {
+      title: "🎉 玩得開心",
+      text: "今天是開心的一天！吃多一點、喝適量、玩得開心～♡"
+    },
+    {
+      title: "💗 幸福小提醒",
+      text: "看到喜歡的菜就多吃一點，看到朋友就多聊幾句～♡"
+    }
+  ]
+};
+
+let weddingReminderLastActivity = Date.now();
+let weddingReminderLastShown = 0;
+let weddingReminderTimer = null;
+let weddingReminderShowing = false;
+
+function resetWeddingReminderTimer(){
+  weddingReminderLastActivity = Date.now();
+
+  if(weddingReminderShowing){
+    hideWeddingReminder();
+  }
+
+  if(weddingReminderTimer){
+    clearTimeout(weddingReminderTimer);
+  }
+
+  weddingReminderTimer = setTimeout(checkWeddingReminder, WEDDING_REMINDER.idleMs);
+}
+
+function checkWeddingReminder(){
+  if(!WEDDING_REMINDER.enabled) return;
+
+  const now = Date.now();
+
+  if(
+    now - weddingReminderLastActivity >= WEDDING_REMINDER.idleMs &&
+    now - weddingReminderLastShown >= WEDDING_REMINDER.cooldownMs &&
+    !weddingReminderShowing
+  ){
+    showWeddingReminder();
+  }else{
+    const wait = Math.max(
+      5000,
+      WEDDING_REMINDER.idleMs -
+      (now - weddingReminderLastActivity)
+    );
+
+    weddingReminderTimer = setTimeout(
+      checkWeddingReminder,
+      wait
+    );
+  }
+}
+
+function showWeddingReminder(){
+  if(!WEDDING_REMINDER.enabled) return;
+
+  const item =
+    WEDDING_REMINDER.messages[
+      Math.floor(
+        Math.random() *
+        WEDDING_REMINDER.messages.length
+      )
+    ];
+
+  // 抽獎模式下中央只保留抽獎。
+  // 婚宴提醒改成旁邊浮動訊息，不佔中央位置。
+  addBubble({
+    name:item.title,
+    text:item.text,
+    time:Date.now()
+  });
+
+  weddingReminderShowing = true;
+  weddingReminderLastShown = Date.now();
+
+  setTimeout(function(){
+    weddingReminderShowing = false;
+    weddingReminderLastActivity = Date.now();
+
+    weddingReminderTimer =
+      setTimeout(
+        checkWeddingReminder,
+        WEDDING_REMINDER.idleMs
+      );
+  }, WEDDING_REMINDER.showMs);
+}
+
+/* 收到真正的賓客訊息／照片時呼叫 */
+function notifyWeddingReminderActivity(){
+  resetWeddingReminderTimer();
+}
+
+function hideWeddingReminder(){
+  document
+    .querySelectorAll(".wedding-reminder-card")
+    .forEach(function(el){
+      el.remove();
+    });
+
+  weddingReminderShowing = false;
+}
+
+/* 啟動提醒計時 */
+setTimeout(
+  checkWeddingReminder,
+  WEDDING_REMINDER.idleMs
+);
+
+
+
+/* =========================================================
+   🎁 三連點抽獎
+   第 1 下：小愛心
+   第 2 下：愛心變大
+   第 3 下：愛心爆開 → 圖片快速洗牌 → 抽出一張
+========================================================= */
+const LOTTERY_CONFIG={
+  enabled:true,
+  requiredClicks:3,
+  clickWindowMs:5000,
+  shuffleDurationMs:12000,
+  shuffleIntervalMs:900,
+  finalBurstAtMs:10200,
+  burstIntervalMs:650,
+  // 給現場主持人與得主足夠時間把刮刮卡揭曉。
+  resultShowMs:30000
+};
+
+const lotteryState={
+  clicks:0,
+  clickTimer:null,
+  running:false,
+  shuffleTimer:null,
+  resultTimer:null,
+  burstTimer:null,
+  finalBurstDone:false,
+  lobbyTimer:null,
+  plannedWinners:null
+};
+
+const lotteryZone=document.getElementById("lotteryZone");
+const lotteryHeart=document.getElementById("lotteryHeart");
+const lotteryBurst=document.getElementById("lotteryBurst");
+const lotteryResult=document.getElementById("lotteryResult");
+const lotteryOpenButton=document.getElementById("lotteryOpenButton");
+const lotteryLobby=document.getElementById("lotteryLobby");
+const lotteryEligibleCount=document.getElementById("lotteryEligibleCount");
+const lotteryLobbyNote=document.getElementById("lotteryLobbyNote");
+const lotteryRefreshButton=document.getElementById("lotteryRefreshButton");
+const lotteryStartButton=document.getElementById("lotteryStartButton");
+const lotteryCloseButton=document.getElementById("lotteryCloseButton");
+const lotteryWinnerCountInput=document.getElementById("lotteryWinnerCount");
+
+function isTodayLotteryUpload(item){
+  if(!item || !item.url)return false;
+
+  const t=Number(item.time)||0;
+  if(!t)return false;
+
+  const d=new Date(t);
+  const now=new Date();
+
+  return d.getFullYear()===now.getFullYear() &&
+    d.getMonth()===now.getMonth() &&
+    d.getDate()===now.getDate();
+}
+
+function lotteryPool(){
+  // 抽獎只抽「今天上傳的賓客照片」。
+  // 不使用 presetShowcase，所以婚紗照不會進抽獎池。
+  const pool=[];
+  const seen=new Set();
+
+  // state.items 是從今日 Apps Script poll 進來的賓客資料。
+  state.items.forEach(item=>{
+    if(!isTodayLotteryUpload(item))return;
+
+    const url=String(item.url||"").trim();
+    if(!url || seen.has(url))return;
+
+    seen.add(url);
+    pool.push({
+      url:url,
+      name:item.name||"賓客照片",
+      time:item.time||0
+    });
+  });
+
+  return pool;
+}
+
+function updateLotteryLobby(note){
+  const count=lotteryPool().length;
+  if(lotteryEligibleCount)lotteryEligibleCount.textContent=String(count);
+  if(lotteryStartButton)lotteryStartButton.disabled=!count;
+  if(lotteryWinnerCountInput)lotteryWinnerCountInput.max=String(Math.min(Math.max(count,1),4));
+  if(lotteryLobbyNote){
+    lotteryLobbyNote.textContent=note || (count
+      ? "只抽今天賓客上傳的照片"
+      : "尚未收到今天的賓客照片，請稍後重新刷新");
+  }
+  return count;
+}
+
+function selectedWinnerCount(poolSize){
+  const requested=Math.round(Number(lotteryWinnerCountInput&&lotteryWinnerCountInput.value)||2);
+  const safe=Math.min(Math.max(requested,1),4,Math.max(poolSize,1));
+  if(lotteryWinnerCountInput)lotteryWinnerCountInput.value=String(safe);
+  return safe;
+}
+
+function openLotteryLobby(){
+  if(lotteryState.running)return;
+  updateLotteryLobby();
+  lotteryZone.classList.add("lottery-lobby-open");
+  if(lotteryLobby)lotteryLobby.hidden=false;
+  clearTimeout(lotteryState.lobbyTimer);
+  lotteryState.lobbyTimer=setTimeout(closeLotteryLobby,5000);
+}
+
+function closeLotteryLobby(){
+  clearTimeout(lotteryState.lobbyTimer);
+  lotteryState.lobbyTimer=null;
+  lotteryZone.classList.remove("lottery-lobby-open");
+  if(lotteryLobby)lotteryLobby.hidden=true;
+}
+
+function refreshLotteryLobby(){
+  clearTimeout(lotteryState.lobbyTimer);
+  lotteryState.lobbyTimer=setTimeout(closeLotteryLobby,5000);
+  if(lotteryRefreshButton)lotteryRefreshButton.disabled=true;
+  updateLotteryLobby("正在同步最新上傳照片…");
+  poll();
+  setTimeout(()=>{
+    updateLotteryLobby();
+    if(lotteryRefreshButton)lotteryRefreshButton.disabled=false;
+  },1400);
+}
+
+function beginLotteryGame(){
+  if(!updateLotteryLobby())return;
+  closeLotteryLobby();
+  wall.classList.add("lottery-fullscreen");
+  startLottery();
+}
+
+function endLotteryGame(){
+  wall.classList.remove("lottery-fullscreen");
+  updateLotteryLobby();
+}
+
+function clearLotteryClickTimer(){
+  if(lotteryState.clickTimer){
+    clearTimeout(lotteryState.clickTimer);
+    lotteryState.clickTimer=null;
+  }
+}
+
+function resetLotteryClicks(){
+  clearLotteryClickTimer();
+  lotteryState.clicks=0;
+  lotteryHeart.classList.remove("show","pulse","explode","resetting");
+  lotteryHeart.style.removeProperty("--heart-scale");
+  lotteryZone.classList.remove("lottery-active");
+}
+
+function lotteryHeartStep(){
+  const scale=[.72,1.05,1.38][Math.min(lotteryState.clicks-1,2)];
+
+  lotteryHeart.style.setProperty("--heart-scale",scale);
+  lotteryHeart.classList.remove("show","pulse");
+  void lotteryHeart.offsetWidth;
+
+  if(lotteryState.clicks===1){
+    lotteryHeart.classList.add("show");
+  }else{
+    lotteryHeart.classList.add("pulse");
+  }
+}
+
+function createLotteryBurst(big=false){
+  lotteryBurst.classList.remove("active");
+  void lotteryBurst.offsetWidth;
+  lotteryBurst.classList.add("active");
+
+  const symbols=["♡","✦","✧","·"];
+  const colors=["#ffe3a4","#fff1d0","#e9b6a5","#ffffff"];
+  const count=big ? 28 : 12;
+
+  // 每次都建立一波新的粒子，讓整個 20 秒洗牌期間持續有噴射效果。
+  const fragment=document.createDocumentFragment();
+  for(let i=0;i<count;i++){
+    const p=document.createElement("span");
+    const angle=Math.random()*Math.PI*2;
+    const distance=big ? 170+Math.random()*390 : 90+Math.random()*230;
+
+    p.className="lottery-particle";
+    p.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+    p.classList.add("heart");
+
+    if(Math.random()>.65){
+      p.style.fontSize=(big ? 17+Math.random()*12 : 13+Math.random()*9)+"px";
+    }
+
+    p.style.setProperty("--dx",Math.cos(angle)*distance+"px");
+    p.style.setProperty("--dy",Math.sin(angle)*distance+"px");
+    p.style.setProperty("--rot",(-220+Math.random()*440)+"deg");
+    p.style.setProperty("--particle",colors[Math.floor(Math.random()*colors.length)]);
+    p.style.animationDelay=(Math.random()*120)+"ms";
+    if(big)p.style.animationDuration=(1.25+Math.random()*.65)+"s";
+    else p.style.animationDuration=(1.05+Math.random()*.35)+"s";
+
+    fragment.appendChild(p);
+  }
+
+  // 保留正在飛行的粒子，避免每一波把上一波清掉。
+  lotteryBurst.appendChild(fragment);
+
+  setTimeout(()=>{
+    while(lotteryBurst.children.length>520){
+      lotteryBurst.removeChild(lotteryBurst.firstElementChild);
+    }
+  },1200);
+}
+
+function stopLotteryBurst(){
+  if(lotteryState.burstTimer){
+    clearInterval(lotteryState.burstTimer);
+    lotteryState.burstTimer=null;
+  }
+  lotteryState.finalBurstDone=false;
+  lotteryBurst.classList.remove("active","final-burst");
+  lotteryBurst.innerHTML="";
+}
+function pickRandomLotteryItem(pool,lastUrl){
+  if(!pool.length)return null;
+
+  let candidates=pool.filter(x=>x.url!==lastUrl);
+  if(!candidates.length)candidates=pool;
+
+
+  return candidates[Math.floor(Math.random()*candidates.length)];
+}
+
+function pickLotteryWinners(pool,count){
+  const candidates=pool.slice();
+  const winners=[];
+  while(candidates.length && winners.length<count){
+    const index=Math.floor(Math.random()*candidates.length);
+    winners.push(candidates.splice(index,1)[0]);
+  }
+  return winners;
+}
+
+function showLotteryImage(item,final=false){
+  if(!item || !item.url)return;
+
+  lotteryResult.innerHTML=
+    '<img src="'+esc(item.url)+'" alt="抽獎圖片">'+
+    '<div class="lottery-stage-caption">幸運抽獎</div>';
+
+  lotteryResult.classList.remove("hiding","reel");
+  lotteryResult.classList.remove("multiple","revealed");
+  delete lotteryResult.dataset.count;
+  lotteryResult.classList.toggle("shuffling",!final);
+
+  if(final){
+    lotteryResult.classList.add("show");
+  }else{
+    lotteryResult.classList.add("show");
+    void lotteryResult.offsetWidth;
+  }
+
+  const img=lotteryResult.querySelector("img");
+  if(img){
+    img.onerror=()=>{
+      const pool=lotteryPool();
+      const replacement=pickRandomLotteryItem(
+        pool,
+        item.url
+      );
+      if(replacement && replacement.url!==item.url){
+        showLotteryImage(replacement,final);
+      }
+    };
+  }
+}
+
+function showLotteryWinners(winners){
+  if(!winners.length)return;
+  lotteryResult.innerHTML=winners.map((item,index)=>
+    '<div class="scratch-winner" data-winner="'+(index+1)+'">'+
+      '<img src="'+esc(item.url)+'" alt="幸運得主照片">'+
+      '<canvas aria-label="刮開揭曉幸運得主" role="img"></canvas>'+
+      '<span class="scratch-hint">刮開揭曉<br><small>幸運得主 #'+(index+1)+'</small></span>'+
+    '</div>'
+  ).join("")+
+    '<div class="lottery-stage-caption">刮開卡面，揭曉幸運得主</div>'+
+    '<button class="lottery-finish-button" type="button">結束抽獎</button>';
+  lotteryResult.classList.remove("hiding","shuffling","reel");
+  lotteryResult.classList.toggle("multiple",winners.length>1);
+  lotteryResult.classList.add("revealed");
+  lotteryResult.dataset.count=String(winners.length);
+  lotteryResult.classList.add("show");
+  const finishButton=lotteryResult.querySelector(".lottery-finish-button");
+  if(finishButton)finishButton.addEventListener("click",closeLotteryResult);
+  requestAnimationFrame(setupScratchCards);
+}
+
+function closeLotteryResult(){
+  if(!lotteryState.running)return;
+  clearTimeout(lotteryState.resultTimer);
+  lotteryResult.classList.add("hiding");
+  setTimeout(()=>{
+    lotteryResult.classList.remove("show","hiding","shuffling","revealed","multiple");
+    lotteryResult.innerHTML="";
+    lotteryZone.classList.remove("winner-flash");
+    lotteryState.running=false;
+    resetLotteryClicks();
+    endLotteryGame();
+  },600);
+}
+
+function setupScratchCards(){
+  lotteryResult.querySelectorAll(".scratch-winner").forEach(card=>{
+    const canvas=card.querySelector("canvas");
+    if(!canvas)return;
+    const context=canvas.getContext("2d",{willReadFrequently:true});
+    const rect=canvas.getBoundingClientRect();
+    const ratio=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.max(1,Math.round(rect.width*ratio));
+    canvas.height=Math.max(1,Math.round(rect.height*ratio));
+    context.scale(ratio,ratio);
+
+    const gradient=context.createLinearGradient(0,0,rect.width,rect.height);
+    gradient.addColorStop(0,"#f6dda0");
+    gradient.addColorStop(.5,"#d99583");
+    gradient.addColorStop(1,"#9d605c");
+    context.fillStyle=gradient;
+    context.fillRect(0,0,rect.width,rect.height);
+    context.globalAlpha=.24;
+    context.fillStyle="#fff8e9";
+    for(let i=0;i<34;i++){
+      context.beginPath();
+      context.arc(Math.random()*rect.width,Math.random()*rect.height,2+Math.random()*6,0,Math.PI*2);
+      context.fill();
+    }
+    context.globalAlpha=1;
+
+    let drawing=false;
+    let previous=null;
+    const point=event=>{
+      const box=canvas.getBoundingClientRect();
+      return {x:event.clientX-box.left,y:event.clientY-box.top};
+    };
+    const erase=(from,to)=>{
+      context.save();
+      context.globalCompositeOperation="destination-out";
+      context.lineWidth=Math.max(36,Math.min(rect.width,rect.height)*.12);
+      context.lineCap="round";
+      context.lineJoin="round";
+      context.beginPath();
+      context.moveTo(from.x,from.y);
+      context.lineTo(to.x,to.y);
+      context.stroke();
+      context.restore();
+    };
+    const revealIfReady=()=>{
+      const image=context.getImageData(0,0,canvas.width,canvas.height).data;
+      let transparent=0;
+      const stride=32;
+      for(let i=3;i<image.length;i+=4*stride){if(image[i]<35)transparent++;}
+      if(transparent/(image.length/(4*stride))>.34){
+        card.classList.add("revealed");
+        canvas.classList.add("cleared");
+        const cards=[...lotteryResult.querySelectorAll(".scratch-winner")];
+        playScratchRevealSound(false);
+        if(cards.length && cards.every(winner=>winner.classList.contains("revealed"))){
+          lotteryResult.classList.add("all-scratched");
+          const caption=lotteryResult.querySelector(".lottery-stage-caption");
+          if(caption)caption.textContent="✦ 恭喜幸運得主 ✦";
+          playScratchRevealSound(true);
+        }
+      }
+    };
+    canvas.addEventListener("pointerdown",event=>{
+      event.preventDefault(); drawing=true; previous=point(event);
+      canvas.setPointerCapture&&canvas.setPointerCapture(event.pointerId);
+      startScratchSound();
+      erase(previous,previous);
+    });
+    canvas.addEventListener("pointermove",event=>{
+      if(!drawing)return;
+      const current=point(event); erase(previous,current); previous=current;
+    });
+    const finish=()=>{if(drawing){drawing=false;previous=null;stopScratchSound();revealIfReady();}};
+    canvas.addEventListener("pointerup",finish);
+    canvas.addEventListener("pointercancel",finish);
+  });
+}
+
+// 刮卡使用極低音量的帶通白噪音，不需額外音檔，也只在使用者拖曳時播放。
+let scratchSoundSource=null;
+let scratchSoundGain=null;
+function startScratchSound(){
+  if(scratchSoundSource)return;
+  const audio=getLotteryAudio();
+  if(!audio)return;
+  const buffer=audio.createBuffer(1,Math.max(1,Math.floor(audio.sampleRate*.18)),audio.sampleRate);
+  const data=buffer.getChannelData(0);
+  for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.42;
+  const source=audio.createBufferSource();
+  const filter=audio.createBiquadFilter();
+  const gain=audio.createGain();
+  source.buffer=buffer;source.loop=true;
+  filter.type="bandpass";filter.frequency.value=1180;filter.Q.value=.7;
+  gain.gain.setValueAtTime(.028,audio.currentTime);
+  source.connect(filter);filter.connect(gain);gain.connect(audio.destination);
+  source.start();
+  scratchSoundSource=source;scratchSoundGain=gain;
+}
+function stopScratchSound(){
+  if(!scratchSoundSource)return;
+  const source=scratchSoundSource;
+  const gain=scratchSoundGain;
+  scratchSoundSource=null;scratchSoundGain=null;
+  try{
+    const audio=source.context;
+    gain.gain.cancelScheduledValues(audio.currentTime);
+    gain.gain.setValueAtTime(gain.gain.value,audio.currentTime);
+    gain.gain.linearRampToValueAtTime(.0001,audio.currentTime+.045);
+    source.stop(audio.currentTime+.055);
+  }catch(e){}
+}
+
+function playScratchRevealSound(allRevealed){
+  const audio=getLotteryAudio();
+  if(!audio)return;
+  const now=audio.currentTime;
+  const notes=allRevealed?[659.25,783.99,987.77]:[783.99,1046.5];
+  notes.forEach((frequency,index)=>{
+    const oscillator=audio.createOscillator();
+    const gain=audio.createGain();
+    oscillator.type="sine";
+    oscillator.frequency.setValueAtTime(frequency,now+index*.09);
+    gain.gain.setValueAtTime(.0001,now+index*.09);
+    gain.gain.exponentialRampToValueAtTime(allRevealed?.11:.075,now+index*.09+.018);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+index*.09+.42);
+    oscillator.connect(gain);gain.connect(audio.destination);
+    oscillator.start(now+index*.09);oscillator.stop(now+index*.09+.45);
+  });
+}
+
+function showLotteryReel(pool){
+  if(!pool.length)return;
+  const shuffled=pool.slice().sort(()=>Math.random()-.5);
+  const maximumVisible=18;
+  const visible=shuffled.slice(0,maximumVisible);
+  const hiddenCount=Math.max(0,shuffled.length-visible.length);
+
+  // 以打散後的格點安排，保有照片牆的隨機感，也避免大量圖片互相壓住。
+  const columns=Math.ceil(Math.sqrt(visible.length*1.45));
+  const rows=Math.ceil(visible.length/columns);
+  const cells=Array.from({length:columns*rows},(_,i)=>i).sort(()=>Math.random()-.5);
+  lotteryResult.innerHTML=visible.map((item,index)=>{
+    const cell=cells[index];
+    const col=cell%columns;
+    const row=Math.floor(cell/columns);
+    const x=(col+.5)/columns*100+(-3+Math.random()*6);
+    const y=18+(row+.5)/rows*61+(-3+Math.random()*6);
+    const rotation=(-8+Math.random()*16).toFixed(1);
+    const size=(11+Math.random()*4.2).toFixed(1);
+    return '<figure class="lottery-reel-photo" style="--x:'+x.toFixed(1)+'%;--y:'+y.toFixed(1)+'%;--r:'+rotation+'deg;--size:'+size+'vw">'+
+      '<img src="'+esc(item.url)+'" alt="參加抽獎的賓客照片">'+
+    '</figure>';
+  }).join("")+'<div class="lottery-stage-caption reel-caption">誰會是幸運得主？</div>';
+  lotteryResult.classList.remove("hiding","multiple","revealed");
+  lotteryResult.classList.add("reel","show","shuffling");
+  delete lotteryResult.dataset.count;
+}
+
+function finishLottery(plannedWinners){
+  clearTimeout(lotteryState.shuffleTimer);
+  stopLotterySound();
+  stopLotteryBurst();
+  lotteryState.shuffleTimer=null;
+
+  const pool=lotteryPool();
+
+  if(!pool.length){
+    // 沒有可抽的圖片時，讓愛心重新出現，下一次可以再試。
+    lotteryState.running=false;
+    lotteryHeart.classList.remove("explode");
+    lotteryHeart.classList.add("show");
+    setTimeout(resetLotteryClicks,900);
+    return;
+  }
+
+  const winners=plannedWinners&&plannedWinners.length
+    ? plannedWinners
+    : pickLotteryWinners(pool,selectedWinnerCount(pool.length));
+  showLotteryWinners(winners);
+
+  // 最後停住：整個中央舞台閃一下，配合「哇！中獎！」。
+  lotteryZone.classList.remove("winner-flash");
+  void lotteryZone.offsetWidth;
+  lotteryZone.classList.add("winner-flash");
+  playLotteryFinalSound();
+
+  // 不設自動結束時間；現場可慢慢把每張刮開，再由右下角主持人按鈕收回。
+  clearTimeout(lotteryState.resultTimer);
+}
+
+/* =========================================================
+   🔊 抽獎音效：使用瀏覽器 Web Audio，不需要額外音檔
+   第 1/2/3 下有提示音；洗牌期間有輕微節奏；最後有高潮音。
+========================================================= */
+let lotteryAudioCtx=null;
+let lotteryTickTimer=null;
+let lotteryMusicTimer=null;
+let lotteryMusicStep=0;
+
+function getLotteryAudio(){
+  try{
+    if(!lotteryAudioCtx){
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC)return null;
+      lotteryAudioCtx=new AC();
+    }
+    if(lotteryAudioCtx.state==="suspended") lotteryAudioCtx.resume();
+    return lotteryAudioCtx;
+  }catch(e){
+    return null;
+  }
+}
+
+function lotteryTone(freq,duration=.12,type="sine",gain=.045,delay=0){
+  const ctx=getLotteryAudio();
+  if(!ctx)return;
+  const now=ctx.currentTime+delay;
+  const osc=ctx.createOscillator();
+  const g=ctx.createGain();
+  osc.type=type;
+  osc.frequency.setValueAtTime(freq,now);
+  g.gain.setValueAtTime(0.0001,now);
+  g.gain.exponentialRampToValueAtTime(gain,now+.012);
+  g.gain.exponentialRampToValueAtTime(0.0001,now+duration);
+  osc.connect(g); g.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now+duration+.02);
+}
+
+function playLotteryClickSound(step){
+  const notes=[523.25,659.25,783.99];
+  lotteryTone(notes[Math.min(step-1,2)],.16,"sine",.055);
+  if(step===3){
+    lotteryTone(1046.5,.38,"triangle",.07,.06);
+    lotteryTone(1318.5,.48,"sine",.045,.13);
+  }
+}
+
+function playLotteryShuffleTick(){
+  // 每次換圖：短促、明亮、明顯的「咔／叮」聲。
+  const ctx=getLotteryAudio();
+  if(!ctx)return;
+  const now=ctx.currentTime;
+
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type="square";
+  osc.frequency.setValueAtTime(260,now);
+  osc.frequency.exponentialRampToValueAtTime(920,now+.055);
+
+  gain.gain.setValueAtTime(.0001,now);
+  gain.gain.exponentialRampToValueAtTime(.075,now+.008);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+.075);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now+.09);
+
+  // 很短的高音亮點，讓每張照片切換更有「中獎機」感。
+  lotteryTone(1244,.065,"triangle",.035,.012);
+}
+
+function startLotterySound(){
+  getLotteryAudio();
+  clearInterval(lotteryTickTimer);
+  lotteryTickTimer=null;
+  startLotteryMusic();
+}
+
+function startLotteryMusic(){
+  const ctx=getLotteryAudio();
+  if(!ctx)return;
+  clearInterval(lotteryMusicTimer);
+  lotteryMusicStep=0;
+
+  const play=()=>{
+    const chords=[[261.63,329.63,392],[293.66,369.99,440],[220,277.18,329.63],[246.94,311.13,369.99]];
+    const chord=chords[lotteryMusicStep++%chords.length];
+    chord.forEach((frequency,index)=>lotteryTone(
+      frequency,.72,"sine",.018,index*.035
+    ));
+    lotteryTone(chord[0]*2,.28,"triangle",.014,.18);
+  };
+  play();
+  lotteryMusicTimer=setInterval(play,820);
+}
+
+function playLotteryFinalSound(){
+  clearInterval(lotteryTickTimer);
+  lotteryTickTimer=null;
+
+  // 最後不是語音，而是「中獎高潮」+ 拍手感。
+  lotteryTone(130.81,.22,"sine",.10);
+  lotteryTone(261.63,.20,"triangle",.075,.02);
+  lotteryTone(523.25,.22,"triangle",.09,.08);
+  lotteryTone(659.25,.30,"triangle",.10,.17);
+  lotteryTone(783.99,.34,"sine",.11,.28);
+  lotteryTone(987.77,.44,"sine",.12,.40);
+  lotteryTone(1318.5,.60,"sine",.13,.53);
+  lotteryTone(1567.98,.72,"sine",.10,.67);
+
+  // 亮晶晶的最後一擊。
+  lotteryTone(2093,.20,"sine",.055,.78);
+  lotteryTone(2637,.25,"sine",.045,.90);
+
+  // 延遲一點進入拍手，做出「大家鼓掌恭喜」的感覺。
+  setTimeout(playLotteryApplause,760);
+}
+
+function playLotteryApplause(){
+  const ctx=getLotteryAudio();
+  if(!ctx)return;
+
+  // 用 Web Audio 產生多次短促噪聲，模擬拍手。
+  const applauseTimes=[0,.12,.24,.38,.52,.68,.86,1.04,1.24,1.46,1.68];
+  applauseTimes.forEach((delay,index)=>{
+    setTimeout(()=>{
+      if(!lotteryState.running && index<applauseTimes.length-1)return;
+
+      const now=ctx.currentTime;
+      const buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*.11),ctx.sampleRate);
+      const data=buffer.getChannelData(0);
+
+      for(let i=0;i<data.length;i++){
+        const t=i/data.length;
+        const envelope=Math.sin(Math.PI*t)*Math.pow(1-t,.35);
+        data[i]=(Math.random()*2-1)*envelope;
+      }
+
+      const source=ctx.createBufferSource();
+      const filter=ctx.createBiquadFilter();
+      const gain=ctx.createGain();
+
+      source.buffer=buffer;
+      filter.type="bandpass";
+      filter.frequency.value=1450 + Math.random()*850;
+      filter.Q.value=.75;
+
+      gain.gain.setValueAtTime(.0001,now);
+      gain.gain.exponentialRampToValueAtTime(.12 + Math.random()*.07,now+.008);
+      gain.gain.exponentialRampToValueAtTime(.0001,now+.105);
+
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(now);
+      source.stop(now+.12);
+    },delay*1000);
+  });
+}
+
+function stopLotterySound(){
+  clearInterval(lotteryTickTimer);
+  lotteryTickTimer=null;
+  clearInterval(lotteryMusicTimer);
+  lotteryMusicTimer=null;
+}
+
+function stopLotterySound(){
+  clearInterval(lotteryTickTimer);
+  lotteryTickTimer=null;
+  clearInterval(lotteryMusicTimer);
+  lotteryMusicTimer=null;
+}
+
+function startLottery(){
+  if(lotteryState.running)return;
+
+  const pool=lotteryPool();
+  if(!pool.length){
+    updateLotteryLobby();
+    endLotteryGame();
+    return;
+  }
+
+  lotteryState.running=true;
+  clearLotteryClickTimer();
+  startLotterySound();
+
+  lotteryZone.classList.add("lottery-active");
+  lotteryHeart.classList.remove("show","pulse","resetting");
+  lotteryHeart.classList.add("explode");
+  lotteryState.finalBurstDone=false;
+
+  setTimeout(()=>{
+    const winnerCount=selectedWinnerCount(pool.length);
+    const plannedWinners=pickLotteryWinners(pool,winnerCount);
+    const winnerUrls=new Set(plannedWinners.map(item=>item.url));
+    const activePool=pool.slice();
+
+    playLotteryShuffleTick();
+    showLotteryReel(activePool);
+
+    const started=Date.now();
+    const initialCount=activePool.length;
+
+    // 所有人先出現，再逐步縮圈；節奏越來越快，得主不會在過程中被淘汰。
+    const scheduleNextShuffle=()=>{
+      if(!lotteryState.running)return;
+
+      const elapsed=Date.now()-started;
+
+      if(elapsed>=LOTTERY_CONFIG.shuffleDurationMs){
+        finishLottery(plannedWinners);
+        return;
+      }
+
+      // 前段保留完整照片牆，後段以越來越快的速度收斂；
+      // 最後一輪會只剩下接近得主數量的卡片，而不是還有十幾張。
+      const progress=Math.max(0,Math.min(1,(elapsed-900)/(LOTTERY_CONFIG.shuffleDurationMs-900)));
+      const eased=Math.pow(progress,1.72);
+      const targetCount=Math.max(
+        plannedWinners.length,
+        plannedWinners.length+Math.ceil((initialCount-plannedWinners.length)*(1-eased))
+      );
+      while(activePool.length>targetCount){
+        const removable=activePool.filter(item=>!winnerUrls.has(item.url));
+        if(!removable.length)break;
+        const removed=removable[Math.floor(Math.random()*removable.length)];
+        activePool.splice(activePool.indexOf(removed),1);
+      }
+
+      playLotteryShuffleTick();
+      showLotteryReel(activePool);
+
+      const interval=Math.max(150,760-elapsed*.052);
+      lotteryState.shuffleTimer=setTimeout(scheduleNextShuffle,interval);
+    };
+
+    // 開場先讓大家看清楚參加名單，再逐步加速。
+    lotteryState.shuffleTimer=setTimeout(scheduleNextShuffle,850);
+  },380);
+}
+
+function handleLotteryClick(event){
+  if(!LOTTERY_CONFIG.enabled || lotteryState.running)return;
+  if(event && event.target.closest("button"))return;
+
+  lotteryState.clicks++;
+  lotteryZone.classList.add("lottery-active");
+  playLotteryClickSound(lotteryState.clicks);
+  lotteryHeartStep();
+
+  clearLotteryClickTimer();
+  lotteryState.clickTimer=setTimeout(()=>{
+    if(lotteryState.clicks<LOTTERY_CONFIG.requiredClicks){
+      lotteryHeart.classList.add("resetting");
+      setTimeout(resetLotteryClicks,360);
+    }
+  },LOTTERY_CONFIG.clickWindowMs);
+
+  if(lotteryState.clicks>=LOTTERY_CONFIG.requiredClicks){
+    clearLotteryClickTimer();
+    setTimeout(()=>{
+      resetLotteryClicks();
+      openLotteryLobby();
+    },180);
+  }
+}
+
+if(lotteryZone){
+  lotteryZone.addEventListener("click",handleLotteryClick);
+
+  lotteryZone.addEventListener("keydown",(ev)=>{
+    if(ev.key==="Enter" || ev.key===" "){
+      ev.preventDefault();
+      handleLotteryClick();
+    }
+  });
+}
+if(lotteryOpenButton)lotteryOpenButton.addEventListener("click",openLotteryLobby);
+if(lotteryRefreshButton)lotteryRefreshButton.addEventListener("click",refreshLotteryLobby);
+if(lotteryStartButton)lotteryStartButton.addEventListener("click",beginLotteryGame);
+if(lotteryCloseButton)lotteryCloseButton.addEventListener("click",closeLotteryLobby);
+
+async function poll(){
+  if(state.syncing){
+    schedulePoll();
+    return;
+  }
+
+  // 若瀏覽器拒絕網路權限 / Apps Script 暫時無法存取，
+  // 不要每秒持續重試造成瀏覽器反覆跳出權限提示。
+  if(state.pausedUntil && Date.now()<state.pausedUntil){
+    state.pollDelay=Math.max(CONFIG.minPollInterval,Math.min(10000,state.pausedUntil-Date.now()));
+    schedulePoll();
+    return;
+  }
+  if(state.pausedUntil && Date.now()>=state.pausedUntil){
+    state.pausedUntil=0;
+    state.consecutiveFailures=0;
+  }
+
+  if(!navigator.onLine){
+    state.online=false;
+    updateConnectionDot();
+    schedulePoll();
+    return;
+  }
+
+  state.syncing=true;
+
+  const cb=
+    "weddingPoll_"+
+    Date.now()+"_"+
+    Math.floor(Math.random()*10000);
+
+  try{
+    const url=
+      CONFIG.endpoint+
+      "?mode=poll"+
+      "&callback="+encodeURIComponent(cb)+
+      "&t="+Date.now();
+
+    const data=await jsonpRequest(url,cb);
+
+    if(data&&data.ok&&Array.isArray(data.items)){
+
+      process(data.items);
+
+      // 成功後恢復 1 秒更新
+      state.online=true;
+      state.pollDelay=CONFIG.minPollInterval;
+      state.consecutiveFailures=0;
+      state.pausedUntil=0;
+    }else{
+      throw new Error(
+        data&&data.error
+          ? data.error
+          : "Invalid poll response"
+      );
+    }
+  }catch(err){
+    state.online=navigator.onLine!==false;
+    state.consecutiveFailures++;
+    state.pollDelay=Math.min(
+      Math.max(
+        state.pollDelay*2,
+        CONFIG.minPollInterval
+      ),
+      CONFIG.maxPollInterval
+    );
+
+    if(state.consecutiveFailures>=CONFIG.maxConsecutiveFailures){
+      state.pausedUntil=Date.now()+CONFIG.failurePause;
+      console.warn(
+        "同步連續失敗，暫停自動重試 60 秒。若是瀏覽器權限提示，允許後會自動恢復。",
+        err
+      );
+    }else{
+      console.warn(
+        "同步暫時失敗，將於 "+
+        Math.round(state.pollDelay/1000)+
+        " 秒後重試",
+        err
+      );
+    }
+  }finally{
+    state.syncing=false;
+    updateConnectionDot();
+    schedulePoll();
+  }
+}
+
+function schedulePoll(){
+  if(state.pollTimer){
+    clearTimeout(state.pollTimer);
+  }
+
+  state.pollTimer=setTimeout(
+    poll,
+    state.pollDelay
+  );
+}
+
+function updateConnectionDot(){
+  const dot=document.getElementById("connectionDot");
+  if(!dot)return;
+
+  dot.classList.toggle(
+    "online",
+    state.online && navigator.onLine!==false
+  );
+
+  dot.classList.toggle(
+    "offline",
+    !state.online || navigator.onLine===false
+  );
+}
+
+/*
+ * 網路恢復時不要等下一個 polling，
+ * 直接重新同步。
+ */
+window.addEventListener("online",()=>{
+  state.online=true;
+  state.pollDelay=CONFIG.minPollInterval;
+  state.consecutiveFailures=0;
+  state.pausedUntil=0;
+  updateConnectionDot();
+
+  if(state.pollTimer){
+    clearTimeout(state.pollTimer);
+    state.pollTimer=null;
+  }
+
+  poll();
+});
+
+window.addEventListener("offline",()=>{
+  state.online=false;
+  updateConnectionDot();
+
+  if(state.pollTimer){
+    clearTimeout(state.pollTimer);
+    state.pollTimer=null;
+  }
+});
+
+/*
+ * Chrome 分頁被切到背景再回來時立即補抓一次。
+ * 婚禮現場長時間播放比較不容易漏資料。
+ */
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible"){
+    // 如果剛因權限 / 網路錯誤進入暫停期，不要因切換分頁又立刻重試。
+    if(state.pausedUntil && Date.now()<state.pausedUntil){
+      schedulePoll();
+      return;
+    }
+    state.pollDelay=CONFIG.minPollInterval;
+
+    if(!state.syncing){
+      if(state.pollTimer){
+        clearTimeout(state.pollTimer);
+        state.pollTimer=null;
+      }
+      poll();
+    }
+  }
+});
+
+function createPetals(){
+  for(let i=0;i<12;i++){
+    const p=document.createElement("i");
+    p.className="petal";
+    p.style.left=(Math.random()*100)+"%";
+    p.style.setProperty("--dx",(Math.random()*26-13)+"vw");
+    p.style.setProperty("--rot",(Math.random()*180)+"deg");
+    p.style.setProperty("--dur",(7+Math.random()*8)+"s");
+    p.style.animationDelay=(-Math.random()*12)+"s";
+    wall.appendChild(p);
+  }
+}
+
+createPetals();
+
+if(chooseLocalPhotosButton){
+  chooseLocalPhotosButton.addEventListener("click",chooseLocalPhotoFolder);
+}
+if(useNetworkPhotosButton){
+  useNetworkPhotosButton.addEventListener("click",useNetworkPhotos);
+}
+if(localPhotoFolderInput){
+  localPhotoFolderInput.addEventListener("change",()=>{
+    applyLocalPhotoFiles(localPhotoFolderInput.files);
+  });
+}
+
+updateConnectionDot();
+
+// Poll-only 啟動：presetConfig 只呼叫一次；poll 負責新的賓客資料。
+// 兩者互不等待，婚紗照圖片會由瀏覽器逐張載入。
+requestAnimationFrame(()=>{
+  loadPresetConfig();
+  poll();
+});
+
+setInterval(showNextQueued,CONFIG.queueInterval);
+
+setInterval(()=>{
+  document.querySelectorAll(".live-time").forEach(el=>{
+    const card=el.closest(".live-card");
+    if(!card)return;
+
+    const id=card.dataset.itemId;
+    const item=state.items.find(
+      x=>keyOf(x)===id
+    );
+
+    if(item){
+      el.textContent=timeText(item.time);
+    }
+  });
+},10000);
+</script>
+
+<style>
+/* =========================================================
+   🎉 抽獎 V7：0.6 倍中央框 + 強烈洗牌音效 + 中獎高潮
+   - 中央抽獎框縮小到上一版約 60%
+   - 每次換圖都有明顯「咔／叮」節奏
+   - 停住時有大型高潮、閃光、粒子、愛心與「哇！中獎！」語音
+========================================================= */
+
+.lottery-result{
+  width:372px !important;
+  height:312px !important;
+  min-width:156px !important;
+  min-height:180px !important;
+  padding:8px !important;
+}
+
+.lottery-result::before{
+  inset:-12px !important;
+  border-width:3px !important;
+}
+
+.lottery-result::after{
+  inset:-20px !important;
+}
+
+.lottery-result img{
+  border-width:3px !important;
+  border-radius:12px !important;
+}
+
+/* 抽獎進行時：中央區域更有舞台燈效果，但不把照片框放大 */
+.lottery-zone.lottery-active::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:680px;
+  height:680px;
+  transform:translate(-50%,-50%) scale(.55);
+  border-radius:50%;
+  pointer-events:none;
+  background:
+    radial-gradient(circle,
+      rgba(255,249,201,.30) 0%,
+      rgba(255,213,137,.20) 18%,
+      rgba(255,158,198,.13) 38%,
+      rgba(255,216,133,.08) 55%,
+      transparent 72%);
+  mix-blend-mode:screen;
+  z-index:-1;
+  animation:lotteryStagePulse .75s ease-in-out infinite;
+}
+
+@keyframes lotteryStagePulse{
+  0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.82)}
+  50%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}
+}
+
+/* 停住瞬間的整體閃光 */
+.lottery-zone.winner-flash::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:760px;
+  height:760px;
+  transform:translate(-50%,-50%) scale(.15);
+  border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(255,255,238,.98) 0%,
+    rgba(255,231,151,.82) 10%,
+    rgba(255,169,204,.35) 28%,
+    transparent 67%);
+  pointer-events:none;
+  z-index:45;
+  animation:winnerFlash .9s cubic-bezier(.1,.75,.2,1) both;
+}
+
+@keyframes winnerFlash{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.15)}
+  15%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}
+}
+
+/* 「哇！中獎！」視覺貼紙 */
+.lottery-zone.winner-flash::before{
+  content:"恭喜！  ♥";
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:70;
+  white-space:nowrap;
+  color:#fff8e8;
+  font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;
+  font-size:clamp(24px,2.5vw,40px);
+  font-weight:900;
+  letter-spacing:.12em;
+  text-shadow:
+    0 2px 0 rgba(125,61,62,.55),
+    0 0 8px rgba(255,255,255,1),
+    0 0 22px rgba(255,151,194,.98),
+    0 0 42px rgba(255,211,105,.9);
+  transform:translate(-50%,-50%) scale(.25) rotate(-8deg);
+  opacity:0;
+  pointer-events:none;
+  animation:winnerTextPop 1.45s cubic-bezier(.12,.78,.18,1) both;
+}
+
+@keyframes winnerTextPop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-12deg)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1.18) rotate(3deg)}
+  34%{transform:translate(-50%,-50%) scale(.94) rotate(-2deg)}
+  52%{transform:translate(-50%,-50%) scale(1.04) rotate(1deg)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.15) rotate(0)}
+}
+
+/* 抽獎框最後一刻更亮 */
+.lottery-zone.winner-flash .lottery-result::before{
+  animation:lotteryWinnerFrame .85s ease-out both !important;
+}
+
+@keyframes lotteryWinnerFrame{
+  0%{filter:brightness(1);transform:rotate(-1deg) scale(.94)}
+  25%{filter:brightness(1.55);transform:rotate(1deg) scale(1.07)}
+  55%{filter:brightness(1.18);transform:rotate(-.5deg) scale(1.025)}
+  100%{filter:brightness(1);transform:rotate(-1deg) scale(1)}
+}
+
+/* 每張圖換圖更有「抽獎翻牌」感 */
+.lottery-result.shuffling img{
+  animation:lotteryShuffleWow .34s cubic-bezier(.18,.72,.2,1) both !important;
+}
+
+@keyframes lotteryShuffleWow{
+  0%{opacity:.18;transform:scale(.88) rotate(-2deg);filter:brightness(1.5) saturate(1.25)}
+  22%{opacity:1;transform:scale(1.04) rotate(1.2deg);filter:brightness(1.18) saturate(1.2)}
+  55%{transform:scale(.985) rotate(-.4deg)}
+  100%{opacity:1;transform:scale(1) rotate(0);filter:brightness(1) saturate(1.06)}
+}
+
+/* 粒子更亮、更密、更像婚禮抽獎舞台 */
+.lottery-particle{
+  animation-duration:.95s !important;
+  font-size:19px !important;
+  text-shadow:
+    0 0 8px rgba(255,255,255,1),
+    0 0 18px rgba(255,135,190,1),
+    0 0 34px rgba(255,211,112,1) !important;
+}
+
+.lottery-burst.final-burst::before{
+  box-shadow:
+    0 0 22px rgba(255,255,220,1),
+    0 0 55px rgba(255,163,201,1),
+    0 0 90px rgba(255,211,112,.95) !important;
+}
+
+.lottery-burst.final-burst::after{
+  box-shadow:
+    0 0 28px rgba(255,214,126,1),
+    0 0 72px rgba(255,151,196,.95) !important;
+}
+
+@media(max-width:900px){
+  .lottery-result{
+    width:36vw !important;
+    height:31vh !important;
+    min-width:150px !important;
+    min-height:170px !important;
+  }
+  .lottery-zone.lottery-active::after{
+    width:520px;
+    height:520px;
+  }
+}
+
+@media(max-width:520px){
+  .lottery-result{
+    width:50vw !important;
+    height:27vh !important;
+    min-width:145px !important;
+    min-height:165px !important;
+  }
+}
+</style>
+
+
+<style>
+/* ===== V8：越抽越快 + 拍手高潮（無語音） ===== */
+.lottery-zone.winner-flash::before{
+  content:"恭喜！  ♥" !important;
+}
+
+.lottery-zone.winner-flash .lottery-result img{
+  animation:lotteryWinnerPhoto .85s cubic-bezier(.12,.8,.18,1) both !important;
+}
+
+@keyframes lotteryWinnerPhoto{
+  0%{transform:scale(.94);filter:brightness(1)}
+  18%{transform:scale(1.07);filter:brightness(1.65) saturate(1.25)}
+  38%{transform:scale(.98);filter:brightness(1.18)}
+  58%{transform:scale(1.035);filter:brightness(1.08)}
+  100%{transform:scale(1);filter:brightness(1.03)}
+}
+</style>
+
+
+<style>
+/* =========================================================
+   V9 修正
+   1. 恢復旁邊正常照片尺寸
+   2. 只有「中央抽獎照片」維持縮小
+   3. 「恭喜！」停留更久
+========================================================= */
+
+/* 旁邊正常輪播照片：恢復原本大小 */
+.polaroid{
+  width:166px !important;
+}
+.polaroid.landscape{
+  width:220px !important;
+}
+.polaroid.square{
+  width:165px !important;
+}
+
+/* 手機也恢復原本比例，不套用之前的 0.6 倍 */
+@media(max-width:900px){
+  .polaroid{
+    width:100px !important;
+  }
+  .polaroid.landscape{
+    width:135px !important;
+  }
+  .polaroid.square{
+    width:112px !important;
+  }
+}
+
+/* 中央抽獎照片：保持縮小約 0.6 倍 */
+.lottery-result{
+  width:372px !important;
+  height:312px !important;
+  min-width:156px !important;
+  min-height:180px !important;
+}
+
+/* 恭喜文字停久一點：從 1.45 秒延長到 5 秒 */
+.lottery-zone.winner-flash::before{
+  content:"恭喜！  ♥" !important;
+  animation:winnerTextStay 5s cubic-bezier(.12,.78,.18,1) both !important;
+}
+
+@keyframes winnerTextStay{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.2) rotate(-12deg);
+  }
+  12%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.16) rotate(3deg);
+  }
+  22%{
+    transform:translate(-50%,-50%) scale(.97) rotate(-1deg);
+  }
+  30%{
+    transform:translate(-50%,-50%) scale(1.03) rotate(1deg);
+  }
+  72%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1) rotate(0);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(1.06) rotate(0);
+  }
+}
+</style>
+
+
+<style>
+/* =========================================================
+   V10 尺寸調整
+   - 中央抽獎照片：維持約 0.6 倍
+   - 旁邊正常輪播照片：放大到約 1.5 倍
+========================================================= */
+
+/* 旁邊正常輪播照片：在原本尺寸基礎上放大 1.5 倍 */
+.polaroid{
+  width:249px !important; /* 166 × 1.5 */
+}
+.polaroid.landscape{
+  width:330px !important; /* 220 × 1.5 */
+}
+.polaroid.square{
+  width:248px !important; /* 165 × 1.5 */
+}
+
+/* 中央抽獎照片：維持約 0.6 倍 */
+.lottery-result{
+  width:372px !important;
+  height:312px !important;
+  min-width:156px !important;
+  min-height:180px !important;
+}
+
+/* 手機／平板旁邊照片同樣放大 1.5 倍 */
+@media(max-width:900px){
+  .polaroid{
+    width:150px !important; /* 100 × 1.5 */
+  }
+  .polaroid.landscape{
+    width:203px !important; /* 135 × 1.5 */
+  }
+  .polaroid.square{
+    width:168px !important; /* 112 × 1.5 */
+  }
+}
+
+/* 小螢幕避免照片超出畫面 */
+@media(max-width:520px){
+  .polaroid{
+    width:150px !important;
+  }
+  .polaroid.landscape{
+    width:190px !important;
+  }
+  .polaroid.square{
+    width:160px !important;
+  }
+}
+</style>
+
+</body>
+</html>
+<style>
+/* ===== V4：浮動訊息改成手繪紙卡，移除灰色 UI 感 ===== */
+.float-msg{
+  min-width:150px;
+  max-width:255px;
+  padding:12px 18px 13px;
+  color:#5a4029;
+  background:
+    radial-gradient(circle at 18% 22%,rgba(255,255,255,.32),transparent 28%),
+    linear-gradient(180deg,rgba(255,247,222,.94),rgba(244,221,181,.88));
+  border:0;
+  border-radius:0;
+  box-shadow:0 7px 16px rgba(61,39,20,.13);
+  clip-path:polygon(
+    1% 9%, 10% 5%, 22% 7%, 35% 3%, 48% 6%, 61% 4%, 74% 7%, 88% 4%, 98% 9%,
+    96% 24%, 99% 39%, 96% 55%, 99% 72%, 96% 91%, 86% 94%, 72% 91%, 58% 96%,
+    44% 93%, 30% 97%, 17% 93%, 4% 96%, 2% 82%, 5% 66%, 2% 51%, 5% 36%, 2% 22%
+  );
+  isolation:isolate;
+}
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:4px;
+  z-index:-1;
+  border:1.15px solid rgba(91,64,40,.64);
+  clip-path:polygon(
+    1% 9%, 12% 5%, 25% 7%, 39% 3%, 53% 6%, 68% 4%, 83% 7%, 98% 9%,
+    96% 27%, 99% 44%, 96% 61%, 98% 90%, 84% 94%, 69% 91%, 53% 96%,
+    37% 93%, 21% 97%, 4% 91%, 6% 72%, 2% 53%, 5% 34%, 2% 18%
+  );
+  transform:rotate(-.45deg);
+  box-shadow:none;
+}
+.float-msg::after{
+  content:"✿";
+  right:-7px;
+  bottom:-9px;
+  color:#d99a8d;
+  font-size:17px;
+  line-height:1;
+  text-shadow:0 1px 0 rgba(255,248,226,.9);
+  transform:rotate(-8deg);
+}
+.float-msg .who{
+  color:#765437;
+  font-size:11px;
+  font-weight:700;
+  margin-bottom:3px;
+  letter-spacing:.1px;
+}
+.float-msg .words{
+  color:#5a402b;
+  font-size:clamp(13px,1vw,17px);
+  line-height:1.38;
+  font-weight:600;
+  text-shadow:0 1px 0 rgba(255,249,231,.45);
+}
+
+/* 讓中央訊息也更像紙張，而不是 UI 卡片 */
+.live-card{
+  background:
+    linear-gradient(180deg,rgba(255,248,229,.91),rgba(247,229,198,.82));
+  border-radius:3px 8px 5px 6px;
+  box-shadow:0 6px 14px rgba(62,39,19,.10);
+}
+.live-card::before{
+  inset:2px;
+  border:1.15px solid rgba(91,64,40,.66);
+  border-radius:4px 9px 5px 7px;
+  transform:rotate(-.28deg);
+  box-shadow:none;
+}
+
+/* 手繪 QR：跟照片框、訊息框使用同一套線條 */
+.qr{
+  background:rgba(255,247,225,.94);
+  border:0;
+  border-radius:3px 7px 5px 4px;
+  box-shadow:0 7px 15px rgba(58,38,20,.12);
+  transform:rotate(1deg);
+}
+.qr::before{
+  inset:3px;
+  border:1.15px solid rgba(91,64,40,.66);
+  border-radius:4px 8px 5px 6px;
+
+  transform:rotate(-.7deg);
+  box-shadow:none;
+}
+
+/* =========================================================
+   V5 — Japanese hand-drawn paper UI refinement
+   - No jagged/saw-tooth message edges
+   - Taller central message cards
+   - Soft irregular hand-drawn double-line effect
+   - Keeps the existing JavaScript untouched
+   ========================================================= */
+
+.live-feed{
+  width:min(680px,48vw);
+  max-height:32vh;
+  gap:10px;
+}
+
+/* Central message: soft paper card, not a flat/thin strip */
+.live-card{
+  min-height:84px;
+  padding:13px 54px 13px 15px;
+  gap:13px;
+  color:#5d432d;
+
+  background:
+    radial-gradient(ellipse at 12% 18%,rgba(255,255,255,.48),transparent 34%),
+    radial-gradient(ellipse at 88% 78%,rgba(226,197,151,.18),transparent 42%),
+    linear-gradient(180deg,rgba(255,250,235,.94),rgba(245,226,192,.91));
+
+  border:1px solid rgba(112,78,43,.52);
+  border-radius:15px 12px 16px 13px;
+
+  /* soft hand-drawn double-line feeling, without jagged edges */
+  box-shadow:
+    0 8px 20px rgba(48,31,18,.14),
+    inset 0 0 0 1px rgba(255,255,255,.52),
+    inset 0 0 18px rgba(157,119,76,.07);
+
+  clip-path:none;
+  overflow:visible;
+}
+
+/* Slightly imperfect second pencil line */
+.live-card::before{
+  content:"";
+  position:absolute;
+  inset:-4px -3px -3px -4px;
+  z-index:-1;
+  border:1px solid rgba(103,75,47,.28);
+  border-radius:17px 14px 18px 15px;
+  transform:rotate(-.35deg);
+  filter:blur(.15px);
+  pointer-events:none;
+}
+
+/* Small botanical/heart detail — no triangular tail */
+.live-card::after{
+  content:"♡";
+  position:absolute;
+  right:15px;
+  bottom:12px;
+  color:#c9857e;
+  font-size:23px;
+  line-height:1;
+  text-shadow:0 1px 0 rgba(255,255,255,.7);
+}
+
+/* Make the central content breathe vertically */
+.live-card .live-copy{
+  min-width:0;
+  padding-top:1px;
+}
+
+.live-card .live-name{
+  color:#76573b;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.25;
+}
+
+.live-card .live-text{
+  color:#5c402b;
+  font-size:clamp(15px,1.05vw,18px);
+  line-height:1.45;
+  font-weight:600;
+}
+
+.live-card .live-time{
+  color:#876c50;
+  font-size:12px;
+}
+
+.live-card .live-thumb{
+  width:50px;
+  height:50px;
+  border-radius:10px;
+  border:1px solid rgba(126,91,55,.36);
+  box-shadow:0 2px 8px rgba(66,42,21,.12);
+}
+
+/* Avatar becomes part of the paper illustration */
+.live-card .avatar{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:linear-gradient(145deg,#e7b9aa,#cf9685);
+  border:2px solid rgba(255,249,230,.96);
+  box-shadow:
+    0 2px 7px rgba(70,40,20,.12),
+    0 0 0 1px rgba(126,91,55,.18);
+}
+
+/* Floating blessing/message cards:
+   same paper language, but rounded — no saw-tooth sides */
+.float-msg{
+  max-width:270px;
+  min-width:170px;
+  padding:13px 17px 14px;
+
+  color:#60442c;
+  background:
+    radial-gradient(ellipse at 16% 20%,rgba(255,255,255,.46),transparent 34%),
+    linear-gradient(180deg,rgba(255,248,228,.94),rgba(244,224,188,.91));
+
+  border:1px solid rgba(116,81,47,.48);
+  border-radius:13px 11px 14px 12px;
+
+  box-shadow:
+    0 8px 18px rgba(47,28,14,.13),
+    inset 0 0 0 1px rgba(255,255,255,.48);
+
+  clip-path:none;
+  overflow:visible;
+}
+
+/* Soft offset sketch line instead of a jagged outline */
+.float-msg::before{
+  content:"";
+  position:absolute;
+  inset:-4px -3px -3px -4px;
+  z-index:-1;
+  border:1px solid rgba(107,77,48,.28);
+  border-radius:15px 13px 16px 14px;
+  transform:rotate(.45deg);
+  filter:blur(.15px);
+  pointer-events:none;
+}
+
+/* Tiny botanical accent */
+.float-msg::after{
+  content:"❧";
+  position:absolute;
+  right:9px;
+  bottom:-7px;
+  color:#87925c;
+  font-size:19px;
+  line-height:1;
+  transform:rotate(-8deg);
+  text-shadow:0 1px 2px rgba(50,30,14,.12);
+}
+
+.float-msg .who{
+  color:#76583d;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.float-msg .words{
+  color:#60432c;
+  font-size:clamp(14px,1vw,17px);
+  line-height:1.42;
+  font-weight:600;
+}
+
+/* Keep the QR and photo-frame line language softer */
+.qr{
+  border-radius:10px 12px 9px 11px;
+  box-shadow:
+    0 8px 20px rgba(43,25,12,.17),
+    inset 0 0 0 1px rgba(255,255,255,.48);
+}
+
+@media (max-width:900px){
+  .live-feed{
+    width:min(680px,72vw);
+    max-height:34vh;
+  }
+  .live-card{
+    min-height:76px;
+    padding:11px 46px 11px 12px;
+  }
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:44px;
+    height:44px;
+  }
+  .live-card .live-text{
+    font-size:14px;
+  }
+}
+
+@media (max-width:560px){
+  .live-feed{
+    width:88vw;
+    max-height:35vh;
+    gap:7px;
+  }
+  .live-card{
+    min-height:68px;
+    padding:9px 39px 9px 10px;
+    gap:9px;
+    border-radius:12px;
+  }
+  .live-card::before{
+    inset:-3px -2px -2px -3px;
+    border-radius:14px;
+  }
+  .live-card .avatar,
+  .live-card .live-thumb{
+    width:38px;
+    height:38px;
+  }
+  .live-card .live-name{
+    font-size:11px;
+  }
+  .live-card .live-text{
+    font-size:12px;
+    line-height:1.35;
+  }
+  .live-card .live-time{
+    font-size:10px;
+  }
+  .live-card::after{
+    right:9px;
+    bottom:7px;
+    font-size:18px;
+  }
+  .float-msg{
+    max-width:205px;
+    min-width:135px;
+    padding:10px 13px 11px;
+    border-radius:11px 10px 12px 10px;
+  }
+}
+
+
+/* =========================================================
+   V6 — remove unintended outer/container frame
+   The photo wall should visually fill the whole viewport.
+   ========================================================= */
+
+html,
+body{
+  margin:0 !important;
+  padding:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+
+/* Never draw a page-level rectangular frame */
+.wall,
+.wall::before,
+.wall::after,
+.page,
+.container,
+.scene,
+.app,
+.stage,
+.viewport,
+#app,
+#root,
+main{
+  outline:none !important;
+}
+
+/* The actual artwork remains edge-to-edge */
+.wall{
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+}
+
+/* Do not let focus/selection outlines create a large rectangle */
+*:focus,
+*:focus-visible{
+  outline:none !important;
+}
+
+/* Keep the hand-drawn lines only on the intended UI components */
+.live-card,
+.float-msg,
+.qr,
+.polaroid{
+  outline:none !important;
+}
+
+</style>
+
+
+<style>
+/* =========================================================
+   🐾 20種 Q版水彩婚禮動物
+   圖檔位置：assets/animals/*.svg
+   如果動物圖檔讀不到，HTML 會自動切換 animal-fallback.svg
+   ========================================================= */
+.live-card .animal-avatar{
+  width:50px!important;height:50px!important;flex:0 0 50px!important;
+  border-radius:50%!important;display:grid!important;place-items:center!important;
+  overflow:hidden!important;
+  border:2px solid rgba(255,249,230,.96)!important;
+  background:#f6e6d6!important;
+  box-shadow:0 2px 7px rgba(70,40,20,.12),0 0 0 1px rgba(126,91,55,.18)!important;
+}
+.live-card .animal-avatar img{
+  width:100%!important;height:100%!important;display:block!important;
+  object-fit:cover!important;
+}
+@media(max-width:900px){.live-card .animal-avatar{width:44px!important;height:44px!important;flex-basis:44px!important}}
+@media(max-width:560px){.live-card .animal-avatar{width:38px!important;height:38px!important;flex-basis:38px!important}}
+</style>
+
+<!-- =========================================================
+ 🎨 自訂顏色快速調整區
+ 只要修改下面的色碼即可；不要動 JavaScript。
+ 【中央】central-bg-top / central-bg-bottom / central-border / central-line / central-text / central-name / central-time / central-heart
+ 【旁邊】float-bg-top / float-bg-bottom / float-border / float-line / float-text / float-name / float-decor
+ 【照片框】photo-frame / photo-border / photo-line / photo-shadow
+ 【QR】qr-bg / qr-border / qr-line / qr-text
+ ========================================================= -->
+<style>
+:root{
+  /* ===== 中央對話框 ===== */
+  --central-bg-top:rgba(246, 238, 213, 0.882);
+  --central-bg-bottom:rgba(231, 211, 176, 0.837);
+  --central-border:rgba(237, 176, 115, 0.52);
+  --central-line:rgba(252, 199, 146, 0.741);
+  --central-text:#5c402b;
+  --central-name:#76573b;
+  --central-time:#876c50;
+  --central-heart:#c9857e;
+
+  /* ===== 旁邊祝福框 ===== */
+  --float-bg-top:rgba(255, 248, 228, 0.773);
+  --float-bg-bottom:rgba(244,224,188,.91);
+  --float-border:rgba(164, 118, 72, 0.48);
+  --float-line:rgba(243, 198, 156, 0.648);
+  --float-text:#533a25;
+  --float-name:#76583d;
+  --float-decor:#87925c;
+
+  /* ===== 婚紗照片框 ===== */
+  --photo-frame:rgba(255, 251, 240, 0.755);
+  --photo-border:rgba(126,91,55,.14);
+  --photo-line:rgba(216, 155, 94, 0.4);
+  --photo-shadow:rgba(52,32,16,.18);
+
+  /* ===== QR Code ===== */
+  --qr-bg:rgba(255,249,233,.90);
+  --qr-border:rgba(112,78,46,.22);
+  --qr-line:rgba(119,83,49,.42);
+  --qr-text:#6b5038;
+}
+
+/* ===== 中央對話框 ===== */
+.live-card{
+  background:linear-gradient(180deg,var(--central-bg-top),var(--central-bg-bottom)) !important;
+  border-color:var(--central-border) !important;
+}
+.live-card::before{border-color:var(--central-line) !important;}
+.live-card .live-name{color:var(--central-name) !important;}
+.live-card .live-text{color:var(--central-text) !important;}
+.live-card .live-time{color:var(--central-time) !important;}
+.live-card::after{color:var(--central-heart) !important;}
+
+/* ===== 旁邊祝福框 ===== */
+.float-msg{
+  background:linear-gradient(180deg,var(--float-bg-top),var(--float-bg-bottom)) !important;
+  border-color:var(--float-border) !important;
+}
+.float-msg::before{border-color:var(--float-line) !important;}
+.float-msg .who{color:var(--float-name) !important;}
+.float-msg .words{color:var(--float-text) !important;}
+.float-msg::after{color:var(--float-decor) !important;}
+
+/* ===== 婚紗照片框 ===== */
+.polaroid{
+  background:var(--photo-frame) !important;
+  border-color:var(--photo-border) !important;
+  box-shadow:0 10px 23px var(--photo-shadow),inset 0 0 0 1px rgba(255,255,255,.72) !important;
+}
+.polaroid::before{border-color:var(--photo-line) !important;}
+.polaroid img{border-color:var(--photo-line) !important;}
+
+/* ===== QR Code ===== */
+.qr{
+  background:var(--qr-bg) !important;
+  border-color:var(--qr-border) !important;
+}
+.qr::before{border-color:var(--qr-line) !important;}
+.qr span{color:var(--qr-text) !important;}
+</style>
+
+
+<style>
+/* ===== 婚宴提醒：沿用中央訊息框風格，但稍微暖一點 ===== */
+.live-card.wedding-reminder-card{
+  background:
+    radial-gradient(circle at 10% 20%,rgba(255,255,255,.52),transparent 28%),
+    linear-gradient(180deg,rgba(255,249,226,.96),rgba(246,224,183,.94)) !important;
+  border-color:rgba(128,91,48,.30) !important;
+  box-shadow:
+    0 7px 18px rgba(85,55,25,.10),
+    inset 0 0 0 1px rgba(255,255,255,.42) !important;
+}
+.live-card.wedding-reminder-card .reminder-avatar{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:25px !important;
+  color:#d78d88 !important;
+  background:#fff0d8 !important;
+}
+</style>
+
+<style>
+/* ===== 抽獎照片 V3：只抽今日賓客照片 + 慢速清楚觀看 ===== */
+.lottery-result{
+  width:min(620px,66vw) !important;
+  height:min(62vh,520px) !important;
+  min-width:260px !important;
+  min-height:260px !important;
+  padding:12px;
+  box-sizing:border-box;
+}
+
+.lottery-result img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  background:rgba(255,250,238,.88);
+  border-radius:16px;
+}
+
+.lottery-result.shuffling img{
+  animation:lotteryShuffleFlash .42s ease both !important;
+}
+
+@media(max-width:900px){
+  .lottery-result{
+    width:min(78vw,560px) !important;
+    height:min(54vh,440px) !important;
+  }
+}
+
+@media(max-width:520px){
+  .lottery-result{
+    width:84vw !important;
+    height:44vh !important;
+    min-width:220px !important;
+    min-height:220px !important;
+  }
+}
+</style>
+
+
+<style>
+/* =========================================================
+   🎁 抽獎 V5：20秒持續噴射 + 停止前大型愛心爆發
+   ========================================================= */
+.lottery-burst{
+  z-index:40 !important;
+  width:1px !important;
+  height:1px !important;
+  overflow:visible !important;
+}
+
+.lottery-particle{
+  z-index:41 !important;
+  width:auto !important;
+  height:auto !important;
+  min-width:8px !important;
+  min-height:8px !important;
+  background:none !important;
+  box-shadow:0 0 12px rgba(255,225,156,.95),0 0 24px rgba(255,166,198,.38) !important;
+  color:#fff5d7 !important;
+  font-size:17px !important;
+  line-height:1 !important;
+  text-shadow:0 0 7px rgba(255,255,255,.98),0 0 16px rgba(255,151,190,.92) !important;
+  animation:lotteryParticle .82s cubic-bezier(.12,.68,.18,1) forwards !important;
+}
+
+.lottery-burst.active::before{
+  animation:lotteryShockwave .82s cubic-bezier(.15,.7,.2,1) both !important;
+}
+.lottery-burst.active::after{
+  animation:lotteryShockwave 1.05s .08s cubic-bezier(.15,.7,.2,1) both !important;
+}
+
+/* 側邊婚紗／賓客照片縮成原本約 0.6 倍 */
+.polaroid{
+  width:100px !important;
+}
+.polaroid.landscape{
+  width:132px !important;
+}
+.polaroid.square{
+  width:105px !important;
+}
+
+@media(max-width:900px){
+  .polaroid{width:100px !important;}
+  .polaroid.landscape{width:132px !important;}
+  .polaroid.square{width:105px !important;}
+}
+</style>
+
+<style>
+/* =========================================================
+   🎉 抽獎 V6：12秒 + 超亮專屬框 + 最後超大愛心高潮
+========================================================= */
+.lottery-result::before{
+  inset:-16px !important;
+  border:4px solid transparent !important;
+  background:
+    linear-gradient(rgba(255,244,209,.96),rgba(255,219,175,.92)) padding-box,
+    linear-gradient(120deg,#fff7bd,#ffd56f,#ff9fc7,#fff0a8,#ffc76d,#fff7bd) border-box !important;
+  box-shadow:
+    0 0 10px rgba(255,245,180,.98),
+    0 0 28px rgba(255,198,100,.92),
+    0 0 58px rgba(255,135,183,.70),
+    0 18px 45px rgba(45,20,12,.30) !important;
+  animation:lotteryFrameGlow 1s ease-in-out infinite !important;
+}
+
+.lottery-result::after{
+  content:"";
+  position:absolute;
+  inset:-28px;
+  border-radius:28px 22px 30px 20px;
+  border:2px solid rgba(255,235,158,.80);
+  box-shadow:0 0 30px rgba(255,180,215,.70), inset 0 0 22px rgba(255,231,150,.38);
+  pointer-events:none;
+  animation:lotteryFrameRing 1.35s ease-in-out infinite;
+}
+
+.lottery-result img{
+  border:4px solid rgba(255,255,242,.98) !important;
+  box-shadow:
+    0 0 10px rgba(255,255,220,.95),
+    0 0 24px rgba(255,206,119,.75),
+    0 7px 24px rgba(52,27,14,.28),
+    inset 0 0 0 2px rgba(255,180,205,.22) !important;
+}
+
+@keyframes lotteryFrameGlow{
+  0%,100%{filter:brightness(1);box-shadow:0 0 10px rgba(255,245,180,.98),0 0 28px rgba(255,198,100,.82),0 0 48px rgba(255,135,183,.55),0 18px 45px rgba(45,20,12,.30)}
+  50%{filter:brightness(1.12);box-shadow:0 0 18px rgba(255,255,205,1),0 0 44px rgba(255,211,104,1),0 0 82px rgba(255,137,190,.88),0 18px 45px rgba(45,20,12,.30)}
+}
+@keyframes lotteryFrameRing{
+  0%,100%{opacity:.45;transform:scale(.985)}
+  50%{opacity:1;transform:scale(1.025)}
+}
+
+.lottery-burst.final-burst::before{
+  width:70px !important;
+  height:70px !important;
+  border-width:4px !important;
+  border-color:rgba(255,247,194,1) !important;
+  box-shadow:0 0 18px rgba(255,255,210,.95),0 0 42px rgba(255,163,201,.85) !important;
+  animation:lotteryFinalShock .72s cubic-bezier(.1,.72,.18,1) infinite !important;
+}
+.lottery-burst.final-burst::after{
+  width:70px !important;
+  height:70px !important;
+  border-width:3px !important;
+  border-color:rgba(255,171,204,.95) !important;
+  box-shadow:0 0 20px rgba(255,214,126,.88) !important;
+  animation:lotteryFinalShock .9s .15s cubic-bezier(.1,.72,.18,1) infinite !important;
+}
+
+.lottery-particle{
+  text-shadow:0 0 9px rgba(255,255,255,1),0 0 22px rgba(255,150,194,1),0 0 34px rgba(255,211,112,.9) !important;
+}
+
+@keyframes lotteryFinalShock{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}
+  10%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(12)}
+}
+</style>
+
+
+
+<style id="final-size-override">
+/* =========================================================
+   V11 FINAL SIZE
+   ★ 側邊正常輪播照片 = 原本 1.5 倍
+   ★ 中央抽獎照片 = 原本約 0.6 倍
+   這段刻意放在整份 HTML 最後，避免被前面的舊 CSS 蓋掉。
+========================================================= */
+
+/* ===== 側邊正常輪播照片：1.5 倍 ===== */
+.polaroid{
+  width:249px !important;
+}
+
+.polaroid.landscape{
+  width:330px !important;
+}
+
+.polaroid.square{
+  width:248px !important;
+}
+
+/* ===== 中央抽獎照片：0.6 倍 =====
+   原本 V3 約 620 × 520
+   620 × 0.6 = 372
+   520 × 0.6 = 312
+*/
+.lottery-result{
+  width:372px !important;
+  height:312px !important;
+  min-width:156px !important;
+  min-height:180px !important;
+  padding:8px !important;
+}
+
+/* 抽獎框外框也跟著中央照片縮小，不影響側邊照片 */
+.lottery-result::before{
+  inset:-8px !important;
+}
+
+/* ===== 900px 以下 ===== */
+@media(max-width:900px){
+  .polaroid{
+    width:150px !important;
+  }
+
+  .polaroid.landscape{
+    width:203px !important;
+  }
+
+  .polaroid.square{
+    width:168px !important;
+  }
+
+  .lottery-result{
+    width:36vw !important;
+    height:31vh !important;
+    min-width:150px !important;
+    min-height:170px !important;
+  }
+}
+
+/* ===== 520px 以下 ===== */
+@media(max-width:520px){
+  .polaroid{
+    width:150px !important;
+  }
+
+  .polaroid.landscape{
+    width:190px !important;
+  }
+
+  .polaroid.square{
+    width:160px !important;
+  }
+
+  .lottery-result{
+    width:50vw !important;
+    height:27vh !important;
+    min-width:145px !important;
+    min-height:165px !important;
+  }
+}
+</style>
+
+
+
+<style id="final-side-photo-size-v12">
+/* V12：旁邊輪播照片在 V11 尺寸上再縮小 0.8 倍
+   249 × 0.8 = 199
+   330 × 0.8 = 264
+   248 × 0.8 = 198
+*/
+.polaroid{
+  width:199px !important;
+}
+.polaroid.landscape{
+  width:264px !important;
+}
+.polaroid.square{
+  width:198px !important;
+}
+
+/* 中央抽獎照片維持 V11 的 0.6 倍，不動 */
+.lottery-result{
+  width:372px !important;
+  height:312px !important;
+  min-width:156px !important;
+  min-height:180px !important;
+}
+
+@media(max-width:900px){
+  .polaroid{
+    width:120px !important;
+  }
+  .polaroid.landscape{
+    width:162px !important;
+  }
+  .polaroid.square{
+    width:134px !important;
+  }
+}
+
+@media(max-width:520px){
+  .polaroid{
+    width:120px !important;
+  }
+  .polaroid.landscape{
+    width:152px !important;
+  }
+  .polaroid.square{
+    width:128px !important;
+  }
+}
+</style>
+
+
+
+<style id="final-side-photo-size-v13">
+/* V13：旁邊輪播照片再縮小 0.9 倍
+   V12 → V13
+   199 × 0.9 ≈ 179
+   264 × 0.9 ≈ 238
+   198 × 0.9 ≈ 178
+*/
+.polaroid{
+  width:179px !important;
+}
+.polaroid.landscape{
+  width:238px !important;
+}
+.polaroid.square{
+  width:178px !important;
+}
+
+/* 中央抽獎照片維持 0.6 倍，不變 */
+.lottery-result{
+  width:372px !important;
+  height:312px !important;
+  min-width:156px !important;
+  min-height:180px !important;
+}
+
+@media(max-width:900px){
+  .polaroid{
+    width:108px !important;
+  }
+  .polaroid.landscape{
+    width:146px !important;
+  }
+  .polaroid.square{
+    width:121px !important;
+  }
+}
+
+@media(max-width:520px){
+  .polaroid{
+    width:108px !important;
+  }
+  .polaroid.landscape{
+    width:137px !important;
+  }
+  .polaroid.square{
+    width:115px !important;
+  }
+}
+</style>
+
+
+
+<style id="center-flow-v14">
+/* =========================================================
+   V14：平常照片／文字恢復「全畫面流動」
+   - 不抽獎時：只避開中央訊息框的位置
+   - 抽獎時：中央整區留給抽獎
+========================================================= */
+
+/* 平常不要把浮動層限制成左右兩側 */
+.floating-layer{
+  pointer-events:none;
+}
+
+/* 抽獎進行時，中央才保持乾淨 */
+.lottery-zone.lottery-active ~ .floating-layer{
+  /* JS 的位置計算負責避開中央，這裡不強制縮小活動範圍 */
+}
+</style>
+
+
+
+<style id="upload-central-message-fix-v15">
+/* =========================================================
+   V15：賓客上傳圖片 → 中央訊息框恢復
+   純文字仍然只在周圍飄，不佔中央。
+========================================================= */
+
+/* 之前抽獎版把 live-feed 整個隱藏，這是造成中央訊息完全不出現的主因。 */
+.live-feed{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  pointer-events:none !important;
+  z-index:30 !important;
+}
+
+/* 只有非抽獎狀態顯示中央訊息 */
+.lottery-zone.lottery-active ~ .live-feed{
+  visibility:hidden !important;
+  opacity:0 !important;
+}
+
+/* 中央訊息卡進場 */
+.live-card{
+  opacity:0;
+  transform:translateY(16px) scale(.96);
+  transition:
+    opacity .38s ease,
+    transform .38s cubic-bezier(.2,.8,.2,1);
+}
+
+.live-card.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+.live-card.removing{
+  opacity:0 !important;
+  transform:translateY(-10px) scale(.97) !important;
+}
+
+/* 動物頭像用 Q 版 emoji，不影響原本訊息框設計 */
+.live-card .animal-avatar{
+  font-size:28px;
+  line-height:1;
+  text-align:center;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 50px !important;
+}
+
+@media(max-width:900px){
+  .live-card .animal-avatar{
+    flex-basis:44px !important;
+    width:44px !important;
+    height:44px !important;
+    font-size:24px;
+  }
+}
+@media(max-width:560px){
+  .live-card .animal-avatar{
+    flex-basis:38px !important;
+    width:38px !important;
+    height:38px !important;
+    font-size:21px;
+  }
+}
+
+/* 抽獎設定與多位得主：放在最後，避免舊版抽獎樣式覆蓋。 */
+.lottery-lobby-card{
+  border:0 !important;
+  box-shadow:none !important;
+}
+.lottery-zone,.lottery-zone *{-webkit-user-select:none;user-select:none}
+.lottery-winner-setting input{-webkit-user-select:text;user-select:text}
+.lottery-zone,.lottery-zone:focus,.lottery-zone:focus-visible{
+  outline:0!important;border:0!important;box-shadow:none!important;
+}
+.lottery-zone::before{display:none!important}
+.lottery-zone.lottery-lobby-open{z-index:9999!important}
+.lottery-zone.lottery-lobby-open .lottery-lobby{z-index:10000!important}
+.lottery-winner-setting{
+  display:inline-flex;align-items:center;gap:7px;margin-top:18px;
+  color:#89634d;font-size:15px;font-weight:700;
+}
+.lottery-winner-setting input{
+  width:52px;height:36px;padding:3px 5px;text-align:center;color:#804e45;
+  background:#fffaf0;border:1px solid rgba(174,116,94,.42);border-radius:10px;
+  font:800 18px inherit;outline:none;
+}
+.lottery-winner-setting input:focus{border-color:#bd7770;box-shadow:0 0 0 3px rgba(213,139,131,.16)}
+.lottery-result.multiple{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:12px}
+.lottery-result.multiple img{width:100% !important;height:100% !important;min-width:0;object-fit:cover !important}
+.lottery-result.multiple::before{inset:-10px !important}
+.wall.lottery-fullscreen > .qr,
+.wall.lottery-fullscreen > .floating-layer,
+.wall.lottery-fullscreen > .live-feed,
+.wall.lottery-fullscreen > .connection-dot{opacity:0!important;visibility:hidden!important}
+.wall.lottery-fullscreen::before{background:transparent!important}
+.wall.lottery-fullscreen .lottery-zone{inset:0!important;transform:none!important;width:100vw!important;height:100vh!important}
+.wall.lottery-fullscreen .lottery-result,
+.wall.lottery-fullscreen .lottery-result.multiple{
+  display:block!important;left:0!important;top:0!important;width:100vw!important;height:100vh!important;
+  min-width:0!important;min-height:0!important;padding:0!important;background:transparent!important;border-radius:0!important;
+  transform:none!important;
+}
+.wall.lottery-fullscreen .lottery-result::before,
+.wall.lottery-fullscreen .lottery-result::after{display:none!important}
+.wall.lottery-fullscreen .lottery-result.show{opacity:1!important;animation:none!important}
+.wall.lottery-fullscreen .lottery-result.hiding{opacity:0!important;animation:none!important}
+.wall.lottery-fullscreen .lottery-result img,
+.wall.lottery-fullscreen .lottery-result.multiple img{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important;
+  background:transparent!important;
+}
+.wall.lottery-fullscreen .lottery-result.multiple img:first-child{right:50%!important;width:50%!important}
+.wall.lottery-fullscreen .lottery-result.multiple img:nth-child(2){left:50%!important;width:50%!important}
+.wall.lottery-fullscreen .lottery-result.multiple[data-count="3"],
+.wall.lottery-fullscreen .lottery-result.multiple[data-count="4"]{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:5px!important;
+}
+.wall.lottery-fullscreen .lottery-result.multiple[data-count="3"] img,
+.wall.lottery-fullscreen .lottery-result.multiple[data-count="4"] img{
+  position:relative!important;inset:auto!important;width:100%!important;height:100%!important;
+}
+.wall.lottery-fullscreen .lottery-result.reel{
+  display:flex!important;flex-wrap:wrap!important;align-content:center!important;justify-content:center!important;
+  gap:13px!important;padding:12vh 8vw 7vh!important;overflow:hidden!important;background:transparent!important;
+}
+.wall.lottery-fullscreen .lottery-result.reel img{
+  position:relative!important;inset:auto!important;flex:0 0 clamp(105px,9vw,150px)!important;
+  width:clamp(105px,9vw,150px)!important;height:clamp(125px,13vw,185px)!important;
+  object-fit:cover!important;border:0!important;border-radius:13px!important;
+  box-shadow:0 12px 25px rgba(42,20,12,.30)!important;animation:lotteryReelTile .62s cubic-bezier(.2,.8,.2,1) both!important;
+}
+.wall.lottery-fullscreen .lottery-result.reel img:nth-child(2n){animation-delay:.06s!important;transform:rotate(2deg)}
+.wall.lottery-fullscreen .lottery-result.reel img:nth-child(3n){animation-delay:.12s!important;transform:rotate(-2deg)}
+.wall.lottery-fullscreen .lottery-result.reel img:nth-child(5n){animation-delay:.16s!important;transform:translateY(-10px) rotate(1deg)}
+@keyframes lotteryReelTile{from{opacity:0;transform:translateY(30px) scale(.7) rotate(-6deg)}60%{opacity:1;transform:translateY(-8px) scale(1.06) rotate(2deg)}to{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+.wall.lottery-fullscreen .lottery-result.reel .reel-caption{
+  position:fixed!important;top:7vh!important;bottom:auto!important;background:transparent!important;
+  color:#fff8ed!important;font-size:clamp(22px,3vw,38px)!important;text-shadow:0 3px 14px rgba(52,23,13,.45)!important;
+  opacity:1!important;
+}
+.lottery-more-card{
+  display:flex;flex:0 0 clamp(105px,9vw,150px);height:clamp(125px,13vw,185px);align-items:center;justify-content:center;flex-direction:column;
+  color:#fff8e9;background:rgba(108,67,52,.58);border-radius:13px;font-size:clamp(25px,3vw,43px);font-weight:800;
+  text-shadow:0 2px 8px rgba(0,0,0,.24);box-shadow:0 12px 25px rgba(42,20,12,.20);
+}
+.lottery-more-card small{margin-top:5px;font-size:12px;font-weight:600}
+.wall.lottery-fullscreen .lottery-result.revealed:not(.multiple) img{
+  position:absolute!important;left:50%!important;top:50%!important;inset:auto!important;
+  width:min(58vw,760px)!important;height:min(72vh,680px)!important;transform:translate(-50%,-50%)!important;
+  object-fit:contain!important;
+}
+.wall.lottery-fullscreen .lottery-result.revealed.multiple{
+  display:flex!important;align-items:center!important;justify-content:center!important;gap:4vw!important;
+}
+.wall.lottery-fullscreen .lottery-result.revealed.multiple img{
+  position:relative!important;inset:auto!important;left:auto!important;right:auto!important;width:min(37vw,500px)!important;height:min(66vh,610px)!important;
+  object-fit:contain!important;
+}
+.lottery-stage-caption{
+  position:absolute;z-index:3;left:50%;bottom:7vh;transform:translateX(-50%);
+  padding:10px 22px;color:#fff8e9;background:rgba(46,25,18,.55);border-radius:999px;
+  font-size:clamp(19px,2.5vw,34px);font-weight:800;letter-spacing:.18em;text-shadow:0 2px 8px rgba(0,0,0,.45);
+}
+.lottery-burst,.lottery-particle{display:none!important}
+.lottery-stage-effects{display:none}
+.wall.lottery-fullscreen .lottery-stage-effects{position:fixed;inset:0;z-index:2;display:block;pointer-events:none}
+.wall.lottery-fullscreen .lottery-stage-effects i{
+  position:absolute;width:7px;height:7px;border-radius:50%;background:#fff2c9;
+  box-shadow:0 0 12px 4px rgba(255,211,123,.42);opacity:0;
+  animation:lotteryTwinkle 2.7s ease-in-out infinite;
+}
+.wall.lottery-fullscreen .lottery-stage-effects i:nth-child(1){left:13%;top:18%;animation-delay:.1s}
+.wall.lottery-fullscreen .lottery-stage-effects i:nth-child(2){left:27%;top:74%;animation-delay:.7s}
+.wall.lottery-fullscreen .lottery-stage-effects i:nth-child(3){left:43%;top:12%;animation-delay:1.1s}
+.wall.lottery-fullscreen .lottery-stage-effects i:nth-child(4){left:61%;top:82%;animation-delay:1.6s}
+.wall.lottery-fullscreen .lottery-stage-effects i:nth-child(5){left:78%;top:17%;animation-delay:.4s}
+.wall.lottery-fullscreen .lottery-stage-effects i:nth-child(6){left:89%;top:65%;animation-delay:1.9s}
+.wall.lottery-fullscreen .lottery-stage-effects i:nth-child(7){left:8%;top:48%;animation-delay:2.2s}
+.wall.lottery-fullscreen .lottery-stage-effects i:nth-child(8){left:71%;top:45%;animation-delay:1.3s}
+@keyframes lotteryTwinkle{0%,100%{opacity:0;transform:scale(.3)}45%{opacity:.9;transform:scale(1.45)}70%{opacity:.2;transform:scale(.7)}}
+.wall.lottery-fullscreen .lottery-result img{filter:drop-shadow(0 18px 35px rgba(14,5,3,.34))}
+.wall.lottery-fullscreen .lottery-stage-caption{
+  position:fixed!important;z-index:5;bottom:8vh!important;left:50%!important;transform:translateX(-50%)!important;
+  min-width:min(300px,76vw);padding:13px 27px!important;text-align:center;
+  color:#fff9eb!important;background:linear-gradient(90deg,rgba(93,48,38,.10),rgba(93,48,38,.72),rgba(93,48,38,.10))!important;
+  border-radius:0!important;box-shadow:none!important;letter-spacing:.22em!important;
+  opacity:0;transition:opacity .5s ease .25s;
+}
+.wall.lottery-fullscreen .lottery-result.revealed .lottery-stage-caption{opacity:1}
+
+/* 最後揭曉採刮刮卡。這些規則刻意放在最末端，覆蓋早期版本的圖片定位。 */
+.wall.lottery-fullscreen .lottery-result.revealed,
+.wall.lottery-fullscreen .lottery-result.revealed.multiple{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  gap:clamp(18px,4vw,70px)!important;padding:7vh 7vw 15vh!important;
+  overflow:hidden!important;
+}
+.wall.lottery-fullscreen .scratch-winner{
+  position:relative!important;flex:0 1 min(38vw,500px)!important;
+  width:min(38vw,500px)!important;height:min(65vh,610px)!important;
+  overflow:hidden!important;border:0!important;border-radius:18px!important;
+  background:transparent!important;box-shadow:none!important;
+}
+.wall.lottery-fullscreen .lottery-result.revealed:not(.multiple) .scratch-winner{
+  width:min(56vw,720px)!important;height:min(68vh,650px)!important;flex-basis:min(56vw,720px)!important;
+}
+.wall.lottery-fullscreen .lottery-result.revealed:not(.multiple) .scratch-winner img{
+  position:absolute!important;inset:0!important;left:auto!important;right:auto!important;top:auto!important;
+  width:100%!important;height:100%!important;transform:none!important;
+  object-fit:contain!important;background:#fffdf7!important;
+  border:0!important;border-radius:18px!important;box-shadow:none!important;
+}
+.wall.lottery-fullscreen .scratch-winner img,
+.wall.lottery-fullscreen .lottery-result.revealed.multiple .scratch-winner img{
+  position:absolute!important;inset:0!important;left:auto!important;right:auto!important;
+  display:block!important;width:100%!important;height:100%!important;transform:none!important;
+  border:0!important;border-radius:18px!important;box-shadow:none!important;object-fit:contain!important;
+  background:#fffdf7!important;filter:none!important;
+}
+.wall.lottery-fullscreen .scratch-winner canvas{
+  position:absolute!important;inset:0!important;z-index:3!important;width:100%!important;height:100%!important;
+  border:0!important;border-radius:18px!important;cursor:crosshair!important;touch-action:none!important;
+  opacity:1!important;transition:opacity .48s ease!important;pointer-events:auto!important;
+}
+.wall.lottery-fullscreen .scratch-winner canvas.cleared{opacity:0!important}
+.wall.lottery-fullscreen .lottery-result.revealed{pointer-events:auto!important}
+.wall.lottery-fullscreen .scratch-winner{pointer-events:auto!important}
+.wall.lottery-fullscreen .scratch-winner canvas.cleared{opacity:0!important;pointer-events:none!important}
+.scratch-hint{
+  position:absolute;z-index:4;left:50%;top:50%;transform:translate(-50%,-50%);width:80%;
+  text-align:center;pointer-events:none;color:#fff9e9;font-size:clamp(24px,3vw,43px);font-weight:800;
+  line-height:1.18;letter-spacing:.11em;text-shadow:0 3px 10px rgba(74,32,24,.38);transition:opacity .3s ease;
+}
+.scratch-hint small{display:block;margin-top:11px;font-size:clamp(12px,1.2vw,17px);letter-spacing:.16em;font-weight:600}
+.scratch-winner.revealed .scratch-hint{opacity:0}
+.wall.lottery-fullscreen .lottery-result.reel::after{
+  content:"";display:block!important;position:absolute!important;inset:0!important;z-index:1!important;
+  pointer-events:none!important;background:linear-gradient(112deg,transparent 38%,rgba(255,242,194,.17) 48%,transparent 58%);
+  transform:translateX(-120%);animation:lotterySweep 1.45s ease-in-out infinite!important;
+}
+.wall.lottery-fullscreen .lottery-result.reel img,
+.wall.lottery-fullscreen .lottery-result.reel .lottery-more-card{position:relative!important;z-index:2!important}
+.wall.lottery-fullscreen .lottery-result.reel img:nth-child(4n+1){animation-duration:.52s!important}
+.wall.lottery-fullscreen .lottery-result.reel img:nth-child(4n+2){animation-duration:.46s!important}
+@keyframes lotterySweep{0%{transform:translateX(-120%);opacity:0}18%{opacity:1}72%{opacity:.8}100%{transform:translateX(120%);opacity:0}}
+.lottery-finish-button{
+  position:fixed!important;z-index:9!important;right:4vw!important;bottom:4vh!important;
+  padding:12px 20px!important;color:#fff8ea!important;background:rgba(91,48,40,.78)!important;
+  border:1px solid rgba(255,244,215,.66)!important;border-radius:999px!important;
+  box-shadow:0 8px 22px rgba(43,18,12,.25)!important;font:700 16px/1 inherit!important;
+  letter-spacing:.08em!important;cursor:pointer!important;transition:transform .2s ease,background .2s ease!important;
+}
+.lottery-finish-button:hover{transform:translateY(-2px)!important;background:rgba(128,73,59,.92)!important}
+.lottery-finish-button:focus-visible{outline:3px solid #fff2c7!important;outline-offset:3px!important}
+
+/* 抽獎時以暖色舞台底分離婚紗背景，字與照片會清楚但仍看得到整體佈置。 */
+.wall.lottery-fullscreen .lottery-zone,
+.wall.lottery-fullscreen .lottery-result{
+  background:transparent!important;box-shadow:none!important;
+}
+.wall.lottery-fullscreen #lotteryZone,
+.wall.lottery-fullscreen #lotteryResult{
+  background:none!important;background-color:transparent!important;
+  border:0!important;outline:0!important;box-shadow:none!important;
+  filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+.wall.lottery-fullscreen #lotteryResult::before,
+.wall.lottery-fullscreen #lotteryResult::after{content:none!important;display:none!important}
+.wall.lottery-fullscreen .lottery-zone::before,
+.wall.lottery-fullscreen .lottery-zone::after,
+.wall.lottery-fullscreen .lottery-result::before,
+.wall.lottery-fullscreen .lottery-result::after{display:none!important;background:transparent!important}
+.wall.lottery-fullscreen .lottery-lobby[hidden]{display:none!important}
+/* 開始抽獎前的設定面板不再加全頁灰色遮罩。 */
+#lotteryLobby{
+  background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+#lotteryLobby::before{display:none!important;background:transparent!important}
+#lotteryLobby .lottery-lobby-card{box-shadow:none!important}
+/* 抽獎期間完全卸載中央賓客訊息區，避免其半透明訊息底留成方形舞台。 */
+.wall.lottery-fullscreen .live-feed,
+.wall.lottery-fullscreen .live-feed *{display:none!important}
+/* 這個是舊版 .wall::after 的「手繪愛心裝飾」規則：它沒有重設舊的 inset，
+   因而意外形成中央一大塊半透明矩形。整個偽元素不再需要，直接停用。 */
+.wall::after{content:none!important;display:none!important}
+/* 不在婚紗背景與照片上再疊暖色霧層；保留原圖對比與照片細節。 */
+.wall::before{background:transparent!important}
+.polaroid img{
+  filter:none!important;image-rendering:auto!important;
+  -ms-interpolation-mode:bicubic;
+}
+.wall:not(.lottery-fullscreen) .qr{
+  display:block!important;visibility:visible!important;opacity:1!important;
+}
+/* 婚紗／賓客照片維持原始比例；舊版固定比例 + cover 會把橫圖和人像裁得很怪。 */
+.polaroid img,
+.polaroid.landscape img,
+.polaroid.square img{
+  width:100%!important;height:auto!important;max-height:31vh!important;
+  aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important;
+  background:transparent!important;
+}
+.wall.lottery-fullscreen::before{
+  background:
+    radial-gradient(circle at 14% 18%,rgba(255,238,195,.25),transparent 24%),
+    radial-gradient(circle at 82% 76%,rgba(222,151,143,.20),transparent 30%),
+    linear-gradient(110deg,rgba(74,39,28,.34),rgba(255,240,210,.08) 48%,rgba(78,40,30,.34))!important;
+}
+.wall.lottery-fullscreen::after{
+  background:radial-gradient(ellipse at 50% 47%,rgba(255,250,231,.06),rgba(72,35,27,.26) 85%)!important;
+}
+.wall.lottery-fullscreen .lottery-result.reel .reel-caption{
+  padding:10px 22px!important;background:rgba(106,57,42,.63)!important;border-radius:999px!important;
+}
+
+/* 洗牌畫面改為散落的日系照片牆：橫圖、直圖依原始比例呈現。 */
+.wall.lottery-fullscreen .lottery-result.reel{
+  display:block!important;position:fixed!important;inset:0!important;padding:0!important;overflow:hidden!important;
+}
+.wall.lottery-fullscreen .lottery-result.reel .lottery-reel-photo{
+  position:absolute!important;z-index:2!important;left:var(--x)!important;top:var(--y)!important;
+  width:var(--size)!important;max-width:19vw!important;margin:0!important;padding:7px!important;
+  transform:translate(-50%,-50%) rotate(var(--r))!important;
+  background:linear-gradient(135deg,#fffdf7,#f0dfc5)!important;border:0!important;border-radius:3px!important;
+  box-shadow:0 12px 28px rgba(65,30,19,.30)!important;animation:reelPhotoArrive .52s cubic-bezier(.18,.86,.25,1.14) both!important;
+}
+.wall.lottery-fullscreen .lottery-result.reel .lottery-reel-photo img{
+  position:relative!important;inset:auto!important;display:block!important;width:100%!important;height:auto!important;
+  max-height:24vh!important;min-height:0!important;object-fit:contain!important;background:transparent!important;
+  border:0!important;border-radius:1px!important;box-shadow:none!important;filter:none!important;transform:none!important;animation:none!important;
+}
+.wall.lottery-fullscreen .lottery-result.reel .lottery-reel-photo:nth-child(3n){animation-delay:.08s!important}
+.wall.lottery-fullscreen .lottery-result.reel .lottery-reel-photo:nth-child(4n){animation-delay:.15s!important}
+.wall.lottery-fullscreen .lottery-result.reel .lottery-more-card{
+  position:absolute!important;z-index:3!important;right:8vw!important;bottom:12vh!important;width:110px!important;height:110px!important;
+  transform:rotate(5deg)!important;background:rgba(135,85,69,.78)!important;border-radius:50%!important;
+}
+@keyframes reelPhotoArrive{from{opacity:0;transform:translate(-50%,-44%) rotate(calc(var(--r) - 8deg)) scale(.62)}to{opacity:1;transform:translate(-50%,-50%) rotate(var(--r)) scale(1)}}
+.wall.lottery-fullscreen .scratch-winner.revealed{
+  animation:scratchReveal .8s cubic-bezier(.18,.85,.25,1.25) both!important;
+}
+.wall.lottery-fullscreen .scratch-winner.revealed::after{
+  content:"✦";position:absolute;z-index:5;inset:0;display:grid;place-items:center;pointer-events:none;
+  color:#fff7c4;font-size:min(15vw,160px);text-shadow:0 0 22px #fff0a7,0 0 70px rgba(255,193,101,.9);
+  animation:scratchSpark .85s ease-out both;
+}
+.wall.lottery-fullscreen .lottery-result.all-scratched .scratch-winner{
+  box-shadow:0 0 0 2px rgba(255,241,190,.72),0 0 38px rgba(255,196,110,.72)!important;
+}
+.wall.lottery-fullscreen .lottery-result.all-scratched .lottery-stage-caption{
+  animation:allWinnersGlow 1s ease-in-out infinite alternate!important;
+}
+@keyframes scratchReveal{0%{transform:scale(.94);filter:brightness(.8)}48%{transform:scale(1.045);filter:brightness(1.28)}100%{transform:scale(1);filter:brightness(1)}}
+@keyframes scratchSpark{0%{opacity:0;transform:scale(.1) rotate(-25deg)}35%{opacity:1;transform:scale(1.12) rotate(10deg)}100%{opacity:0;transform:scale(1.75) rotate(35deg)}}
+@keyframes allWinnersGlow{from{filter:drop-shadow(0 0 4px rgba(255,229,156,.4))}to{filter:drop-shadow(0 0 17px rgba(255,229,156,1))}}
+@media(max-width:560px){
+  .lottery-lobby-card{padding:34px 24px 22px}
+  .lottery-count{font-size:16px}
+}
+</style>
+
