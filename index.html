@@ -26,6 +26,10 @@
       @media (hover:none){.map-hotspot span{opacity:1}}
       .map-hotspot span{left:44%;bottom:-8%;opacity:1 !important;transform:translateX(-50%) !important}
       .map-hotspot:hover span,.map-hotspot:focus span{opacity:1 !important;transform:translateX(-50%) !important}
+      .seat-lookup{padding:22px 20px 19px;background:#faf6ee;text-align:center;border-top:1px solid #eadfd2}
+      .seat-lookup p{margin:0 0 11px;color:#897666;font-size:12px;letter-spacing:.11em}
+      .seat-lookup a{display:inline-flex;align-items:center;justify-content:center;min-width:196px;padding:12px 22px;border:1px solid #bd8067;border-radius:999px;background:linear-gradient(135deg,#c48269,#af6e58);color:#fffaf4;text-decoration:none;font:600 15px 'Noto Serif TC',serif;letter-spacing:.14em;box-shadow:0 5px 12px #91604a26;transition:transform .2s,box-shadow .2s}
+      .seat-lookup a:hover,.seat-lookup a:focus{transform:translateY(-2px);box-shadow:0 8px 16px #91604a3a}
       .calendar-countdown{margin-top:0;position:relative;z-index:4;border-radius:24px 24px 0 0;padding:36px 12px 30px;background:linear-gradient(180deg,#f4ebdf 0%,#f7efe5 100%);box-shadow:0 -8px 20px rgba(122,91,66,.08)}
       .calendar-countdown p{margin-bottom:14px;font-size:13px}
       .calendar-pages{max-width:330px;gap:4px}
@@ -60,6 +64,10 @@
           <a class="map-hotspot venue-hotspot" href="https://www.google.com/maps/dir/?api=1&destination=%E5%BD%AD%E5%9C%92%E6%96%B0%E6%9D%BF%E9%A4%A8" target="_blank" rel="noopener" aria-label="導航至彭園新板館"><span>導航</span></a>
           <a class="map-hotspot parking-hotspot" href="https://www.google.com/maps/dir/?api=1&destination=%E6%96%B0%E5%8C%97%E5%B8%82%E5%B8%82%E6%B0%91%E5%BB%A3%E5%A0%B4%E5%9C%B0%E4%B8%8B%E5%81%9C%E8%BB%8A%E5%A0%B4" target="_blank" rel="noopener" aria-label="導航至市民廣場地下停車場"><span>導航</span></a>
         </div>
+        <section class="seat-lookup" aria-label="座位查詢">
+          <p>輸入受邀姓名，查看桌號與位置</p>
+          <a href="seating.html">查詢座位</a>
+        </section>
         <section class="calendar-countdown" aria-label="距離婚禮倒數" aria-live="polite">
           <p>距離我們的婚禮</p>
           <div class="calendar-pages"><div class="calendar-unit"><b id="days">000</b><span>天</span></div><div class="calendar-unit"><b id="hours">00</b><span>時</span></div><div class="calendar-unit"><b id="minutes">00</b><span>分</span></div><div class="calendar-unit"><b id="seconds">00</b><span>秒</span></div></div>
