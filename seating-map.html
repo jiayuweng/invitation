@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f2e9" />
+  <title>婚禮座位查詢｜劉育名 & 翁佳瑜</title>
+  <meta name="description" content="查詢婚禮宴席桌號與座位位置。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--ink:#63554a;--soft:#8d7767;--paper:#fffdf8;--ground:#f6efe5;--line:#dbcaba;--accent:#b9715c;--gold:#be9337}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(145deg,#e9dfd2,#f6efe6 42%,#e8dfd5);color:var(--ink);font-family:'Noto Serif TC',serif}
+    main{width:min(100%,560px);min-height:100svh;margin:auto;padding:24px 16px 42px;background:var(--paper);box-shadow:0 0 50px #6c51371d}
+    .back{display:inline-block;color:#937967;font-size:13px;letter-spacing:.08em;text-decoration:none}.back:hover{text-decoration:underline}
+    header{text-align:center;padding:18px 0 22px}.eyebrow{margin:0 0 7px;color:#b17b65;font:15px 'DM Serif Display',serif;letter-spacing:.2em}.title{margin:0;font-size:27px;letter-spacing:.13em}.intro{margin:9px 0 0;color:var(--soft);font-size:13px;letter-spacing:.05em}
+    .lookup{padding:18px;border:1px solid var(--line);border-radius:15px;background:#fcf8f1;box-shadow:0 8px 25px #9b735214}
+    .lookup form{display:flex;gap:8px}.lookup input{min-width:0;flex:1;border:1px solid #d9c6b4;border-radius:999px;background:#fffefa;padding:12px 15px;color:var(--ink);font:500 15px 'Noto Serif TC',serif;outline:none}.lookup input:focus{border-color:#ad8068;box-shadow:0 0 0 3px #e9d3c655}.lookup button{border:0;border-radius:999px;background:var(--accent);padding:0 18px;color:#fffdf8;font:600 14px 'Noto Serif TC',serif;letter-spacing:.06em;cursor:pointer}.lookup button:hover{background:#9f5d4d}
+    .status{min-height:1.5em;margin:12px 2px 0;color:var(--soft);font-size:13px}.status.error{color:#a24f45}.status.success{color:#716f57}
+    .result{margin-top:18px;padding:14px 16px;border:1px solid #dfcdbb;border-radius:10px;background:#fffdf8;text-align:center}.result[hidden]{display:none}.result-name{margin:0;color:var(--soft);font-size:13px}.result-table{margin:3px 0 0;color:#9a654f;font:28px 'DM Serif Display','Noto Serif TC',serif;letter-spacing:.08em}
+    .map-card{margin:24px 0 0;padding:16px 10px 12px;border-radius:17px;background:var(--ground);border:1px solid #e3d7c9}.map-card h2{margin:0 0 10px;text-align:center;font-size:16px;letter-spacing:.12em}.map-note{margin:0 0 10px;text-align:center;color:#9b8877;font-size:11px}.map-wrap{position:relative;overflow:hidden;border-radius:11px;background:#fffdf8;border:1px solid #e1d5c6}
+    #seatMap{display:block;width:100%;height:auto;min-height:600px;background:radial-gradient(circle at 50% 4%,#fffdf8 0 26%,#f9f0e5 70%,#f1e3d5 100%)}.floor{fill:#fffdf8}.aisle{fill:url(#carpetGradient);stroke:#c87966;stroke-width:2}.aisle-line{stroke:#f3d6a4;stroke-width:2;stroke-dasharray:9 10;opacity:.9}.table-circle{fill:#fffdf8;stroke:#e97b52;stroke-width:7;filter:drop-shadow(0 5px 4px #98694a20)}.table-label{fill:#685a4e;font:600 29px 'DM Serif Display','Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.main-circle{fill:#fffdf8;stroke:#eabf47;stroke-width:7;filter:drop-shadow(0 5px 4px #8e6d1e20)}.main-label{fill:#655448;font:600 25px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.checkin{fill:#bceee8;stroke:#91d7cf;stroke-width:2}.door{fill:#fffdf8;stroke:#b9a38e;stroke-width:3}.door-swing{fill:none;stroke:#b9a38e;stroke-width:2;stroke-dasharray:5 5}.door-label{fill:#806d5b;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.12em}.checkin-label{fill:#45625e;font:600 24px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.highlight-ring{fill:none;stroke:#b85e48;stroke-width:8;opacity:.95;animation:pulse 1.3s ease-in-out infinite}.arrow{fill:#b85e48;filter:drop-shadow(0 3px 2px #63321a55);animation:bob 1s ease-in-out infinite}.marker-label{fill:#a34f3d;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.14em;paint-order:stroke;stroke:#fffdf8;stroke-width:5;stroke-linejoin:round}@keyframes pulse{50%{stroke-width:15;opacity:.28}}@keyframes bob{50%{transform:translateY(-8px)}}
+    .legend{margin:11px 4px 0;color:#94806e;font-size:11px;text-align:center}.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden;white-space:nowrap}
+    @media(max-width:370px){main{padding-inline:10px}.lookup{padding:14px}.lookup button{padding-inline:14px}.title{font-size:24px}}
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="./">← 回到婚禮邀請函</a>
+    <header>
+      <p class="eyebrow">WEDDING SEATING</p>
+      <h1 class="title">查詢您的座位</h1>
+      <p class="intro">請輸入受邀姓名，查看宴席桌號與位置。</p>
+    </header>
+
+    <section class="lookup" aria-label="座位查詢">
+      <form id="lookupForm" novalidate>
+        <label class="sr-only" for="guestName">受邀姓名</label>
+        <input id="guestName" name="guestName" type="search" autocomplete="name" placeholder="請輸入姓名" maxlength="40" required />
+        <button type="submit">查詢</button>
+      </form>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="result" class="result" hidden aria-live="polite">
+      <p id="resultName" class="result-name"></p>
+      <p id="resultTable" class="result-table"></p>
+    </section>
+
+    <section class="map-card" aria-labelledby="mapTitle">
+      <h2 id="mapTitle">會場座位圖</h2>
+      <p class="map-note">查詢後，箭頭會標示您的桌位。</p>
+      <div class="map-wrap">
+        <svg id="seatMap" viewBox="0 0 730 1200" role="img" aria-label="主桌與二十張宴席桌的會場座位圖"></svg>
+      </div>
+      <p class="legend">桌號與位置將依最終場地配置更新。</p>
+    </section>
+  </main>
+
+  <script>
+    const SEAT_LOOKUP_URL = 'https://script.google.com/macros/s/AKfycbw4c4KG8q7nvvO1BabceF_3adXi1mPsrGw3IVKExwMZ4KWh6fMOcVBUAB5-uQEo-sc/exec';
+    const svg = document.getElementById('seatMap');
+    const form = document.getElementById('lookupForm');
+    const input = document.getElementById('guestName');
+    const status = document.getElementById('status');
+    const result = document.getElementById('result');
+    const resultName = document.getElementById('resultName');
+    const resultTable = document.getElementById('resultTable');
+    let dataPromise;
+    const DEFAULT_LAYOUT = [
+      ['Table_1',355,25,0],['Table_2',55,195,1],['Table_3',262,230,2],['Table_4',468,230,3],['Table_5',675,195,4],
+      ['Table_6',55,375,5],['Table_7',262,410,6],['Table_8',468,410,7],['Table_9',675,375,8],
+      ['Table_10',55,555,9],['Table_11',262,590,10],['Table_12',468,590,11],['Table_13',675,555,12],
+      ['Table_14',55,735,13],['Table_15',262,770,14],['Table_16',468,770,15],['Table_17',675,735,16],
+      ['Table_18',55,915,17],['Table_19',262,950,18],['Table_20',468,950,19],['Table_21',675,915,20]
+    ].map(([Object_ID, X, Y, Public_Table_ID]) => ({Object_ID, Type:'Table', X, Y, Public_Table_ID}));
+
+    const clean = (value) => String(value ?? '').replace(/[\s　]+/g, '').toLocaleLowerCase('zh-Hant');
+    const asNumber = (value) => Number(value);
+    const svgEl = (tag, attrs = {}) => {
+      const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+      Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+      return el;
+    };
+    function setStatus(message, kind = '') {
+      status.textContent = message;
+      status.className = `status ${kind}`.trim();
+    }
+    function drawMap(layout, activeObjectId = '') {
+      svg.replaceChildren();
+
+      const defs = svgEl('defs');
+      const carpetGradient = svgEl('linearGradient', {id:'carpetGradient', x1:'0', x2:'1', y1:'0', y2:'0'});
+      carpetGradient.append(svgEl('stop', {offset:'0%', 'stop-color':'#e5a18c'}));
+      carpetGradient.append(svgEl('stop', {offset:'48%', 'stop-color':'#d77f69'}));
+      carpetGradient.append(svgEl('stop', {offset:'100%', 'stop-color':'#e5a18c'}));
+      defs.append(carpetGradient);
+      svg.append(defs);
+      svg.append(svgEl('rect', {x:0, y:0, width:730, height:1200, class:'floor'}));
+
+      // Main table remains clear of the carpet.
+      svg.append(svgEl('rect', {x:325, y:155, width:80, height:810, rx:36, class:'aisle'}));
+      svg.append(svgEl('line', {x1:365, y1:190, x2:365, y2:930, class:'aisle-line'}));
+
+      // Entrance sits below Table 20 with clear walking space.
+      const door = svgEl('g');
+      door.append(svgEl('path', {d:'M 730 1000 H 678 V 1080 H 730', class:'door'}));
+      door.append(svgEl('path', {d:'M 678 1000 A 82 82 0 0 1 730 1076', class:'door-swing'}));
+      const doorLabel = svgEl('text', {x:704, y:1040, class:'door-label', transform:'rotate(-90 704 1040)'});
+      doorLabel.textContent = '入口';
+      door.append(doorLabel);
+      svg.append(door);
+
+      // After entering from the right, the reception table is on the left.
+      const checkin = svgEl('g');
+      checkin.append(svgEl('rect', {x:430, y:1060, width:205, height:72, rx:15, class:'checkin'}));
+      const checkinText = svgEl('text', {x:532, y:1097, class:'checkin-label'});
+      checkinText.textContent = '簽到桌';
+      checkin.append(checkinText);
+      svg.append(checkin);
+
+      const tables = layout.filter((row) => row.Type === 'Table' && String(row.Public_Table_ID).trim() !== '');
+      tables.forEach((row) => {
+        const publicId = String(row.Public_Table_ID).trim();
+        const isMain = publicId === '0';
+        let x = asNumber(row.X);
+        let y = asNumber(row.Y);
+        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+
+        // Bring the two outer table rows inward while keeping every table off the carpet.
+        if (x === 55) x = 95;
+        else if (x === 262) x = 245;
+        else if (x === 468) x = 485;
+        else if (x === 675) x = 635;
+        if (isMain) { x = 365; y = 85; }
+
+        const group = svgEl('g', {id:row.Object_ID});
+        group.append(svgEl('circle', {cx:x, cy:y, r:isMain ? 57 : 50, class:isMain ? 'main-circle' : 'table-circle'}));
+        const label = svgEl('text', {x, y, class:isMain ? 'main-label' : 'table-label'});
+        label.textContent = isMain ? '主桌' : publicId;
+        group.append(label);
+
+        if (row.Object_ID === activeObjectId) {
+          group.append(svgEl('circle', {cx:x, cy:y, r:66, class:'highlight-ring'}));
+          const marker = svgEl('g', {class:'seat-marker'});
+          const markerLabel = svgEl('text', {x, y:y - 138, class:'marker-label'});
+          markerLabel.textContent = '您的座位';
+          marker.append(markerLabel);
+          // Downward arrow ends at the top edge of the selected table.
+          marker.append(svgEl('path', {d:`M ${x - 12} ${y - 128} H ${x + 12} V ${y - 84} H ${x + 28} L ${x} ${y - 50} L ${x - 28} ${y - 84} H ${x - 12} Z`, class:'arrow'}));
+          group.append(marker);
+        }
+        svg.append(group);
+      });
+    }
+    function initialiseMap() {
+      drawMap(DEFAULT_LAYOUT);
+    }
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const typedName = input.value.trim();
+      const query = clean(typedName);
+      result.hidden = true;
+      if (!query) { setStatus('請先輸入受邀姓名。', 'error'); input.focus(); return; }
+
+      setStatus('正在查詢座位…');
+      try {
+        const url = `${SEAT_LOOKUP_URL}?mode=seat&name=${encodeURIComponent(typedName)}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('座位服務暫時無法讀取');
+        const lookup = await response.json();
+
+        if (!lookup.found) {
+          setStatus(lookup.message || '找不到此姓名，請確認是否與邀請函相同。', 'error');
+          return;
+        }
+
+        resultName.textContent = `${typedName}，您的座位在`;
+        resultTable.textContent = `第 ${lookup.publicTableId} 桌`;
+        result.hidden = false;
+        drawMap(DEFAULT_LAYOUT, lookup.objectId);
+        setStatus('已為您標示桌位。', 'success');
+        result.scrollIntoView({behavior:'smooth', block:'center'});
+      } catch (error) {
+        console.error(error);
+        setStatus('目前無法讀取座位資料，請稍後再試。', 'error');
+      }
+    });
+    initialiseMap();
+  </script>
+</body>
+</html>
