@@ -58,8 +58,9 @@
     </section>
   </main>
 
+  <script src="./assets/seat-data.js"></script>
   <script>
-    const SEAT_LOOKUP_URL = 'https://script.google.com/macros/s/AKfycbw4c4KG8q7nvvO1BabceF_3adXi1mPsrGw3IVKExwMZ4KWh6fMOcVBUAB5-uQEo-sc/exec';
+    const seatIndex = (window.SEAT_DATA && window.SEAT_DATA.entries) || {};
     const svg = document.getElementById('seatMap');
     const form = document.getElementById('lookupForm');
     const input = document.getElementById('guestName');
@@ -157,6 +158,14 @@
     function initialiseMap() {
       drawMap(DEFAULT_LAYOUT);
     }
+    async function hashName(value) {
+      const bytes = new TextEncoder().encode(clean(value));
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const typedName = input.value.trim();
@@ -166,25 +175,22 @@
 
       setStatus('正在查詢座位…');
       try {
-        const url = `${SEAT_LOOKUP_URL}?mode=seat&name=${encodeURIComponent(typedName)}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('座位服務暫時無法讀取');
-        const lookup = await response.json();
+        const lookup = seatIndex[await hashName(typedName)];
 
-        if (!lookup.found) {
-          setStatus(lookup.message || '找不到此姓名，請確認是否與邀請函相同。', 'error');
+        if (!lookup) {
+          setStatus('查無座位資訊，請以填寫表單時使用的姓名查詢，或洽詢新人。', 'error');
           return;
         }
 
         resultName.textContent = `${typedName}，您的座位在`;
-        resultTable.textContent = `第 ${lookup.publicTableId} 桌`;
+        resultTable.textContent = `第 ${lookup.t} 桌`;
         result.hidden = false;
-        drawMap(DEFAULT_LAYOUT, lookup.objectId);
+        drawMap(DEFAULT_LAYOUT, lookup.o);
         setStatus('已為您標示桌位。', 'success');
         result.scrollIntoView({behavior:'smooth', block:'center'});
       } catch (error) {
         console.error(error);
-        setStatus('目前無法讀取座位資料，請稍後再試。', 'error');
+        setStatus('目前無法查詢座位資料，請稍後再試。', 'error');
       }
     });
     initialiseMap();
