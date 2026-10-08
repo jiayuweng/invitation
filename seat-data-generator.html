@@ -31,6 +31,7 @@
       </label>
       <input id="fileInput" class="file" type="file" accept=".xlsx,.xls" />
       <button id="download" type="button" disabled>下載 seat-data.js</button>
+      <button id="copy" type="button" disabled>複製檔案內容</button>
       <p id="status" class="status" role="status" aria-live="polite"></p>
       <div id="details" class="details"></div>
     </section>
@@ -44,6 +45,7 @@
     const status = document.getElementById('status');
     const details = document.getElementById('details');
     const download = document.getElementById('download');
+    const copy = document.getElementById('copy');
     let output = '';
 
     const text = (value) => value === null || value === undefined ? '' : String(value).trim();
@@ -65,6 +67,7 @@
     async function convert(file) {
       output = '';
       download.disabled = true;
+      copy.disabled = true;
       details.className = 'details';
       setStatus('正在處理檔案…');
 
@@ -123,6 +126,7 @@
         (collisions.length ? '<br><span style="color:#a24f45">有 ' + collisions.length + ' 個重複別名指向不同桌號，請回到 Excel 檢查。</span>' : '');
       details.className = 'details show';
       download.disabled = collisions.length > 0;
+      copy.disabled = collisions.length > 0;
       setStatus(collisions.length ? '請先處理重複別名後再下載。' : '資料已準備好，可下載。', collisions.length ? 'error' : 'ok');
     }
 
@@ -138,6 +142,14 @@
     dropZone.addEventListener('drop', (event) => {
       const file = event.dataTransfer.files[0];
       if (file) convert(file).catch((error) => setStatus(error.message, 'error'));
+    });
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(output);
+        setStatus('已複製，可貼到 GitHub 的 assets/seat-data.js 後提交。', 'ok');
+      } catch (error) {
+        setStatus('無法自動複製，請改用下載的檔案。', 'error');
+      }
     });
     download.addEventListener('click', () => {
       const link = document.createElement('a');
