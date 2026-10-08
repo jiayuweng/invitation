@@ -131,7 +131,8 @@
         const {layout} = await getData();
         drawMap(layout);
       } catch (error) {
-        drawMap(DEFAULT_LAYOUT);\n        setStatus('座位圖已顯示；查詢資料將在連接照片牆資料後啟用。', 'error');
+        drawMap(DEFAULT_LAYOUT);
+        setStatus('座位圖已顯示；查詢資料將在連接照片牆資料後啟用。', 'error');
       }
     }
     form.addEventListener('submit', async (event) => {
