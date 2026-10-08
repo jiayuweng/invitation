@@ -59,8 +59,7 @@
   </main>
 
   <script>
-    const SHEET_ID = '17S-YGI8hcYBZZfNovM09SyP-h9Yv5JJi3XuZLW_je-0';
-    const sheetUrl = (sheetName) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+    const SEAT_LOOKUP_URL = 'https://script.google.com/macros/s/AKfycbw4c4KG8q7nvvO1BabceF_3adXi1mPsrGw3IVKExwMZ4KWh6fMOcVBUAB5-uQEo-sc/exec';
     const svg = document.getElementById('seatMap');
     const form = document.getElementById('lookupForm');
     const input = document.getElementById('guestName');
@@ -84,21 +83,6 @@
       Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
       return el;
     };
-    const parseGviz = (text) => {
-      const json = JSON.parse(text.replace(/^\/\*O_o\*\/\n/, '').replace(/^google\.visualization\.Query\.setResponse\(/, '').replace(/\);\s*$/, ''));
-      const table = json.table;
-      const headers = table.cols.map((column) => column.label || column.id);
-      return table.rows.map((row) => Object.fromEntries(headers.map((header, index) => [header, row.c[index]?.v ?? ''])));
-    };
-    async function getData() {
-      if (!dataPromise) dataPromise = Promise.all([fetch(sheetUrl('GuestData')), fetch(sheetUrl('Layout'))])
-        .then(async ([guests, layout]) => {
-          if (!guests.ok || !layout.ok) throw new Error('座位資料無法讀取');
-          return Promise.all([guests.text(), layout.text()]);
-        })
-        .then(([guests, layout]) => ({guests: parseGviz(guests), layout: parseGviz(layout)}));
-      return dataPromise;
-    }
     function setStatus(message, kind = '') {
       status.textContent = message;
       status.className = `status ${kind}`.trim();
@@ -126,34 +110,32 @@
         svg.append(group);
       });
     }
-    async function initialiseMap() {
-      try {
-        const {layout} = await getData();
-        drawMap(layout);
-      } catch (error) {
-        drawMap(DEFAULT_LAYOUT);
-        setStatus('座位圖已顯示；查詢資料將在連接照片牆資料後啟用。', 'error');
-      }
+    function initialiseMap() {
+      drawMap(DEFAULT_LAYOUT);
     }
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const query = clean(input.value);
+      const typedName = input.value.trim();
+      const query = clean(typedName);
       result.hidden = true;
       if (!query) { setStatus('請先輸入受邀姓名。', 'error'); input.focus(); return; }
+
       setStatus('正在查詢座位…');
       try {
-        const {guests, layout} = await getData();
-        const matches = guests.filter((guest) => [guest.Name, guest.FormName, guest.NameOverride].some((name) => clean(name) === query));
-        if (!matches.length) { setStatus('找不到此姓名，請確認是否與邀請函相同。', 'error'); return; }
-        const guest = matches[0];
-        const objectId = `Table_${String(guest.Table_ID).trim()}`;
-        const table = layout.find((row) => row.Object_ID === objectId);
-        const publicId = String(table?.Public_Table_ID ?? '').trim();
-        if (!table || !publicId || publicId === '0') { setStatus('您的座位資料尚未安排完成，請稍後再查詢。', 'error'); return; }
-        resultName.textContent = `${guest.Name}，您的座位在`;
-        resultTable.textContent = `第 ${publicId} 桌`;
+        const url = `${SEAT_LOOKUP_URL}?mode=seat&name=${encodeURIComponent(typedName)}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('座位服務暫時無法讀取');
+        const lookup = await response.json();
+
+        if (!lookup.found) {
+          setStatus(lookup.message || '找不到此姓名，請確認是否與邀請函相同。', 'error');
+          return;
+        }
+
+        resultName.textContent = `${typedName}，您的座位在`;
+        resultTable.textContent = `第 ${lookup.publicTableId} 桌`;
         result.hidden = false;
-        drawMap(layout, objectId);
+        drawMap(DEFAULT_LAYOUT, lookup.objectId);
         setStatus('已為您標示桌位。', 'success');
         result.scrollIntoView({behavior:'smooth', block:'center'});
       } catch (error) {
