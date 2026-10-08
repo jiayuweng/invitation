@@ -101,7 +101,7 @@
       svg.append(svgEl('rect', {x:285, y:130, width:160, height:820, rx:31, class:'aisle'}));
       const checkin = svgEl('g');
       checkin.append(svgEl('rect', {x:405, y:1035, width:235, height:85, rx:15, class:'checkin'}));
-      const checkinText = svgEl('text', {x:522, y:1078, class:'checkin-label'}); checkinText.textContent = '簽到桌'; checkin.append(checkin); svg.append(checkin);
+      const checkinText = svgEl('text', {x:522, y:1078, class:'checkin-label'}); checkinText.textContent = '簽到桌'; checkin.append(checkinText); svg.append(checkin);
       const tables = layout.filter((row) => row.Type === 'Table' && String(row.Public_Table_ID).trim() !== '');
       tables.forEach((row) => {
         const x = asNumber(row.X), y = asNumber(row.Y), publicId = String(row.Public_Table_ID).trim();
