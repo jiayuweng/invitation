@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f2e9" />
+  <title>座位查詢資料轉換工具</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root{--ink:#63554a;--soft:#8d7767;--paper:#fffdf8;--ground:#f6efe5;--line:#dbcaba;--accent:#b9715c;--good:#537d6e;--warn:#a24f45}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(145deg,#e9dfd2,#f6efe6 42%,#e8dfd5);color:var(--ink);font-family:"Noto Serif TC",serif}
+    main{width:min(100%,680px);min-height:100vh;margin:auto;padding:32px 20px 48px;background:var(--paper);box-shadow:0 0 50px #6c51371d}
+    a{color:#937967}.back{font-size:13px;letter-spacing:.08em}.eyebrow{margin:30px 0 7px;color:#b17b65;font:15px Georgia,serif;letter-spacing:.2em}.title{margin:0;font-size:27px;letter-spacing:.08em}.intro{margin:10px 0 24px;color:var(--soft);font-size:14px;line-height:1.8}
+    .panel{padding:22px;border:1px solid var(--line);border-radius:16px;background:#fcf8f1}.drop{display:block;border:2px dashed #cfae99;border-radius:14px;padding:34px 20px;text-align:center;cursor:pointer;background:#fffefa;transition:.2s}.drop:hover,.drop.drag{border-color:var(--accent);background:#fff8f0}.drop strong{display:block;font-size:17px}.drop span{display:block;margin-top:9px;color:var(--soft);font-size:13px}.file{display:none}
+    button{margin-top:16px;border:0;border-radius:999px;background:var(--accent);padding:12px 19px;color:#fffdf8;font:600 14px "Noto Serif TC",serif;letter-spacing:.06em;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.status{min-height:1.5em;margin:15px 2px 0;color:var(--soft);font-size:14px}.status.ok{color:var(--good)}.status.error{color:var(--warn)}
+    .details{display:none;margin-top:18px;padding:16px;border-radius:11px;background:#fffdf8;border:1px solid #e1d5c6;font-size:14px;line-height:1.8}.details.show{display:block}.note{margin:24px 2px 0;color:var(--soft);font-size:13px;line-height:1.8}
+    code{padding:1px 5px;border-radius:4px;background:#f1e9df;color:#765b49}
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="./seating.html">← 回到座位查詢頁</a>
+    <p class="eyebrow">SEAT DATA TOOL</p>
+    <h1 class="title">座位查詢資料轉換</h1>
+    <p class="intro">選擇從 Google Sheet 下載的 Excel 檔。檔案只會在這台裝置的瀏覽器內處理，不會上傳到任何伺服器。</p>
+
+    <section class="panel">
+      <label id="dropZone" class="drop" for="fileInput">
+        <strong>選擇或拖曳 Excel 檔</strong>
+        <span>需要包含 <code>GuestData</code> 和 <code>Layout</code> 工作表</span>
+      </label>
+      <input id="fileInput" class="file" type="file" accept=".xlsx,.xls" />
+      <button id="download" type="button" disabled>下載 seat-data.js</button>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div id="details" class="details"></div>
+    </section>
+
+    <p class="note">下載後，到 GitHub 專案的 <code>assets/seat-data.js</code>，按編輯並以新檔內容覆蓋後提交。賓客的查詢網站就會使用新資料。</p>
+  </main>
+
+  <script>
+    const input = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const status = document.getElementById('status');
+    const details = document.getElementById('details');
+    const download = document.getElementById('download');
+    let output = '';
+
+    const text = (value) => value === null || value === undefined ? '' : String(value).trim();
+    const normalise = (value) => text(value).replace(/[\s　]+/g, '').toLocaleLowerCase('zh-Hant');
+    const isIncluded = (value) => !['false','no','n','0','否','不要'].includes(normalise(value));
+    const tableId = (value) => text(value).replace(/\.0$/, '');
+    const setStatus = (message, type = '') => { status.textContent = message; status.className = 'status ' + type; };
+    const sheetRows = (workbook, sheetName) => {
+      const sheet = workbook.Sheets[sheetName];
+      if (!sheet) throw new Error('找不到「' + sheetName + '」工作表。');
+      return XLSX.utils.sheet_to_json(sheet, {defval:'', raw:false});
+    };
+    const sha256 = async (value) => {
+      const bytes = new TextEncoder().encode(normalise(value));
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join('');
+    };
+
+    async function convert(file) {
+      output = '';
+      download.disabled = true;
+      details.className = 'details';
+      setStatus('正在處理檔案…');
+
+      if (!window.XLSX) throw new Error('轉檔元件載入失敗，請確認網路後重新整理。');
+      if (!window.crypto || !crypto.subtle) throw new Error('此瀏覽器不支援安全雜湊，請使用最新版 Chrome、Edge 或 Safari。');
+
+      const workbook = XLSX.read(await file.arrayBuffer(), {type:'array'});
+      const guests = sheetRows(workbook, 'GuestData');
+      const layout = sheetRows(workbook, 'Layout');
+      const layoutMap = {};
+
+      layout.forEach((row) => {
+        if (text(row.Type) === 'Table') {
+          layoutMap[text(row.Object_ID)] = tableId(row.Public_Table_ID);
+        }
+      });
+
+      const entries = {};
+      const collisions = [];
+      let guestCount = 0;
+      let skippedCount = 0;
+
+      for (const guest of guests) {
+        if (!isIncluded(guest.IncludeSeat)) continue;
+        const objectId = 'Table_' + (parseInt(guest.Table_ID, 10) || 0);
+        const publicTable = layoutMap[objectId] || '';
+
+        if (!publicTable || publicTable === '0') {
+          skippedCount++;
+          continue;
+        }
+
+        guestCount++;
+        const names = [guest.Name, guest.FormName, guest.NameOverride]
+          .concat(text(guest.SearchAliases).split(/[，,、\n]/));
+
+        for (const name of names) {
+          if (!normalise(name)) continue;
+          const key = await sha256(name);
+          const value = {t:publicTable, o:objectId};
+
+          if (entries[key] && JSON.stringify(entries[key]) !== JSON.stringify(value)) {
+            collisions.push(key);
+          } else {
+            entries[key] = value;
+          }
+        }
+      }
+
+      output = 'window.SEAT_DATA = ' + JSON.stringify({v:1, entries:entries}) + ';\n';
+      details.innerHTML =
+        '<strong>轉換完成</strong><br>' +
+        '可查詢賓客：' + guestCount + ' 位<br>' +
+        '雜湊查詢名稱：' + Object.keys(entries).length + ' 個<br>' +
+        '尚未安排／主桌資料：' + skippedCount + ' 筆' +
+        (collisions.length ? '<br><span style="color:#a24f45">有 ' + collisions.length + ' 個重複別名指向不同桌號，請回到 Excel 檢查。</span>' : '');
+      details.className = 'details show';
+      download.disabled = collisions.length > 0;
+      setStatus(collisions.length ? '請先處理重複別名後再下載。' : '資料已準備好，可下載。', collisions.length ? 'error' : 'ok');
+    }
+
+    input.addEventListener('change', () => {
+      if (input.files[0]) convert(input.files[0]).catch((error) => setStatus(error.message, 'error'));
+    });
+    ['dragenter','dragover'].forEach((eventName) => dropZone.addEventListener(eventName, (event) => {
+      event.preventDefault(); dropZone.classList.add('drag');
+    }));
+    ['dragleave','drop'].forEach((eventName) => dropZone.addEventListener(eventName, (event) => {
+      event.preventDefault(); dropZone.classList.remove('drag');
+    }));
+    dropZone.addEventListener('drop', (event) => {
+      const file = event.dataTransfer.files[0];
+      if (file) convert(file).catch((error) => setStatus(error.message, 'error'));
+    });
+    download.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(new Blob([output], {type:'application/javascript'}));
+      link.download = 'seat-data.js';
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+  </script>
+</body>
+</html>
