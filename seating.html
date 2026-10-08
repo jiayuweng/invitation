@@ -22,7 +22,7 @@
     .status{min-height:1.5em;margin:12px 2px 0;color:var(--soft);font-size:13px}.status.error{color:#a24f45}.status.success{color:#517565}
     .result{position:relative;margin-top:24px;padding:17px 16px 15px;border:1px solid #d6c5b0;border-radius:4px;background:#fffdf8;text-align:center;box-shadow:4px 5px 0 #e6dcd0}.result::before{content:'SEAT FOUND';position:absolute;top:-9px;left:50%;padding:1px 11px;background:#e5d5bd;color:#8a6c58;font:11px 'DM Serif Display',serif;letter-spacing:.16em;transform:translateX(-50%) rotate(-1deg)}.result[hidden]{display:none}.result-name{margin:0;color:var(--soft);font-size:13px}.result-table{margin:4px 0 0;color:var(--coral-deep);font:31px 'DM Serif Display','Noto Serif TC',serif;letter-spacing:.1em}
     .map-card{position:relative;margin:30px 0 0;padding:20px 10px 13px;border:1px solid #d7c8b7;border-radius:5px;background:#f5eee2;box-shadow:5px 6px 0 #e5d9cb}.map-card h2{margin:0 0 7px;text-align:center;font-size:17px;letter-spacing:.16em}.map-card h2::before,.map-card h2::after{content:'✦';padding:0 8px;color:var(--gold);font-size:12px}.map-note{margin:0 0 13px;text-align:center;color:#958474;font-size:11px;letter-spacing:.04em}.map-wrap{position:relative;overflow:hidden;border-radius:2px;background:#fffdf8;border:1px solid #d9ccbd}
-    #seatMap{display:block;width:100%;height:auto;min-height:600px;background:radial-gradient(circle at 50% 4%,#fffdf8 0 26%,#f8efe3 70%,#efe0d1 100%)}.floor{fill:#fffdf8}.aisle{fill:url(#carpetGradient);stroke:#c87966;stroke-width:2}.aisle-line{stroke:#f3d6a4;stroke-width:2;stroke-dasharray:9 10;opacity:.9}.table-circle{fill:#fffdf8;stroke:#df7e59;stroke-width:7;filter:drop-shadow(0 5px 4px #98694a20)}.table-label{fill:#62584c;font:600 29px 'DM Serif Display','Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.main-circle{fill:#fffdf8;stroke:#dcb348;stroke-width:7;filter:drop-shadow(0 5px 4px #8e6d1e20)}.main-label{fill:#655448;font:600 25px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.checkin{fill:#c7ebe2;stroke:#8ec9bd;stroke-width:2}.selected-table{fill:#e5f7f3;stroke:var(--teal);stroke-width:9}.door{fill:#fffdf8;stroke:#b9a38e;stroke-width:3}.door-swing{fill:none;stroke:#b9a38e;stroke-width:2;stroke-dasharray:5 5}.door-label{fill:#806d5b;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.12em}.checkin-label{fill:#45625e;font:600 24px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.highlight-ring{fill:none;stroke:var(--teal);stroke-width:8;opacity:.95;animation:pulse 1.3s ease-in-out infinite}.arrow{fill:var(--teal);filter:drop-shadow(0 3px 2px #366e6650);animation:bob 1s ease-in-out infinite}.marker-label{fill:#126f6b;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.14em;paint-order:stroke;stroke:#fffdf8;stroke-width:5;stroke-linejoin:round}@keyframes pulse{50%{stroke-width:15;opacity:.28}}@keyframes bob{50%{transform:translateY(-8px)}}
+    #seatMap{display:block;width:100%;height:auto;min-height:600px;background:radial-gradient(circle at 50% 4%,#fffdf8 0 26%,#f8efe3 70%,#efe0d1 100%)}.floor{fill:url(#paperGrain)}.aisle{fill:url(#carpetGradient);stroke:#c87966;stroke-width:2}.aisle-line{stroke:#f3d6a4;stroke-width:2;stroke-dasharray:9 10;opacity:.9}.table-circle{fill:#fffdf8;stroke:#df7e59;stroke-width:7;filter:url(#handDrawn)}.table-inner{fill:none;stroke:#ecc1ac;stroke-width:1.7;stroke-dasharray:3 7;opacity:.9}.table-label{fill:#62584c;font:600 29px 'DM Serif Display','Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.main-circle{fill:#fffdf8;stroke:#dcb348;stroke-width:7;filter:url(#handDrawn)}.main-label{fill:#655448;font:600 25px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.checkin{fill:#f7d7cc;stroke:#d99b86;stroke-width:2}.selected-table{fill:#fff0f1;stroke:#d96379;stroke-width:9}.door{fill:#fffdf8;stroke:#b9a38e;stroke-width:3}.door-swing{fill:none;stroke:#b9a38e;stroke-width:2;stroke-dasharray:5 5}.door-label{fill:#806d5b;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.12em}.checkin-label{fill:#925f52;font:600 24px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.highlight-ring{fill:none;stroke:#efadb8;stroke-width:9;opacity:.95;animation:pulse 1.3s ease-in-out infinite}.arrow{fill:#d96379;filter:drop-shadow(0 3px 2px #366e6650);animation:bob 1s ease-in-out infinite}.marker-label{fill:#c14e67;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.14em;paint-order:stroke;stroke:#fffdf8;stroke-width:5;stroke-linejoin:round}@keyframes pulse{50%{stroke-width:15;opacity:.28}}@keyframes bob{50%{transform:translateY(-8px)}}
     .legend{margin:12px 4px 0;color:#8f7e6e;font-size:11px;text-align:center}.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden;white-space:nowrap}
     @media(max-width:370px){main{padding-inline:12px}.lookup{padding:17px 14px}.lookup button{padding-inline:14px}.title{font-size:25px}.event-meta{font-size:10px}}
     @media(min-width:651px){body{padding:20px}main{border-radius:5px}}
@@ -97,6 +97,17 @@
       svg.replaceChildren();
 
       const defs = svgEl('defs');
+      const paperGrain = svgEl('pattern', {id:'paperGrain', width:18, height:18, patternUnits:'userSpaceOnUse'});
+      paperGrain.append(svgEl('rect', {width:18, height:18, fill:'#fffdf8'}));
+      paperGrain.append(svgEl('path', {d:'M 0 16 H 18', stroke:'#eee1d2', 'stroke-width':'.75', opacity:'.68'}));
+      defs.append(paperGrain);
+
+      const handDrawn = svgEl('filter', {id:'handDrawn', x:'-20%', y:'-20%', width:'140%', height:'140%'});
+      handDrawn.append(svgEl('feTurbulence', {type:'fractalNoise', baseFrequency:'.018', numOctaves:'1', seed:'8', result:'noise'}));
+      handDrawn.append(svgEl('feDisplacementMap', {in:'SourceGraphic', in2:'noise', scale:'1.35', xChannelSelector:'R', yChannelSelector:'G', result:'rough'}));
+      handDrawn.append(svgEl('feDropShadow', {in:'rough', dx:'0', dy:'5', stdDeviation:'3', 'flood-color':'#98694a', 'flood-opacity':'.14'}));
+      defs.append(handDrawn);
+
       const carpetGradient = svgEl('linearGradient', {id:'carpetGradient', x1:'0', x2:'1', y1:'0', y2:'0'});
       carpetGradient.append(svgEl('stop', {offset:'0%', 'stop-color':'#e5a18c'}));
       carpetGradient.append(svgEl('stop', {offset:'48%', 'stop-color':'#d77f69'}));
@@ -143,6 +154,9 @@
 
         const group = svgEl('g', {id:row.Object_ID});
         group.append(svgEl('circle', {cx:x, cy:y, r:isMain ? 57 : 50, class:(isMain ? 'main-circle' : 'table-circle') + (row.Object_ID === activeObjectId ? ' selected-table' : '')}));
+        if (!isMain && row.Object_ID !== activeObjectId) {
+          group.append(svgEl('circle', {cx:x, cy:y, r:39, class:'table-inner'}));
+        }
         const label = svgEl('text', {x, y, class:isMain ? 'main-label' : 'table-label'});
         label.textContent = isMain ? '主桌' : publicId;
         group.append(label);
