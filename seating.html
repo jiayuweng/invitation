@@ -20,7 +20,7 @@
     .status{min-height:1.5em;margin:12px 2px 0;color:var(--soft);font-size:13px}.status.error{color:#a24f45}.status.success{color:#716f57}
     .result{margin-top:18px;padding:14px 16px;border:1px solid #dfcdbb;border-radius:10px;background:#fffdf8;text-align:center}.result[hidden]{display:none}.result-name{margin:0;color:var(--soft);font-size:13px}.result-table{margin:3px 0 0;color:#9a654f;font:28px 'DM Serif Display','Noto Serif TC',serif;letter-spacing:.08em}
     .map-card{margin:24px 0 0;padding:16px 10px 12px;border-radius:17px;background:var(--ground);border:1px solid #e3d7c9}.map-card h2{margin:0 0 10px;text-align:center;font-size:16px;letter-spacing:.12em}.map-note{margin:0 0 10px;text-align:center;color:#9b8877;font-size:11px}.map-wrap{position:relative;overflow:hidden;border-radius:11px;background:#fffdf8;border:1px solid #e1d5c6}
-    #seatMap{display:block;width:100%;height:auto;min-height:600px}.aisle{fill:#f9d7c7}.table-circle{fill:#fffdf8;stroke:#e97b52;stroke-width:7}.table-label{fill:#685a4e;font:600 29px 'DM Serif Display','Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.main-circle{fill:#fffdf8;stroke:#eabf47;stroke-width:7}.main-label{fill:#655448;font:600 25px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.checkin{fill:#aeecea}.checkin-label{fill:#45625e;font:600 24px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.highlight-ring{fill:none;stroke:#b85e48;stroke-width:8;opacity:.9;animation:pulse 1.3s ease-in-out infinite}.arrow{fill:#b85e48;filter:drop-shadow(0 3px 2px #63321a55);animation:bob 1s ease-in-out infinite}@keyframes pulse{50%{stroke-width:15;opacity:.3}}@keyframes bob{50%{transform:translateY(-12px)}}
+    #seatMap{display:block;width:100%;height:auto;min-height:600px;background:radial-gradient(circle at 50% 4%,#fffdf8 0 26%,#f9f0e5 70%,#f1e3d5 100%)}.floor{fill:#fffdf8}.stage{fill:#ead8c4;stroke:#d4bda7;stroke-width:2}.stage-label{fill:#826853;font:600 15px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.22em}.aisle{fill:#f9d7c7;opacity:.86}.aisle-line{stroke:#eabfae;stroke-width:2;stroke-dasharray:8 9}.table-circle{fill:#fffdf8;stroke:#e97b52;stroke-width:7;filter:drop-shadow(0 5px 4px #98694a20)}.table-label{fill:#685a4e;font:600 29px 'DM Serif Display','Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.main-circle{fill:#fffdf8;stroke:#eabf47;stroke-width:7;filter:drop-shadow(0 5px 4px #8e6d1e20)}.main-label{fill:#655448;font:600 25px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.checkin{fill:#bceee8;stroke:#91d7cf;stroke-width:2}.checkin-label{fill:#45625e;font:600 24px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.highlight-ring{fill:none;stroke:#b85e48;stroke-width:8;opacity:.95;animation:pulse 1.3s ease-in-out infinite}.arrow{fill:#b85e48;filter:drop-shadow(0 3px 2px #63321a55);animation:bob 1s ease-in-out infinite}.marker-label{fill:#a34f3d;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.14em;paint-order:stroke;stroke:#fffdf8;stroke-width:5;stroke-linejoin:round}@keyframes pulse{50%{stroke-width:15;opacity:.28}}@keyframes bob{50%{transform:translateY(-8px)}}
     .legend{margin:11px 4px 0;color:#94806e;font-size:11px;text-align:center}.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden;white-space:nowrap}
     @media(max-width:370px){main{padding-inline:10px}.lookup{padding:14px}.lookup button{padding-inline:14px}.title{font-size:24px}}
   </style>
@@ -89,10 +89,25 @@
     }
     function drawMap(layout, activeObjectId = '') {
       svg.replaceChildren();
+      svg.append(svgEl('rect', {x:0, y:0, width:730, height:1200, class:'floor'}));
+
+      const stage = svgEl('g');
+      stage.append(svgEl('rect', {x:230, y:12, width:270, height:42, rx:20, class:'stage'}));
+      const stageText = svgEl('text', {x:365, y:39, class:'stage-label'});
+      stageText.textContent = '主桌方向';
+      stage.append(stageText);
+      svg.append(stage);
+
       svg.append(svgEl('rect', {x:285, y:130, width:160, height:820, rx:31, class:'aisle'}));
+      svg.append(svgEl('line', {x1:365, y1:164, x2:365, y2:920, class:'aisle-line'}));
+
       const checkin = svgEl('g');
-      checkin.append(svgEl('rect', {x:405, y:1035, width:235, height:85, rx:15, class:'checkin'}));
-      const checkinText = svgEl('text', {x:522, y:1078, class:'checkin-label'}); checkinText.textContent = '簽到桌'; checkin.append(checkinText); svg.append(checkin);
+      checkin.append(svgEl('rect', {x:247, y:1045, width:236, height:76, rx:15, class:'checkin'}));
+      const checkinText = svgEl('text', {x:365, y:1084, class:'checkin-label'});
+      checkinText.textContent = '簽到桌';
+      checkin.append(checkinText);
+      svg.append(checkin);
+
       const tables = layout.filter((row) => row.Type === 'Table' && String(row.Public_Table_ID).trim() !== '');
       tables.forEach((row) => {
         const x = asNumber(row.X), y = asNumber(row.Y), publicId = String(row.Public_Table_ID).trim();
@@ -103,9 +118,16 @@
         const label = svgEl('text', {x, y, class:isMain ? 'main-label' : 'table-label'});
         label.textContent = isMain ? '主桌' : publicId;
         group.append(label);
+
         if (row.Object_ID === activeObjectId) {
           group.append(svgEl('circle', {cx:x, cy:y, r:66, class:'highlight-ring'}));
-          group.append(svgEl('path', {d:`M ${x} ${y - 112} l -20 38 h 13 v 29 h 14 v -29 h 13 Z`, class:'arrow'}));
+          const marker = svgEl('g', {class:'seat-marker'});
+          const markerLabel = svgEl('text', {x, y:y - 138, class:'marker-label'});
+          markerLabel.textContent = '您的座位';
+          marker.append(markerLabel);
+          // The arrow points down to the highlighted table, never toward the table above it.
+          marker.append(svgEl('path', {d:`M ${x} ${y - 122} v 45 h -15 l 15 28 15 -28 h -15 v -45 Z`, class:'arrow'}));
+          group.append(marker);
         }
         svg.append(group);
       });
