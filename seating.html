@@ -69,6 +69,13 @@
     const resultName = document.getElementById('resultName');
     const resultTable = document.getElementById('resultTable');
     let dataPromise;
+    const DEFAULT_LAYOUT = [
+      ['Table_1',355,25,0],['Table_2',55,195,1],['Table_3',262,230,2],['Table_4',468,230,3],['Table_5',675,195,4],
+      ['Table_6',55,375,5],['Table_7',262,410,6],['Table_8',468,410,7],['Table_9',675,375,8],
+      ['Table_10',55,555,9],['Table_11',262,590,10],['Table_12',468,590,11],['Table_13',675,555,12],
+      ['Table_14',55,735,13],['Table_15',262,770,14],['Table_16',468,770,15],['Table_17',675,735,16],
+      ['Table_18',55,915,17],['Table_19',262,950,18],['Table_20',468,950,19],['Table_21',675,915,20]
+    ].map(([Object_ID, X, Y, Public_Table_ID]) => ({Object_ID, Type:'Table', X, Y, Public_Table_ID}));
 
     const clean = (value) => String(value ?? '').replace(/[\s　]+/g, '').toLocaleLowerCase('zh-Hant');
     const asNumber = (value) => Number(value);
@@ -124,7 +131,7 @@
         const {layout} = await getData();
         drawMap(layout);
       } catch (error) {
-        setStatus('座位圖資料暫時無法讀取，請稍後再試。', 'error');
+        drawMap(DEFAULT_LAYOUT);\n        setStatus('座位圖已顯示；查詢資料將在連接照片牆資料後啟用。', 'error');
       }
     }
     form.addEventListener('submit', async (event) => {
