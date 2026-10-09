@@ -65,7 +65,8 @@
 
   <script src="./assets/seat-data.js"></script>
   <script>
-    const seatIndex = (window.SEAT_DATA && window.SEAT_DATA.entries) || {};
+    const seatData = window.SEAT_DATA || {};
+    const seatIndex = seatData.entries || {};
     const svg = document.getElementById('seatMap');
     const form = document.getElementById('lookupForm');
     const input = document.getElementById('guestName');
@@ -81,6 +82,7 @@
       ['Table_14',55,735,7],['Table_15',262,770,8],['Table_16',468,770,18],['Table_17',675,735,17],
       ['Table_18',55,915,9],['Table_19',262,950,10],['Table_20',468,950,20],['Table_21',675,915,19]
     ].map(([Object_ID, X, Y, Public_Table_ID]) => ({Object_ID, Type:'Table', X, Y, Public_Table_ID}));
+    const mapLayout = Array.isArray(seatData.layout) && seatData.layout.length ? seatData.layout : DEFAULT_LAYOUT;
 
     const clean = (value) => String(value ?? '').replace(/[\s　]+/g, '').toLocaleLowerCase('zh-Hant');
     const asNumber = (value) => Number(value);
@@ -175,7 +177,7 @@
       });
     }
     function initialiseMap() {
-      drawMap(DEFAULT_LAYOUT);
+      drawMap(mapLayout);
     }
     async function hashName(value) {
       const bytes = new TextEncoder().encode(clean(value));
@@ -204,7 +206,7 @@
         resultName.textContent = `${typedName}，您的座位在`;
         resultTable.textContent = `第 ${lookup.t} 桌`;
         result.hidden = false;
-        drawMap(DEFAULT_LAYOUT, lookup.o);
+        drawMap(mapLayout, lookup.o);
         setStatus('已為您標示桌位。', 'success');
         result.scrollIntoView({behavior:'smooth', block:'center'});
       } catch (error) {
