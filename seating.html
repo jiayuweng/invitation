@@ -203,11 +203,14 @@
           return;
         }
 
-        // Public table number always comes from the current Layout, not the cached value in seat-data.js.
+        // Resolve the public-facing number from the latest Layout:
+        // name -> internal object (Table_8) -> Public_Table_ID (14).
         const tableRow = mapLayout.find((row) => String(row.Object_ID) === String(lookup.o));
-        const publicTableId = tableRow && String(tableRow.Public_Table_ID).trim() !== ''
-          ? String(tableRow.Public_Table_ID).trim()
-          : String(lookup.t);
+        const publicTableId = tableRow ? String(tableRow.Public_Table_ID).trim() : '';
+        if (!publicTableId) {
+          setStatus('目前找不到此座位的公開桌號，請洽詢簽到處人員。', 'error');
+          return;
+        }
         resultName.textContent = `${typedName}，您的座位在`;
         resultTable.textContent = `第 ${publicTableId} 桌`;
         result.hidden = false;
