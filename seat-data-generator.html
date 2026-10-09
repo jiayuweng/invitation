@@ -85,6 +85,15 @@
         }
       });
 
+      const layoutForMap = layout
+        .filter((row) => text(row.Type) === 'Table' && text(row.Object_ID) !== '' && tableId(row.Public_Table_ID) !== '')
+        .map((row) => ({
+          Object_ID: text(row.Object_ID),
+          Type: 'Table',
+          X: Number(row.X),
+          Y: Number(row.Y),
+          Public_Table_ID: tableId(row.Public_Table_ID)
+        }));
       const entries = {};
       const collisions = [];
       let guestCount = 0;
@@ -117,11 +126,12 @@
         }
       }
 
-      output = 'window.SEAT_DATA = ' + JSON.stringify({v:1, entries:entries}) + ';\n';
+      output = 'window.SEAT_DATA = ' + JSON.stringify({v:2, layout:layoutForMap, entries:entries}) + ';\n';
       details.innerHTML =
         '<strong>轉換完成</strong><br>' +
         '可查詢賓客：' + guestCount + ' 位<br>' +
         '雜湊查詢名稱：' + Object.keys(entries).length + ' 個<br>' +
+        '座位圖桌次：' + layoutForMap.filter((row) => row.Public_Table_ID !== '0').length + ' 桌<br>' +
         '尚未安排／主桌資料：' + skippedCount + ' 筆' +
         (collisions.length ? '<br><span style="color:#a24f45">有 ' + collisions.length + ' 個重複別名指向不同桌號，請回到 Excel 檢查。</span>' : '');
       details.className = 'details show';
