@@ -203,8 +203,13 @@
           return;
         }
 
+        // Public table number always comes from the current Layout, not the cached value in seat-data.js.
+        const tableRow = mapLayout.find((row) => String(row.Object_ID) === String(lookup.o));
+        const publicTableId = tableRow && String(tableRow.Public_Table_ID).trim() !== ''
+          ? String(tableRow.Public_Table_ID).trim()
+          : String(lookup.t);
         resultName.textContent = `${typedName}，您的座位在`;
-        resultTable.textContent = `第 ${lookup.t} 桌`;
+        resultTable.textContent = `第 ${publicTableId} 桌`;
         result.hidden = false;
         drawMap(mapLayout, lookup.o);
         setStatus('已為您標示桌位。', 'success');
