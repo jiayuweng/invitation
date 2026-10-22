@@ -13,7 +13,7 @@
     a{color:#937967}.back{font-size:13px;letter-spacing:.08em}.eyebrow{margin:30px 0 7px;color:#b17b65;font:15px Georgia,serif;letter-spacing:.2em}.title{margin:0;font-size:27px;letter-spacing:.08em}.intro{margin:10px 0 24px;color:var(--soft);font-size:14px;line-height:1.8}
     .panel{padding:22px;border:1px solid var(--line);border-radius:16px;background:#fcf8f1}.drop{display:block;border:2px dashed #cfae99;border-radius:14px;padding:34px 20px;text-align:center;cursor:pointer;background:#fffefa;transition:.2s}.drop:hover,.drop.drag{border-color:var(--accent);background:#fff8f0}.drop strong{display:block;font-size:17px}.drop span{display:block;margin-top:9px;color:var(--soft);font-size:13px}.file{display:none}
     button{margin-top:16px;border:0;border-radius:999px;background:var(--accent);padding:12px 19px;color:#fffdf8;font:600 14px "Noto Serif TC",serif;letter-spacing:.06em;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.status{min-height:1.5em;margin:15px 2px 0;color:var(--soft);font-size:14px}.status.ok{color:var(--good)}.status.error{color:var(--warn)}
-    .details{display:none;margin-top:18px;padding:16px;border-radius:11px;background:#fffdf8;border:1px solid #e1d5c6;font-size:14px;line-height:1.8}.details.show{display:block}.note{margin:24px 2px 0;color:var(--soft);font-size:13px;line-height:1.8}
+    .preview{display:none;margin-top:18px;padding:14px;border:1px solid #e1d5c6;border-radius:11px;background:#fffdf8;font-size:12px;line-height:1.7;max-height:340px;overflow:auto;white-space:pre-wrap}.preview.show{display:block}.details{display:none;margin-top:18px;padding:16px;border-radius:11px;background:#fffdf8;border:1px solid #e1d5c6;font-size:14px;line-height:1.8}.details.show{display:block}.note{margin:24px 2px 0;color:var(--soft);font-size:13px;line-height:1.8}
     code{padding:1px 5px;border-radius:4px;background:#f1e9df;color:#765b49}
   </style>
 </head>
@@ -33,7 +33,7 @@
       <button id="download" type="button" disabled>下載 seat-data.js</button>
       <button id="copy" type="button" disabled>複製檔案內容</button>
       <p id="status" class="status" role="status" aria-live="polite"></p>
-      <div id="details" class="details"></div>
+      <div id="details" class="details"></div><div id="preview" class="preview" aria-live="polite"></div>
     </section>
 
     <p class="note">下載後，到 GitHub 專案的 <code>assets/seat-data.js</code>，按編輯並以新檔內容覆蓋後提交。賓客的查詢網站就會使用新資料。</p>
@@ -44,6 +44,7 @@
     const dropZone = document.getElementById('dropZone');
     const status = document.getElementById('status');
     const details = document.getElementById('details');
+    const preview = document.getElementById('preview');
     const download = document.getElementById('download');
     const copy = document.getElementById('copy');
     let output = '';
@@ -98,6 +99,7 @@
       const collisions = [];
       let guestCount = 0;
       let skippedCount = 0;
+      const previewRows = [];
 
       for (const guest of guests) {
         if (!isIncluded(guest.IncludeSeat)) continue;
@@ -117,6 +119,7 @@
           if (!normalise(name)) continue;
           const key = await sha256(name);
           const value = {t:publicTable, o:objectId};
+        previewRows.push({name:text(guest.Name) || text(guest.FormName), aliases:[text(guest.FormName), text(guest.NameOverride)].concat(text(guest.SearchAliases).split(/[，,、\\n]/)).filter((name, index, names) => normalise(name) && normalise(name) !== normalise(guest.Name) && names.indexOf(name) === index), internal:objectId, publicTable});
 
           if (entries[key] && JSON.stringify(entries[key]) !== JSON.stringify(value)) {
             collisions.push(key);
@@ -134,6 +137,8 @@
         '座位圖桌次：' + layoutForMap.filter((row) => row.Public_Table_ID !== '0').length + ' 桌<br>' +
         '尚未安排／主桌資料：' + skippedCount + ' 筆' +
         (collisions.length ? '<br><span style="color:#a24f45">有 ' + collisions.length + ' 個重複別名指向不同桌號，請回到 Excel 檢查。</span>' : '');
+      preview.textContent = '請先核對以下資料（姓名 → 內部桌位 → 公開桌號）：\n\n' + previewRows.map((row) => row.name + (row.aliases.length ? '（別名：' + row.aliases.join('、') + '）' : '') + ' → ' + row.internal + ' → 第 ' + row.publicTable + ' 桌').join('\n') + (skippedCount ? '\n\n未安排／主桌資料：' + skippedCount + ' 筆（未納入查詢）' : '');
+      preview.className = 'preview show';
       details.className = 'details show';
       download.disabled = collisions.length > 0;
       copy.disabled = collisions.length > 0;
