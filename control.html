@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>照片牆表演控制</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#fffaf3;color:#5a4438;font-family:"Noto Serif TC","PingFang TC",serif}
+body{max-width:480px;margin:0 auto;padding:28px 20px 40px}
+h1{margin:0 0 6px;text-align:center;font-size:26px;font-weight:600}
+.sub{margin:0 0 24px;text-align:center;color:#8b7064;font-size:14px}
+button{display:block;width:100%;margin:0 0 16px;padding:26px 18px;border:0;border-radius:22px;color:#fff;font-family:inherit;font-size:24px;font-weight:600;cursor:pointer;box-shadow:0 8px 22px rgba(90,68,56,.15)}
+button:active{transform:scale(.98)}
+button:disabled{opacity:.5}
+.groom{background:#6f8aa3}
+.bride{background:#c98a8f}
+.stop{background:#8b7064;padding:16px;font-size:18px}
+.status{min-height:48px;margin-top:6px;text-align:center;font-size:15px;line-height:1.6;white-space:pre-line}
+.status.ok{color:#65805c}.status.err{color:#a04f4f}
+.foot{margin-top:20px;text-align:center;font-size:12px;color:#9a8378;line-height:1.7}
+.foot a{color:#9a8378}
+</style>
+</head>
+<body>
+<h1>照片牆表演控制</h1>
+<p class="sub">按下後約 3～5 秒，照片牆開始播放</p>
+
+<button class="groom" data-cue="groom">男方感謝</button>
+<button class="bride" data-cue="bride">女方感謝</button>
+<button class="stop" data-cue="stop">停止，回到照片牆</button>
+
+<div id="s" class="status" role="status" aria-live="polite"></div>
+
+<div class="foot">
+現場備援：在播放照片牆的電腦上按 <b>1</b> 男方、<b>2</b> 女方、<b>0</b> 停止
+</div>
+
+<script>
+const ENDPOINT="https://script.google.com/macros/s/AKfycbyJ5XKfxOjKgQ_8phL-8pIxrMmrYe6rwmBtrcVUbD6DCTOCd8is5x5CZI0vyxJX5y4/exec";
+// 口令已內建（要跟 Code.gs 的 SHOW_KEY 一樣），這個網址只給工作人員。
+const SHOW_KEY="love-ntgxbv88";
+const LABEL={groom:"男方感謝",bride:"女方感謝",stop:"停止"};
+
+const status=document.getElementById("s");
+const buttons=Array.from(document.querySelectorAll("button[data-cue]"));
+
+function setStatus(cls,text){
+  status.className="status "+cls;
+  status.textContent=text;
+}
+
+async function sendCue(cue){
+  const key=SHOW_KEY;
+
+  buttons.forEach(b=>b.disabled=true);
+  setStatus("","送出中：「"+LABEL[cue]+"」…");
+
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),30000);
+
+  try{
+    const res=await fetch(ENDPOINT,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({type:"cue",cue,key}),
+      redirect:"follow",
+      signal:ctrl.signal
+    });
+    const data=await res.json();
+
+    if(data&&data.ok){
+      const t=new Date().toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+      setStatus("ok","✓ 已送出「"+LABEL[cue]+"」（"+t+"）\n照片牆幾秒後會切換。");
+    }else if(data&&data.error==="bad key"){
+      setStatus("err","口令不符：Apps Script 可能還沒部署新版本。");
+    }else{
+      console.error(data);
+      setStatus("err","沒有成功，請再按一次。");
+    }
+  }catch(err){
+    console.error(err);
+    setStatus("err",err.name==="AbortError"
+      ?"逾時了，網路可能比較慢，請再按一次。"
+      :"連線失敗，請確認網路後再按一次。（也可以在電腦上按 1／2／0）");
+  }finally{
+    clearTimeout(timer);
+    buttons.forEach(b=>b.disabled=false);
+  }
+}
+
+buttons.forEach(b=>b.addEventListener("click",()=>sendCue(b.dataset.cue)));
+</script>
+</body>
+</html>
