@@ -12,13 +12,19 @@ h1{margin:0 0 10px;text-align:center;font-size:30px;font-weight:600}
 .subtitle{margin:0 0 26px;text-align:center;color:#8b7064;font-size:15px}
 .card{padding:24px 20px;background:rgba(255,255,255,.7);border:1px solid rgba(185,120,104,.18);border-radius:20px;box-shadow:0 10px 35px rgba(90,68,56,.08)}
 label{display:block;margin:14px 0 6px;font-size:14px;font-weight:600}
+label small{font-weight:400;color:#9a8378}
 input[type=text],textarea{width:100%;padding:12px 14px;border:1px solid #dbc8bd;border-radius:12px;background:#fff;color:#5a4438;font:inherit;outline:none}
 input[type=text]:focus,textarea:focus{border-color:#b97868;box-shadow:0 0 0 3px rgba(185,120,104,.1)}
 textarea{min-height:120px;resize:vertical;line-height:1.6}
 .file-box{margin-top:8px;padding:14px;border:1px dashed #cba99b;border-radius:14px;background:#fffdf9}
 input[type=file]{width:100%;font-size:14px}
 .preview{display:none;margin-top:12px;text-align:center}
-.preview img{max-width:100%;max-height:260px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+.thumb{position:relative}
+.thumb img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.thumb.done::after{content:"✓";position:absolute;right:4px;bottom:4px;width:22px;height:22px;border-radius:50%;background:#65805c;color:#fff;font-size:13px;line-height:22px}
+.thumb.failed img{outline:3px solid #a04f4f}
+.count{margin-top:8px;color:#8b7064;font-size:13px}
 .status{min-height:24px;margin:15px 0 5px;text-align:center;font-size:14px;line-height:1.5}
 .status.success{color:#65805c}.status.error{color:#a04f4f}
 button{width:100%;margin-top:10px;padding:13px 18px;border:0;border-radius:25px;background:#b97868;color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer}
@@ -39,12 +45,13 @@ button.remove{width:auto;margin-top:10px;padding:6px 16px;background:transparent
 <label for="t">給新人的祝福</label>
 <textarea id="t" maxlength="300" placeholder="寫一句想對我們說的話 ♡"></textarea>
 
-<label for="p">上傳照片</label>
+<label for="p">上傳照片 <small>（可一次選多張，最多 10 張）</small></label>
 <div class="file-box">
-<input id="p" type="file" accept="image/*">
+<input id="p" type="file" accept="image/*" multiple>
 <div class="preview" id="preview">
-<img id="previewImg" alt="照片預覽">
-<br><button type="button" class="remove" id="removePhoto">移除照片</button>
+<div class="preview-grid" id="previewGrid"></div>
+<div class="count" id="count"></div>
+<button type="button" class="remove" id="removePhoto">清除照片</button>
 </div>
 </div>
 
@@ -58,6 +65,7 @@ button.remove{width:auto;margin-top:10px;padding:6px 16px;background:transparent
 <script>
 const ENDPOINT="https://script.google.com/macros/s/AKfycbyJ5XKfxOjKgQ_8phL-8pIxrMmrYe6rwmBtrcVUbD6DCTOCd8is5x5CZI0vyxJX5y4/exec";
 const TIMEOUT_MS=60000;
+const MAX_FILES=10;
 const NAME_KEY="wedding_guest_name";
 const BUTTON_TEXT="送出祝福";
 
@@ -68,23 +76,25 @@ const photoInput=document.getElementById("p");
 const status=document.getElementById("s");
 const button=document.getElementById("b");
 const preview=document.getElementById("preview");
-const previewImg=document.getElementById("previewImg");
+const previewGrid=document.getElementById("previewGrid");
+const countEl=document.getElementById("count");
 const removeBtn=document.getElementById("removePhoto");
 
 /*
- * 同一筆送出（含重試）共用同一個 ID，
- * 後端看到重複 ID 會直接回成功、不會再寫一次。
- * 內容有變動時才換新 ID。
+ * 目前選的照片，以及這一批送出的狀態。
+ * 每張照片各自一個上傳 ID；重試時沿用同一個 ID，
+ * 已成功的照片會略過，後端也會擋掉重複的 ID。
+ * 照片或祝福有變動時才重新開始一批。
  */
-let pendingId=null;
-let previewUrl="";
+let files=[];
+let batch=null;          // {ids:[], done:[]}
+let previewUrls=[];
 
 function newId(){
   if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
   return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,12);
 }
 
-/* 給使用者看的錯誤訊息 */
 function friendly(message,cause){
   const err=new Error(message);
   err.friendly=true;
@@ -92,35 +102,68 @@ function friendly(message,cause){
   return err;
 }
 
-/* 記住名字，傳第二張不用重打 */
+/* 記住名字，傳第二次不用重打 */
 try{nameInput.value=localStorage.getItem(NAME_KEY)||"";}catch(e){}
 nameInput.addEventListener("input",()=>{
   try{localStorage.setItem(NAME_KEY,nameInput.value.trim());}catch(e){}
 });
 
-function setPreview(file){
-  if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl="";}
-  if(!file){
-    preview.style.display="none";
-    previewImg.removeAttribute("src");
-    return;
-  }
-  previewUrl=URL.createObjectURL(file);
-  previewImg.src=previewUrl;
+function clearPreview(){
+  previewUrls.forEach(u=>URL.revokeObjectURL(u));
+  previewUrls=[];
+  previewGrid.innerHTML="";
+  preview.style.display="none";
+  countEl.textContent="";
+}
+
+function renderPreview(){
+  clearPreview();
+  if(!files.length)return;
+  files.forEach((file,i)=>{
+    const url=URL.createObjectURL(file);
+    previewUrls.push(url);
+    const box=document.createElement("div");
+    box.className="thumb";
+    box.dataset.index=i;
+    const img=document.createElement("img");
+    img.alt="照片預覽 "+(i+1);
+    img.src=url;
+    box.appendChild(img);
+    previewGrid.appendChild(box);
+  });
+  countEl.textContent="已選 "+files.length+" 張";
   preview.style.display="block";
 }
 
+function markThumb(i,cls){
+  const box=previewGrid.querySelector('.thumb[data-index="'+i+'"]');
+  if(!box)return;
+  box.classList.remove("done","failed");
+  if(cls)box.classList.add(cls);
+}
+
 photoInput.addEventListener("change",()=>{
-  pendingId=null;
-  setPreview(photoInput.files[0]||null);
+  batch=null;
+  let picked=Array.from(photoInput.files||[]);
+  if(picked.length>MAX_FILES){
+    picked=picked.slice(0,MAX_FILES);
+    status.className="status error";
+    status.textContent="一次最多 "+MAX_FILES+" 張，已幫你保留前 "+MAX_FILES+" 張。";
+  }else{
+    status.className="status";
+    status.textContent="";
+  }
+  files=picked;
+  renderPreview();
 });
 
-textInput.addEventListener("input",()=>{pendingId=null;});
+textInput.addEventListener("input",()=>{batch=null;});
 
 removeBtn.addEventListener("click",()=>{
-  pendingId=null;
+  batch=null;
+  files=[];
   photoInput.value="";
-  setPreview(null);
+  clearPreview();
 });
 
 function compressImage(file){
@@ -189,7 +232,7 @@ function compressImage(file){
 
     img.onerror=()=>{
       URL.revokeObjectURL(url);
-      reject(friendly("這個照片格式無法讀取（例如 HEIC），請改選 JPG 或 PNG 照片。"));
+      reject(friendly("有照片格式無法讀取（例如 HEIC），請改選 JPG 或 PNG 照片。"));
     };
 
     img.src=url;
@@ -217,21 +260,21 @@ async function sendPayload(payload){
       });
     }catch(err){
       if(err.name==="AbortError"){
-        throw friendly("上傳逾時，現場網路可能比較慢。請再按一次送出（不會重複上傳）。",err);
+        throw friendly("上傳逾時，現場網路可能比較慢。",err);
       }
-      throw friendly("連線失敗，請確認網路後再按一次送出（不會重複上傳）。",err);
+      throw friendly("連線失敗，請確認網路。",err);
     }
 
     let data;
     try{
       data=await res.json();
     }catch(err){
-      throw friendly("伺服器回應異常，請稍後再試一次。",err);
+      throw friendly("伺服器回應異常。",err);
     }
 
     if(!data||!data.ok){
       console.error("Server error:",data);
-      throw friendly("上傳沒有成功，請再試一次。");
+      throw friendly("上傳沒有成功。");
     }
 
     return data;
@@ -246,48 +289,79 @@ form.addEventListener("submit",async e=>{
 
   const name=nameInput.value.trim()||"親友";
   const text=textInput.value.trim();
-  const file=photoInput.files[0];
 
-  if(!file&&!text){
+  if(!files.length&&!text){
     status.className="status error";
     status.textContent="請上傳照片或寫下祝福 ♡";
     return;
   }
 
-  if(!pendingId)pendingId=newId();
+  /*
+   * 一筆一個項目：祝福跟第一張照片一起送；
+   * 沒有照片時就只送祝福。
+   */
+  const total=Math.max(1,files.length);
+  if(!batch||batch.ids.length!==total){
+    batch={ids:Array.from({length:total},newId),done:new Array(total).fill(false)};
+  }
 
   button.disabled=true;
   button.textContent="送出中…";
   status.className="status";
-  status.textContent=file?"正在準備照片…":"正在送出祝福…";
 
-  try{
-    let photo=null;
-    if(file){
-      photo=await compressImage(file);
-      status.textContent="照片準備完成，正在送出…";
+  let lastError=null;
+  let failed=0;
+
+  for(let i=0;i<total;i++){
+    if(batch.done[i])continue;
+
+    const file=files[i]||null;
+    status.textContent=files.length>1
+      ?"正在上傳第 "+(i+1)+" / "+total+" 張…"
+      :(file?"正在上傳照片…":"正在送出祝福…");
+
+    try{
+      const photo=file?await compressImage(file):null;
+      await sendPayload({
+        id:batch.ids[i],
+        name,
+        text:i===0?text:"",
+        photo
+      });
+      batch.done[i]=true;
+      markThumb(i,"done");
+    }catch(err){
+      console.error(err);
+      lastError=err;
+      failed++;
+      markThumb(i,"failed");
     }
+  }
 
-    await sendPayload({id:pendingId,name,text,photo});
+  const sent=batch.done.filter(Boolean).length;
 
-    pendingId=null;
+  if(!failed){
     status.className="status success";
-    status.textContent="已成功送出 ♡ 照片會很快出現在照片牆！想再傳可以繼續選照片喔。";
+    status.textContent=files.length>1
+      ?"已成功送出 "+files.length+" 張 ♡ 照片會很快出現在照片牆！"
+      :"已成功送出 ♡ 照片會很快出現在照片牆！";
 
     /* 只清祝福與照片，保留名字 */
+    batch=null;
+    files=[];
     textInput.value="";
     photoInput.value="";
-    setPreview(null);
-  }catch(error){
-    console.error(error);
+    setTimeout(clearPreview,1200);
+  }else{
     status.className="status error";
-    status.textContent=error&&error.friendly
-      ?error.message
-      :"上傳失敗，請確認網路後再試一次。";
-  }finally{
-    button.disabled=false;
-    button.textContent=BUTTON_TEXT;
+    const reason=lastError&&lastError.friendly?lastError.message:"";
+    status.textContent=(sent?"已送出 "+sent+" 張，":"")+
+      failed+" 張沒有成功。"+reason+
+      "請再按一次送出，已成功的不會重複上傳。";
   }
+
+  button.disabled=false;
+  button.textContent=BUTTON_TEXT;
 });
 </script>
 </body>
