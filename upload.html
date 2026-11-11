@@ -3,64 +3,284 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>婚禮祝福上傳｜劉育名 & 翁佳瑜</title>
+<title>婚禮祝福上傳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Iansui&display=swap" rel="stylesheet">
 <style>
+/* =========================================================
+   日系手繪風
+   和紙底色・紙膠帶・鉛筆線・拍立得
+========================================================= */
+:root{
+  --paper:#fbf6ec;
+  --paper-2:#f5ecdc;
+  --ink:#5b4636;
+  --ink-soft:#8a7462;
+  --line:#c9b49c;
+  --sakura:#e8a5a5;
+  --sakura-deep:#cf7f7f;
+  --matcha:#9db48a;
+  --sky:#a9c4d6;
+  /* 芫荽：鋼筆手寫感，繁體中文字完整 */
+  --hand:"Iansui","Kaiti TC","DFKai-SB","標楷體",serif;
+}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:#fffaf3;color:#5a4438;font-family:"Noto Serif TC","PingFang TC",serif}
-body{max-width:520px;margin:0 auto;padding:30px 20px 50px}
-h1{margin:0 0 10px;text-align:center;font-size:30px;font-weight:600}
-.subtitle{margin:0 0 26px;text-align:center;color:#8b7064;font-size:15px}
-.card{padding:24px 20px;background:rgba(255,255,255,.7);border:1px solid rgba(185,120,104,.18);border-radius:20px;box-shadow:0 10px 35px rgba(90,68,56,.08)}
-label{display:block;margin:14px 0 6px;font-size:14px;font-weight:600}
-label small{font-weight:400;color:#9a8378}
-input[type=text],textarea{width:100%;padding:12px 14px;border:1px solid #dbc8bd;border-radius:12px;background:#fff;color:#5a4438;font:inherit;outline:none}
-input[type=text]:focus,textarea:focus{border-color:#b97868;box-shadow:0 0 0 3px rgba(185,120,104,.1)}
-textarea{min-height:120px;resize:vertical;line-height:1.6}
-.file-box{margin-top:8px;padding:14px;border:1px dashed #cba99b;border-radius:14px;background:#fffdf9}
-input[type=file]{width:100%;font-size:14px}
-.preview{display:none;margin-top:12px;text-align:center}
-.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
-.thumb{position:relative}
-.thumb img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
-.thumb.done::after{content:"✓";position:absolute;right:4px;bottom:4px;width:22px;height:22px;border-radius:50%;background:#65805c;color:#fff;font-size:13px;line-height:22px}
-.thumb.failed img{outline:3px solid #a04f4f}
-.count{margin-top:8px;color:#8b7064;font-size:13px}
-.status{min-height:24px;margin:15px 0 5px;text-align:center;font-size:14px;line-height:1.5}
-.status.success{color:#65805c}.status.error{color:#a04f4f}
-button{width:100%;margin-top:10px;padding:13px 18px;border:0;border-radius:25px;background:#b97868;color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer}
-button:disabled{opacity:.55;cursor:default}
-button.remove{width:auto;margin-top:10px;padding:6px 16px;background:transparent;color:#a04f4f;border:1px solid #dbc8bd;font-size:13px;font-weight:400}
-.note{margin-top:18px;text-align:center;color:#9a8378;font-size:12px;line-height:1.6}
+/* 和紙底圖鋪滿整個畫面（不只中間那一欄） */
+html{
+  min-height:100%;
+  background:
+    radial-gradient(circle at 12% 8%,rgba(232,165,165,.14),transparent 32%),
+    radial-gradient(circle at 92% 38%,rgba(157,180,138,.13),transparent 30%),
+    radial-gradient(circle at 20% 88%,rgba(169,196,214,.15),transparent 34%),
+    repeating-radial-gradient(circle at 30% 40%,rgba(140,110,80,.025) 0 1px,transparent 1px 7px),
+    var(--paper);
+  background-attachment:scroll;
+}
+body{
+  margin:0 auto;max-width:520px;min-height:100vh;
+  padding:26px 18px 56px;
+  color:var(--ink);font-family:var(--hand);font-size:17px;line-height:1.6;
+  background:transparent;
+  font-synthesis:none; /* 手寫字只有一種粗細，不要讓瀏覽器硬加粗 */
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ---------- 標題 ---------- */
+.head{position:relative;text-align:center;margin:6px 0 24px}
+.head h1{
+  position:relative;display:inline-block;margin:18px 0 2px;
+  font-size:34px;font-weight:700;letter-spacing:.08em;
+}
+.head h1 .underline{position:absolute;left:-6%;bottom:-8px;width:112%;height:14px}
+.head .sub{margin:14px 0 0;color:var(--ink-soft);font-size:15px}
+.doodle{position:absolute;pointer-events:none}
+.doodle.sprig{left:2px;top:4px;width:54px;transform:rotate(-14deg)}
+.doodle.hearts{right:4px;top:10px;width:50px;transform:rotate(10deg)}
+
+/* ---------- 紙卡 ---------- */
+.card{
+  position:relative;
+  padding:30px 20px 24px;
+  background:
+    linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,.55)),
+    var(--paper-2);
+  border:1.5px solid rgba(91,70,54,.55);
+  border-radius:255px 18px 225px 16px/16px 225px 18px 255px;
+  box-shadow:3px 4px 0 rgba(91,70,54,.10);
+}
+/* 紙膠帶 */
+.tape{
+  position:absolute;top:-13px;width:96px;height:26px;opacity:.85;
+  background:repeating-linear-gradient(45deg,rgba(255,255,255,.45) 0 6px,transparent 6px 12px),var(--sakura);
+  clip-path:polygon(3% 0,97% 4%,100% 50%,96% 100%,2% 96%,0 50%);
+}
+.tape.l{left:22px;transform:rotate(-6deg)}
+.tape.r{right:22px;transform:rotate(5deg);
+  background:radial-gradient(circle,rgba(255,255,255,.7) 1.5px,transparent 2px) 0 0/9px 9px,var(--matcha)}
+
+/* ---------- 欄位 ---------- */
+.field{margin:0 0 20px}
+.field-label{
+  display:flex;align-items:center;gap:6px;margin:0 0 6px;
+  font-size:16px;font-weight:700;
+}
+.field-label svg{width:20px;height:20px;flex:none}
+.field-label small{font-weight:400;font-size:13px;color:var(--ink-soft)}
+
+input[type=text],textarea{
+  width:100%;padding:8px 4px;
+  color:var(--ink);font:inherit;font-size:17px;
+  background:transparent;border:0;border-radius:0;outline:none;
+  border-bottom:1.5px dashed var(--line);
+  transition:border-color .2s;
+}
+input[type=text]:focus,textarea:focus{border-bottom-color:var(--sakura-deep);border-bottom-style:solid}
+::placeholder{color:#b9a796}
+
+/* 信紙橫線 */
+textarea{
+  height:70px;min-height:70px;resize:vertical;padding:0 4px;
+  line-height:34px;
+  border:0;
+  background:repeating-linear-gradient(transparent 0 33px,var(--line) 33px 34px);
+  background-attachment:local;
+}
+textarea:focus{border:0}
+
+/* ---------- 選照片 ---------- */
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.dropzone{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:20px 14px 16px;cursor:pointer;text-align:center;
+  border:2px dashed var(--line);
+  border-radius:20px 225px 18px 255px/255px 18px 225px 20px;
+  background:rgba(255,255,255,.45);
+  transition:background .2s,transform .15s;
+}
+.dropzone:active{transform:scale(.98)}
+.dropzone:hover{background:rgba(255,255,255,.75)}
+.dropzone svg{width:56px;height:46px}
+.dropzone b{font-size:18px}
+.dropzone span{font-size:13px;color:var(--ink-soft)}
+#p:focus-visible + .dropzone{outline:2px solid var(--sakura-deep);outline-offset:3px}
+
+.preview{display:none;margin-top:18px;text-align:center}
+
+/* 多張：拍立得 */
+.preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 14px;text-align:left}
+.thumb{
+  position:relative;padding:7px 7px 6px;background:#fffdf8;
+  box-shadow:0 3px 10px rgba(91,70,54,.16);
+  transform:rotate(-1.6deg);
+}
+.thumb:nth-child(2n){transform:rotate(1.4deg)}
+.thumb:nth-child(3n){transform:rotate(-.6deg)}
+.thumb::before{
+  content:"";position:absolute;top:-9px;left:50%;width:46px;height:16px;margin-left:-23px;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0 4px,transparent 4px 8px),var(--sky);
+  opacity:.8;transform:rotate(-4deg);z-index:1;
+}
+.thumb:nth-child(2n)::before{background:repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0 4px,transparent 4px 8px),var(--sakura);transform:rotate(5deg)}
+.thumb .pic{position:relative}
+.thumb img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.thumb.done .pic::after{
+  content:"✓";position:absolute;right:6px;bottom:6px;width:28px;height:28px;
+  border:2px solid #fff;border-radius:50%;background:var(--matcha);color:#fff;
+  font-size:16px;line-height:24px;text-align:center;transform:rotate(-8deg);
+}
+.thumb.failed .pic::after{
+  content:"!";position:absolute;right:6px;bottom:6px;width:28px;height:28px;
+  border:2px solid #fff;border-radius:50%;background:#c46a6a;color:#fff;
+  font-size:16px;line-height:24px;text-align:center;
+}
+.thumb input.cap{
+  display:block;width:100%;margin:4px 0 0;padding:6px 2px 4px;
+  font-size:15px;text-align:center;border-bottom:1px dashed var(--line);
+}
+.thumb.done input.cap{color:#6f8a5f}
+
+/* 只有一張：大拍立得 */
+.preview-grid.single{grid-template-columns:1fr;justify-items:center}
+.preview-grid.single .thumb{max-width:300px;padding:10px 10px 30px;transform:rotate(-1.2deg)}
+.preview-grid.single img{aspect-ratio:auto;max-height:320px;object-fit:contain}
+
+.count{margin-top:14px;color:var(--ink-soft);font-size:14px}
+
+/* ---------- 按鈕 ---------- */
+button{
+  font-family:var(--hand);cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+}
+button.remove{
+  margin-top:12px;padding:4px 14px;
+  color:var(--ink-soft);font-size:14px;
+  background:transparent;border:1.5px solid var(--line);
+  border-radius:15px 225px 15px 255px/255px 15px 225px 15px;
+}
+.submit{
+  display:block;width:100%;margin-top:6px;padding:14px 18px 12px;
+  color:#fff;font-size:20px;font-weight:700;letter-spacing:.18em;
+  background:var(--sakura-deep);
+  border:2px solid var(--ink);
+  border-radius:255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow:3px 4px 0 var(--ink);
+  transition:transform .1s,box-shadow .1s;
+}
+.submit:active{transform:translate(3px,4px);box-shadow:0 0 0 var(--ink)}
+.submit:disabled{opacity:.6;cursor:default;transform:none;box-shadow:3px 4px 0 var(--ink)}
+
+/* ---------- 狀態 ---------- */
+.status{min-height:26px;margin:16px 0 6px;text-align:center;font-size:15px;line-height:1.6}
+.status.success{color:#6f8a5f}
+.status.error{color:#b65c5c}
+
+.note{
+  margin-top:22px;text-align:center;color:var(--ink-soft);font-size:13px;line-height:1.8;
+}
+.note svg{display:block;width:120px;height:18px;margin:0 auto 6px}
 </style>
 </head>
 <body>
-<h1>留下你的祝福</h1>
-<p class="subtitle">上傳照片，或寫一句祝福</p>
 
-<div class="card">
+<header class="head">
+  <!-- 小樹枝 -->
+  <svg class="doodle sprig" viewBox="0 0 60 60" fill="none" stroke="#9db48a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M8 54 C20 40 30 26 50 8"/>
+    <path d="M18 42 c-6 -2 -10 -8 -9 -14 c6 1 10 7 9 14z" fill="#c9d8bb"/>
+    <path d="M27 31 c-5 -3 -7 -9 -5 -14 c5 2 7 8 5 14z" fill="#c9d8bb"/>
+    <path d="M24 40 c6 -1 12 2 14 7 c-6 1 -12 -2 -14 -7z" fill="#c9d8bb"/>
+    <path d="M34 27 c6 -2 11 0 14 5 c-6 2 -11 0 -14 -5z" fill="#c9d8bb"/>
+  </svg>
+  <!-- 小愛心 -->
+  <svg class="doodle hearts" viewBox="0 0 60 50" fill="none" stroke="#cf7f7f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M20 40 C6 30 4 20 10 15 C15 11 20 14 20 19 C21 13 27 11 31 15 C36 21 32 31 20 40Z" fill="#f3cfcf"/>
+    <path d="M45 22 C39 18 38 13 41 11 C43 9 46 11 46 13 C47 10 50 9 52 11 C54 14 52 18 45 22Z"/>
+    <path d="M50 36 l2 -4 l2 4 l-2 4z" fill="#f3cfcf"/>
+  </svg>
+
+  <h1>留下你的祝福
+    <svg class="underline" viewBox="0 0 200 14" preserveAspectRatio="none" fill="none" stroke="#e8a5a5" stroke-width="4" stroke-linecap="round" aria-hidden="true">
+      <path d="M3 9 C40 3 70 12 105 6 S170 4 197 8"/>
+    </svg>
+  </h1>
+  <p class="sub">上傳照片，或寫一句想說的話 ♡</p>
+</header>
+
+<main class="card">
+<span class="tape l" aria-hidden="true"></span>
+<span class="tape r" aria-hidden="true"></span>
+
 <form id="f">
-<label for="n">你的名字</label>
-<input id="n" type="text" maxlength="30" placeholder="例如：小明" autocomplete="name">
 
-<label for="t">給新人的祝福</label>
-<textarea id="t" maxlength="300" placeholder="寫一句想對我們說的話 ♡"></textarea>
-
-<label for="p">上傳照片 <small>（可一次選多張，最多 10 張）</small></label>
-<div class="file-box">
-<input id="p" type="file" accept="image/*" multiple>
-<div class="preview" id="preview">
-<div class="preview-grid" id="previewGrid"></div>
-<div class="count" id="count"></div>
-<button type="button" class="remove" id="removePhoto">清除照片</button>
+<div class="field">
+  <label class="field-label" for="n">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#8a7462" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4-7 8-7s7 2 8 7"/></svg>
+    你的名字
+  </label>
+  <input id="n" type="text" maxlength="30" placeholder="例如：小明" autocomplete="name">
 </div>
+
+<div class="field">
+  <label class="field-label" for="t">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#8a7462" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/></svg>
+    給新人的祝福
+  </label>
+  <textarea id="t" rows="2" maxlength="300" placeholder="寫一句想對我們說的話…"></textarea>
+</div>
+
+<div class="field">
+  <span class="field-label">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#8a7462" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.5"/></svg>
+    上傳照片 <small>（可一次選多張，最多 10 張）</small>
+  </span>
+  <input id="p" class="visually-hidden" type="file" accept="image/*" multiple>
+  <label class="dropzone" for="p">
+    <svg viewBox="0 0 64 52" fill="none" stroke="#5b4636" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M8 16 C8 13 10 12 13 12 L20 12 L24 6 L40 6 L44 12 L52 12 C55 12 57 14 56 17 L55 42 C55 45 53 46 50 46 L13 47 C10 47 8 45 8 42 Z" fill="#fffdf8"/>
+      <circle cx="32" cy="29" r="10" fill="#f3cfcf"/>
+      <circle cx="32" cy="29" r="5"/>
+      <path d="M48 18 h3"/>
+    </svg>
+    <b>點這裡選照片</b>
+    <span>從相簿挑幾張喜歡的吧</span>
+  </label>
+  <div class="preview" id="preview">
+    <div class="preview-grid" id="previewGrid"></div>
+    <div class="count" id="count"></div>
+    <button type="button" class="remove" id="removePhoto">✕ 清除照片</button>
+  </div>
 </div>
 
 <div id="s" class="status" role="status" aria-live="polite"></div>
-<button id="b" type="submit">送出祝福</button>
+<button id="b" class="submit" type="submit">送出祝福</button>
 </form>
-</div>
+</main>
 
-<div class="note">照片會自動縮小後上傳，<br>並顯示在婚禮現場照片牆。</div>
+<div class="note">
+  <svg viewBox="0 0 120 18" fill="none" stroke="#c9b49c" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 9 C15 3 25 15 38 9 S62 3 75 9 S100 15 118 9"/></svg>
+  照片會自動縮小後上傳，<br>並出現在婚禮現場的照片牆 ✿
+</div>
 
 <script>
 const ENDPOINT="https://script.google.com/macros/s/AKfycbyJ5XKfxOjKgQ_8phL-8pIxrMmrYe6rwmBtrcVUbD6DCTOCd8is5x5CZI0vyxJX5y4/exec";
@@ -87,6 +307,7 @@ const removeBtn=document.getElementById("removePhoto");
  * 照片或祝福有變動時才重新開始一批。
  */
 let files=[];
+let captions=[];         // 每張照片各自的一句話
 let batch=null;          // {ids:[], done:[]}
 let previewUrls=[];
 
@@ -108,7 +329,16 @@ nameInput.addEventListener("input",()=>{
   try{localStorage.setItem(NAME_KEY,nameInput.value.trim());}catch(e){}
 });
 
+const dropTitle=document.querySelector(".dropzone b");
+const dropHint=document.querySelector(".dropzone span");
+function setDropzoneText(hasPhotos){
+  if(!dropTitle||!dropHint)return;
+  dropTitle.textContent=hasPhotos?"重新選照片":"點這裡選照片";
+  dropHint.textContent=hasPhotos?"會換掉下面這些照片":"從相簿挑幾張喜歡的吧";
+}
+
 function clearPreview(){
+  setDropzoneText(false);
   previewUrls.forEach(u=>URL.revokeObjectURL(u));
   previewUrls=[];
   previewGrid.innerHTML="";
@@ -125,13 +355,36 @@ function renderPreview(){
     const box=document.createElement("div");
     box.className="thumb";
     box.dataset.index=i;
+
+    const pic=document.createElement("div");
+    pic.className="pic";
     const img=document.createElement("img");
     img.alt="照片預覽 "+(i+1);
     img.src=url;
-    box.appendChild(img);
+    pic.appendChild(img);
+
+    box.appendChild(pic);
+
+    // 多張才讓每張各寫一句；只有一張就用上面的祝福
+    if(files.length>1){
+      const cap=document.createElement("input");
+      cap.type="text";
+      cap.className="cap";
+      cap.maxLength=100;
+      cap.placeholder="✎ 寫點什麼…";
+      cap.setAttribute("aria-label","第 "+(i+1)+" 張照片的文字");
+      cap.value=captions[i]||"";
+      cap.addEventListener("input",()=>{captions[i]=cap.value;});
+      box.appendChild(cap);
+    }
+
     previewGrid.appendChild(box);
   });
-  countEl.textContent="已選 "+files.length+" 張";
+  previewGrid.classList.toggle("single",files.length===1);
+  setDropzoneText(true);
+  countEl.textContent=files.length>1
+    ?"已選 "+files.length+" 張・每張都可以寫一句（不寫也行）"
+    :"";
   preview.style.display="block";
 }
 
@@ -154,14 +407,14 @@ photoInput.addEventListener("change",()=>{
     status.textContent="";
   }
   files=picked;
+  captions=files.map(()=>"");
   renderPreview();
 });
-
-textInput.addEventListener("input",()=>{batch=null;});
 
 removeBtn.addEventListener("click",()=>{
   batch=null;
   files=[];
+  captions=[];
   photoInput.value="";
   clearPreview();
 });
@@ -297,13 +550,24 @@ form.addEventListener("submit",async e=>{
   }
 
   /*
-   * 一筆一個項目：祝福跟第一張照片一起送；
-   * 沒有照片時就只送祝福。
+   * 每張照片一筆，文字用「這張自己寫的話」。
+   * 上面的大祝福：
+   *   - 第一張沒寫自己的話 → 跟第一張一起出現
+   *   - 第一張有自己的話   → 另外送一則純文字祝福
+   *   - 沒有照片           → 只送祝福
    */
-  const total=Math.max(1,files.length);
-  if(!batch||batch.ids.length!==total){
-    batch={ids:Array.from({length:total},newId),done:new Array(total).fill(false)};
+  const items=files.map((file,i)=>({
+    file,
+    text:files.length>1?(captions[i]||"").trim():""
+  }));
+  if(text){
+    if(items.length&&!items[0].text)items[0].text=text;
+    else items.push({file:null,text});
   }
+
+  const total=items.length;
+  if(!batch)batch={ids:[],done:[]};
+  while(batch.ids.length<total){batch.ids.push(newId());batch.done.push(false);}
 
   button.disabled=true;
   button.textContent="送出中…";
@@ -315,17 +579,19 @@ form.addEventListener("submit",async e=>{
   for(let i=0;i<total;i++){
     if(batch.done[i])continue;
 
-    const file=files[i]||null;
-    status.textContent=files.length>1
-      ?"正在上傳第 "+(i+1)+" / "+total+" 張…"
-      :(file?"正在上傳照片…":"正在送出祝福…");
+    const file=items[i].file;
+    status.textContent=!file
+      ?"正在送出祝福…"
+      :files.length>1
+        ?"正在上傳第 "+(i+1)+" / "+files.length+" 張…"
+        :"正在上傳照片…";
 
     try{
       const photo=file?await compressImage(file):null;
       await sendPayload({
         id:batch.ids[i],
         name,
-        text:i===0?text:"",
+        text:items[i].text,
         photo
       });
       batch.done[i]=true;
@@ -349,6 +615,7 @@ form.addEventListener("submit",async e=>{
     /* 只清祝福與照片，保留名字 */
     batch=null;
     files=[];
+    captions=[];
     textInput.value="";
     photoInput.value="";
     setTimeout(clearPreview,1200);
