@@ -22,7 +22,7 @@
     .status{min-height:1.5em;margin:12px 2px 0;color:var(--soft);font-size:13px}.status.error{color:#a24f45}.status.success{color:#517565}
     .result{position:relative;margin-top:24px;padding:17px 16px 15px;border:1px solid #d6c5b0;border-radius:4px;background:#fffdf8;text-align:center;box-shadow:4px 5px 0 #e6dcd0}.result::before{content:'SEAT FOUND';position:absolute;top:-9px;left:50%;padding:1px 11px;background:#e5d5bd;color:#8a6c58;font:11px 'DM Serif Display',serif;letter-spacing:.16em;transform:translateX(-50%) rotate(-1deg)}.result[hidden]{display:none}.result-name{margin:0;color:var(--soft);font-size:13px}.result-table{margin:4px 0 0;color:var(--coral-deep);font:31px 'DM Serif Display','Noto Serif TC',serif;letter-spacing:.1em}
     .map-card{position:relative;margin:30px 0 0;padding:20px 10px 13px;border:1px solid #d7c8b7;border-radius:5px;background:#f5eee2;box-shadow:5px 6px 0 #e5d9cb}.map-card h2{margin:0 0 7px;text-align:center;font-size:17px;letter-spacing:.16em}.map-card h2::before,.map-card h2::after{content:'✦';padding:0 8px;color:var(--gold);font-size:12px}.map-note{margin:0 0 13px;text-align:center;color:#958474;font-size:11px;letter-spacing:.04em}.map-wrap{position:relative;overflow:hidden;border-radius:2px;background:#fffdf8;border:1px solid #d9ccbd}
-    #seatMap{display:block;width:100%;height:auto;min-height:600px;background:radial-gradient(circle at 50% 4%,#fffdf8 0 26%,#f8efe3 70%,#efe0d1 100%)}.floor{fill:url(#paperGrain)}.aisle{fill:url(#carpetGradient);stroke:#c87966;stroke-width:2}.aisle-line{stroke:#f3d6a4;stroke-width:2;stroke-dasharray:9 10;opacity:.9}.table-circle{fill:#fffdf8;stroke:#df7e59;stroke-width:7;filter:url(#handDrawn)}.table-inner{fill:none;stroke:#ecc1ac;stroke-width:1.7;stroke-dasharray:3 7;opacity:.9}.table-label{fill:#62584c;font:600 29px 'DM Serif Display','Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.main-circle{fill:#fffdf8;stroke:#dcb348;stroke-width:7;filter:url(#handDrawn)}.main-label{fill:#655448;font:600 25px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.checkin{fill:#f7d7cc;stroke:#d99b86;stroke-width:2}.selected-table{fill:#fff0f1;stroke:#d96379;stroke-width:9}.door{fill:#fffdf8;stroke:#b9a38e;stroke-width:3}.door-swing{fill:none;stroke:#b9a38e;stroke-width:2;stroke-dasharray:5 5}.door-label{fill:#806d5b;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.12em}.checkin-label{fill:#925f52;font:600 24px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.highlight-ring{fill:none;stroke:#efadb8;stroke-width:9;opacity:.95;animation:pulse 1.3s ease-in-out infinite}.arrow{fill:#d96379;filter:drop-shadow(0 3px 2px #366e6650);animation:bob 1s ease-in-out infinite}.marker-label{fill:#c14e67;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.14em;paint-order:stroke;stroke:#fffdf8;stroke-width:5;stroke-linejoin:round}@keyframes pulse{50%{stroke-width:15;opacity:.28}}@keyframes bob{50%{transform:translateY(-8px)}}
+    #seatMap{display:block;width:100%;height:auto;min-height:600px;background:radial-gradient(circle at 50% 4%,#fffdf8 0 26%,#f8efe3 70%,#efe0d1 100%)}.floor{fill:url(#paperGrain)}.aisle{fill:url(#carpetGradient);stroke:#c87966;stroke-width:2}.aisle-line{stroke:#f3d6a4;stroke-width:2;stroke-dasharray:9 10;opacity:.9}.table-circle{fill:#fffdf8;stroke:#df7e59;stroke-width:7;filter:url(#handDrawn)}.table-inner{fill:none;stroke:#ecc1ac;stroke-width:1.7;stroke-dasharray:3 7;opacity:.9}.table-label{fill:#62584c;font:600 29px 'DM Serif Display','Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.main-circle{fill:#fffdf8;stroke:#dcb348;stroke-width:7;filter:url(#handDrawn)}.main-label{fill:#655448;font:600 25px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.checkin{fill:#f7d7cc;stroke:#d99b86;stroke-width:2}.selected-table{fill:#fff0f1;stroke:#d96379;stroke-width:9}.door{fill:#fffdf8;stroke:#b9a38e;stroke-width:3}.door-swing{fill:none;stroke:#b9a38e;stroke-width:2;stroke-dasharray:5 5}.door-label{fill:#806d5b;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.12em}.checkin-label{fill:#925f52;font:600 24px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central}.highlight-ring{fill:none;stroke:#efadb8;stroke-width:9;opacity:.95;animation:pulse 1.3s ease-in-out infinite}.arrow{fill:#d96379;filter:drop-shadow(0 3px 2px #366e6650);animation:bob 1s ease-in-out infinite}.marker-label{fill:#c14e67;font:600 17px 'Noto Serif TC',serif;text-anchor:middle;letter-spacing:.14em;paint-order:stroke;stroke:#fffdf8;stroke-width:5;stroke-linejoin:round}.free-zone-box{fill:#e3efe9a6;stroke:var(--teal);stroke-width:3.5;stroke-dasharray:14 9}.free-zone-pill{fill:var(--teal);stroke:#fffdf8;stroke-width:3}.free-zone-label.multi{font-size:18px}[data-text],.status,.result-name,.result-table{white-space:pre-line}.result-table{line-height:1.3}.free-zone.active .free-zone-box{fill:#d5ebe3;stroke-width:4.5;stroke-dasharray:none}.free-zone-halo{fill:none;stroke:#167f7b;stroke-width:14;opacity:.28;animation:zone 1.6s ease-in-out infinite}.table-circle.free-table{fill:#fffdf8;stroke:var(--teal)}.free-table-inner{stroke:#9fcdc4}.free-table-label{fill:#145f5c}@keyframes zone{50%{stroke-width:24;opacity:.08}}@keyframes zone{50%{stroke-opacity:.35}}.free-zone-label{fill:#fffdf8;font:700 19px 'Noto Serif TC',serif;text-anchor:middle;dominant-baseline:central;letter-spacing:.06em}@keyframes pulse{50%{stroke-width:15;opacity:.28}}@keyframes bob{50%{transform:translateY(-8px)}}
     .legend{margin:12px 4px 0;color:#8f7e6e;font-size:11px;text-align:center}.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden;white-space:nowrap}
     @media(max-width:370px){main{padding-inline:12px}.lookup{padding:17px 14px}.lookup button{padding-inline:14px}.title{font-size:25px}.event-meta{font-size:10px}}
     @media(min-width:651px){body{padding:20px}main{border-radius:5px}}
@@ -30,20 +30,20 @@
 </head>
 <body>
   <main>
-    <a class="back" href="./">回到婚禮邀請函</a>
+    <a class="back" href="./" data-text="back">回到婚禮邀請函</a>
     <header>
-      <p class="eyebrow">WEDDING SEAT GUIDE</p>
-      <h1 class="title">查詢您的座位</h1>
-      <p class="intro">請輸入受邀姓名，查看宴席桌號與位置。</p>
-      <div class="event-meta"><span>2026.11.22 SUN</span><i aria-hidden="true"></i><span>彭園新板館</span></div>
+      <p class="eyebrow" data-text="eyebrow">WEDDING SEAT GUIDE</p>
+      <h1 class="title" data-text="title">查詢您的座位</h1>
+      <p class="intro" data-text="intro">請輸入受邀姓名，查看宴席桌號與位置。</p>
+      <div class="event-meta"><span data-text="date">2026.11.22 SUN</span><i aria-hidden="true"></i><span data-text="venue">彭園新板館</span></div>
     </header>
 
     <section class="lookup" aria-label="座位查詢">
-      <div class="lookup-caption"><span>GUEST CHECK</span><strong>輸入姓名查詢桌位</strong></div>
+      <div class="lookup-caption"><span data-text="lookupEyebrow">GUEST CHECK</span><strong data-text="lookupTitle">輸入姓名查詢桌位</strong></div>
       <form id="lookupForm" novalidate>
         <label class="sr-only" for="guestName">受邀姓名</label>
         <input id="guestName" name="guestName" type="search" autocomplete="name" placeholder="請輸入姓名" maxlength="40" required />
-        <button type="submit">查詢</button>
+        <button type="submit" data-text="button">查詢</button>
       </form>
       <p id="status" class="status" role="status" aria-live="polite"></p>
     </section>
@@ -54,17 +54,48 @@
     </section>
 
     <section class="map-card" aria-labelledby="mapTitle">
-      <h2 id="mapTitle">會場座位圖</h2>
-      <p class="map-note">查詢後，箭頭會標示您的桌位。</p>
+      <h2 id="mapTitle" data-text="mapTitle">會場座位圖</h2>
+      <p class="map-note" data-text="mapNote">查詢後，箭頭會標示您的桌位。</p>
       <div class="map-wrap">
         <svg id="seatMap" viewBox="0 0 730 1200" role="img" aria-label="主桌與二十張宴席桌的會場座位圖"></svg>
       </div>
-      <p class="legend">桌號與位置將依最終場地配置更新。</p>
+      <p class="legend" data-text="legend">桌號與位置將依最終場地配置更新。</p>
     </section>
   </main>
 
-  <script src="./assets/seat-data.js?v=20261113"></script>
+  <script src="./assets/seat-data.js?v=20261114"></script>
   <script>
+    // Always fetch the latest wording so edits to seat-config.js show up on a normal refresh.
+    document.write('<script src="./assets/seat-config.js?t=' + Date.now() + '"><\/script>');
+  </script>
+  <script>
+    // Editable wording lives in assets/seat-config.js; these are the fallbacks.
+    const config = window.SEAT_CONFIG || {};
+    const TEXT_DEFAULTS = {
+      pageTitle:document.title, placeholder:'請輸入姓名',
+      resultLine:'{name}，您的座位在', resultTitle:'第 {table} 桌',
+      statusEmpty:'請先輸入受邀姓名。', statusSearching:'正在查詢座位…',
+      statusNotFound:'查無座位資訊，請以填寫表單時使用的姓名查詢，或洽詢新人。',
+      statusNoTable:'目前找不到此座位的公開桌號，請洽詢簽到處人員。',
+      statusSuccess:'已為您標示桌位。', statusError:'目前無法查詢座位資料，請稍後再試。',
+      mapMainTable:'主桌', mapEntrance:'入口', mapCheckin:'簽到桌', mapMarker:'您的座位'
+    };
+    const TEXT = {...TEXT_DEFAULTS, ...(config.text || {})};
+    const FREE = {
+      tables:[], mapLabel:'', resultLine:'{name}，歡迎您！', resultTitle:'自行入座', status:'請在框線範圍內任選座位入座。',
+      ...(config.freeSeating || {})
+    };
+    const freeTables = new Set((Array.isArray(FREE.tables) ? FREE.tables : []).map((id) => String(id).trim()));
+    // "/n" in the config means a line break.
+    const breakLines = (value) => String(value ?? '').replace(/\/n|\\n/g, '\n');
+    const fill = (template, values = {}) => breakLines(template).replace(/\{(\w+)\}/g, (match, key) => key in values ? values[key] : match);
+    document.querySelectorAll('[data-text]').forEach((el) => {
+      const value = (config.text || {})[el.dataset.text];
+      if (typeof value === 'string') el.textContent = breakLines(value);
+    });
+    document.title = breakLines(TEXT.pageTitle).replace(/\n/g, ' ');
+    document.getElementById('guestName').placeholder = TEXT.placeholder;
+
     const seatData = window.SEAT_DATA || {};
     const seatIndex = seatData.entries || {};
     const svg = document.getElementById('seatMap');
@@ -95,7 +126,7 @@
       status.textContent = message;
       status.className = `status ${kind}`.trim();
     }
-    function drawMap(layout, activeObjectId = '') {
+    function drawMap(layout, activeObjectId = '', freeActive = false) {
       svg.replaceChildren();
 
       const defs = svgEl('defs');
@@ -122,12 +153,61 @@
       svg.append(svgEl('rect', {x:325, y:155, width:80, height:810, rx:36, class:'aisle'}));
       svg.append(svgEl('line', {x1:365, y1:190, x2:365, y2:930, class:'aisle-line'}));
 
+      // Resolve every table's drawn position first so the open-seating frame can wrap them.
+      const tables = layout
+        .filter((row) => row.Type === 'Table' && String(row.Public_Table_ID).trim() !== '')
+        .map((row) => {
+          const publicId = String(row.Public_Table_ID).trim();
+          const isMain = publicId === '0';
+          let x = asNumber(row.X);
+          let y = asNumber(row.Y);
+          // Bring the two outer table rows inward while keeping every table off the carpet.
+          if (x === 55) x = 95;
+          else if (x === 262) x = 245;
+          else if (x === 468) x = 485;
+          else if (x === 675) x = 635;
+          if (isMain) { x = 365; y = 85; }
+          return {row, publicId, isMain, x, y, isFree:!isMain && freeTables.has(publicId)};
+        })
+        .filter((table) => Number.isFinite(table.x) && Number.isFinite(table.y));
+
+      // Open-seating frame around the tables listed in seat-config.js.
+      const freeList = tables.filter((table) => table.isFree);
+      let freeZoneLabel = null;
+      // The frame is only shown to guests whose search lands on these tables.
+      if (freeActive && freeList.length) {
+        const pad = 66;
+        const minX = Math.min(...freeList.map((t) => t.x)) - pad;
+        const maxX = Math.max(...freeList.map((t) => t.x)) + pad;
+        const minY = Math.min(...freeList.map((t) => t.y)) - pad;
+        const maxY = Math.max(...freeList.map((t) => t.y)) + pad;
+        const freeZone = svgEl('g', {class:'free-zone' + (freeActive ? ' active' : '')});
+        if (freeActive) freeZone.append(svgEl('rect', {x:minX, y:minY, width:maxX - minX, height:maxY - minY, rx:24, class:'free-zone-halo'}));
+        freeZone.append(svgEl('rect', {x:minX, y:minY, width:maxX - minX, height:maxY - minY, rx:24, class:'free-zone-box'}));
+        svg.append(freeZone);
+        if (FREE.mapLabel) {
+          const cx = (minX + maxX) / 2;
+          const cy = (minY + maxY) / 2;
+          const lines = breakLines(FREE.mapLabel).split('\n').filter((line) => line.trim() !== '');
+          const lineHeight = lines.length > 1 ? 21 : 0;
+          const pillHeight = 32 + lineHeight * (lines.length - 1);
+          const pill = svgEl('rect', {x:cx - 118, y:cy - pillHeight / 2, width:236, height:pillHeight, rx:16, class:'free-zone-pill'});
+          const text = svgEl('text', {x:cx, y:cy, class:'free-zone-label' + (lines.length > 1 ? ' multi' : '')});
+          lines.forEach((line, index) => {
+            const tspan = svgEl('tspan', {x:cx, y:cy + (index - (lines.length - 1) / 2) * lineHeight});
+            tspan.textContent = line;
+            text.append(tspan);
+          });
+          freeZoneLabel = {pill, text, cx};
+        }
+      }
+
       // Entrance sits below Table 20 with clear walking space.
       const door = svgEl('g');
-      door.append(svgEl('path', {d:'M 730 1000 H 678 V 1080 H 730', class:'door'}));
-      door.append(svgEl('path', {d:'M 678 1000 A 82 82 0 0 1 730 1076', class:'door-swing'}));
-      const doorLabel = svgEl('text', {x:704, y:1040, class:'door-label', transform:'rotate(-90 704 1040)'});
-      doorLabel.textContent = '入口';
+      door.append(svgEl('path', {d:'M 730 1022 H 678 V 1102 H 730', class:'door'}));
+      door.append(svgEl('path', {d:'M 678 1022 A 82 82 0 0 1 730 1098', class:'door-swing'}));
+      const doorLabel = svgEl('text', {x:704, y:1062, class:'door-label', transform:'rotate(-90 704 1062)'});
+      doorLabel.textContent = TEXT.mapEntrance;
       door.append(doorLabel);
       svg.append(door);
 
@@ -135,39 +215,27 @@
       const checkin = svgEl('g');
       checkin.append(svgEl('rect', {x:430, y:1060, width:205, height:72, rx:15, class:'checkin'}));
       const checkinText = svgEl('text', {x:532, y:1097, class:'checkin-label'});
-      checkinText.textContent = '簽到桌';
+      checkinText.textContent = TEXT.mapCheckin;
       checkin.append(checkinText);
       svg.append(checkin);
 
-      const tables = layout.filter((row) => row.Type === 'Table' && String(row.Public_Table_ID).trim() !== '');
-      tables.forEach((row) => {
-        const publicId = String(row.Public_Table_ID).trim();
-        const isMain = publicId === '0';
-        let x = asNumber(row.X);
-        let y = asNumber(row.Y);
-        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
-
-        // Bring the two outer table rows inward while keeping every table off the carpet.
-        if (x === 55) x = 95;
-        else if (x === 262) x = 245;
-        else if (x === 468) x = 485;
-        else if (x === 675) x = 635;
-        if (isMain) { x = 365; y = 85; }
-
+      tables.forEach(({row, publicId, isMain, x, y, isFree}) => {
+        const isActive = row.Object_ID === activeObjectId;
+        const isFreeLit = freeActive && isFree;
         const group = svgEl('g', {id:row.Object_ID});
-        group.append(svgEl('circle', {cx:x, cy:y, r:isMain ? 57 : 50, class:(isMain ? 'main-circle' : 'table-circle') + (row.Object_ID === activeObjectId ? ' selected-table' : '')}));
-        if (!isMain && row.Object_ID !== activeObjectId) {
-          group.append(svgEl('circle', {cx:x, cy:y, r:39, class:'table-inner'}));
+        group.append(svgEl('circle', {cx:x, cy:y, r:isMain ? 57 : 50, class:(isMain ? 'main-circle' : 'table-circle') + (isActive ? ' selected-table' : '') + (isFreeLit ? ' free-table' : '')}));
+        if (!isMain && !isActive) {
+          group.append(svgEl('circle', {cx:x, cy:y, r:39, class:'table-inner' + (isFreeLit ? ' free-table-inner' : '')}));
         }
-        const label = svgEl('text', {x, y, class:isMain ? 'main-label' : 'table-label'});
-        label.textContent = isMain ? '主桌' : publicId;
+        const label = svgEl('text', {x, y, class:(isMain ? 'main-label' : 'table-label') + (isFreeLit ? ' free-table-label' : '')});
+        label.textContent = isMain ? TEXT.mapMainTable : publicId;
         group.append(label);
+        if (isActive) group.append(svgEl('circle', {cx:x, cy:y, r:66, class:'highlight-ring'}));
 
-        if (row.Object_ID === activeObjectId) {
-          group.append(svgEl('circle', {cx:x, cy:y, r:66, class:'highlight-ring'}));
+        if (isActive) {
           const marker = svgEl('g', {class:'seat-marker'});
           const markerLabel = svgEl('text', {x, y:y - 138, class:'marker-label'});
-          markerLabel.textContent = '您的座位';
+          markerLabel.textContent = TEXT.mapMarker;
           marker.append(markerLabel);
           // Downward arrow ends at the top edge of the selected table.
           marker.append(svgEl('path', {d:`M ${x - 12} ${y - 128} H ${x + 12} V ${y - 84} H ${x + 28} L ${x} ${y - 50} L ${x - 28} ${y - 84} H ${x - 12} Z`, class:'arrow'}));
@@ -175,6 +243,16 @@
         }
         svg.append(group);
       });
+
+      // Keep the frame label above the tables and sized to whatever text is configured.
+      if (freeZoneLabel) {
+        const {pill, text, cx} = freeZoneLabel;
+        svg.append(pill, text);
+        try {
+          const width = Math.max(...Array.from(text.children, (tspan) => tspan.getComputedTextLength())) + 30;
+          if (width > 30) { pill.setAttribute('width', width); pill.setAttribute('x', cx - width / 2); }
+        } catch (error) { /* keep default width */ }
+      }
     }
     function initialiseMap() {
       drawMap(mapLayout);
@@ -192,14 +270,15 @@
       const typedName = input.value.trim();
       const query = clean(typedName);
       result.hidden = true;
-      if (!query) { setStatus('請先輸入受邀姓名。', 'error'); input.focus(); return; }
+      if (!query) { setStatus(TEXT.statusEmpty, 'error'); input.focus(); return; }
 
-      setStatus('正在查詢座位…');
+      setStatus(TEXT.statusSearching);
       try {
         const lookup = seatIndex[await hashName(typedName)];
 
         if (!lookup) {
-          setStatus('查無座位資訊，請以填寫表單時使用的姓名查詢，或洽詢新人。', 'error');
+          setStatus(TEXT.statusNotFound, 'error');
+          drawMap(mapLayout);
           return;
         }
 
@@ -208,18 +287,27 @@
         const tableRow = mapLayout.find((row) => String(row.Object_ID) === String(lookup.o));
         const publicTableId = tableRow ? String(tableRow.Public_Table_ID).trim() : '';
         if (!publicTableId) {
-          setStatus('目前找不到此座位的公開桌號，請洽詢簽到處人員。', 'error');
+          setStatus(TEXT.statusNoTable, 'error');
+          drawMap(mapLayout);
           return;
         }
-        resultName.textContent = `${typedName}，您的座位在`;
-        resultTable.textContent = `第 ${publicTableId} 桌`;
+        const values = {name:typedName, table:publicTableId};
+        if (freeTables.has(publicTableId)) {
+          resultName.textContent = fill(FREE.resultLine, values);
+          resultTable.textContent = fill(FREE.resultTitle, values);
+          drawMap(mapLayout, '', true);
+          setStatus(fill(FREE.status, values), 'success');
+        } else {
+          resultName.textContent = fill(TEXT.resultLine, values);
+          resultTable.textContent = fill(TEXT.resultTitle, values);
+          drawMap(mapLayout, lookup.o);
+          setStatus(fill(TEXT.statusSuccess, values), 'success');
+        }
         result.hidden = false;
-        drawMap(mapLayout, lookup.o);
-        setStatus('已為您標示桌位。', 'success');
         result.scrollIntoView({behavior:'smooth', block:'center'});
       } catch (error) {
         console.error(error);
-        setStatus('目前無法查詢座位資料，請稍後再試。', 'error');
+        setStatus(TEXT.statusError, 'error');
       }
     });
     initialiseMap();
